@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- POMモデルのバージョンを指定します -->
+    <!-- 4.0.0は現在の標準バージョンであり、すべてのMavenプロジェクトで使用されます -->
+    <modelVersion>4.0.0</modelVersion>
+    <!-- 親プロジェクトを指定します -->
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>MyRMS</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <!-- プロジェクトのパッケージ形式を指定します -->
+    <!-- jar: Javaアプリケーション用の実行可能またはライブラリ用のJARファイル -->
+    <packaging>jar</packaging>
+    <!-- プロジェクトまたはモジュールの一意な識別子を指定 -->
+    <artifactId>common</artifactId>
+
+
+</project>
