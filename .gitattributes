@@ -1,11 +1,11 @@
 # java
 **/target/
-*.idea
+**/.idea/*
 *.iml
 *.class
 *Test.java
 **/test/
-*.vscode
+
 
 # Logs
 logs
@@ -23,13 +23,12 @@ dist-ssr
 coverage
 *.local
 
-/cypress/videos/
-/cypress/screenshots/
+**/cypress/videos/
+**/cypress/screenshots/
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+**/.vscode/*
+**/!.vscode/extensions.json
 *.suo
 *.ntvs*
 *.njsproj
