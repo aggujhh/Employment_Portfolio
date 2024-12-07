@@ -1,14 +1,20 @@
-import './assets/main.css'
+// Vueアプリケーションを作成するための関数をインポート
+import { createApp } from "vue";
+import { createPinia } from 'pinia';
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+// メインコンポーネントをインポート
+import App from "./App.vue";
+import router from "./router";
 
-import App from './App.vue'
-import router from './router'
 
+// アプリケーションを作成
 const app = createApp(App)
+const pinia = createPinia();
 
-app.use(createPinia())
-app.use(router)
+// ルーターをアプリケーションに登録
+app.use(router);
+app.use(pinia);
 
-app.mount('#app')
+
+// アプリケーションを指定したDOM要素にマウント
+app.mount("#app"); 
