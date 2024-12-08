@@ -38,7 +38,7 @@ const router = createRouter({
         redirect: '/login'
     },
     {
-        path: '/:pathMatch(.*)*', 
+        path: '/:pathMatch(.*)*',
         redirect: '/404',
     },
     ], // ルートの設定を適用
@@ -52,7 +52,10 @@ router.beforeEach((to, from, next) => {
     const requiresAuth = to.meta.requiresAuth !== false; // デフォルトでは認証が必要
 
 
-    if (requiresAuth && !isAuthenticated) {
+    if (to.path === '/404') {
+        next(); // 允许访问404
+    }
+    else if (requiresAuth && !isAuthenticated) {
         // 認証が必要なルートにアクセスする場合、ログインページにリダイレクト
         next('/login');
     } else {
