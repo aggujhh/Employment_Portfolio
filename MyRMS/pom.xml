@@ -46,6 +46,7 @@
         <jjwt.version>0.9.1</jjwt.version>
         <pagehelper.version>1.4.6</pagehelper.version>
         <aop.version>3.2.1</aop.version>
+        <jaxb.version>2.3.1</jaxb.version>
     </properties>
 
     <!-- プロジェクト全体の依存関係を定義するセクション -->
@@ -116,6 +117,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
             <version>${aop.version}</version>
+        </dependency>
+        <!--java9以降のバージョンではjavax.xml.bindモジュールが削除されているため、手動で依存関係を追加する必要があります。-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb.version}</version>
         </dependency>
     </dependencies>
 </project>

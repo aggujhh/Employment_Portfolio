@@ -9,7 +9,7 @@ spring:
     # データベースドライバークラス名
     driver-class-name: com.mysql.cj.jdbc.Driver
     # データベース接続URL
-    url: jdbc:mysql://localhost:3306/rest_man_sys_db
+    url: jdbc:mysql://localhost:3306/rms_db
     # データベースユーザー名
     username: root
     # データベースパスワード

@@ -1,4 +1,8 @@
-package org.example.server.service.impl;
+package org.example.server.service;
 
-public class EmpService {
+import org.example.pojo.entity.Emp;
+
+public interface EmpService {
+    Emp login(Emp emp);
 }
+

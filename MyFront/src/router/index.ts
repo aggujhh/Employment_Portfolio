@@ -1,5 +1,6 @@
 // Vue Routerをインポート
 import { createRouter, createWebHistory } from 'vue-router';
+import session from "@/utils/session"
 // コンポーネントをインポートNews
 import Home from '@/views/Home.vue';
 import News from '@/views/News.vue';
@@ -13,7 +14,7 @@ const router = createRouter({
     history: createWebHistory(), // HTML5のヒストリーモードを使用
     routes: [{
         path: '/home',
-        component: Home
+        component: Home,
     },
     {
         path: '/about',
@@ -21,7 +22,8 @@ const router = createRouter({
     },
     {
         path: '/login',
-        component: Login
+        component: Login,
+        meta: { requiresAuth: false }
     },
     {
         path: '/news',
@@ -36,10 +38,27 @@ const router = createRouter({
         redirect: '/login'
     },
     {
-        path: '/:pathMatch(.*)*', // 匹配所有未定义路径
+        path: '/:pathMatch(.*)*', 
         redirect: '/404',
     },
     ], // ルートの設定を適用
+});
+
+
+// ナビゲーションガード（拦截器）を追加
+router.beforeEach((to, from, next) => {
+    // 例: ユーザーの認証状態を確認
+    const isAuthenticated = session.getSession(); // トークンがある場合はログイン状態とみなす
+    const requiresAuth = to.meta.requiresAuth !== false; // デフォルトでは認証が必要
+
+
+    if (requiresAuth && !isAuthenticated) {
+        // 認証が必要なルートにアクセスする場合、ログインページにリダイレクト
+        next('/login');
+    } else {
+        // 通常のナビゲーション
+        next();
+    }
 });
 
 // ルーターをエクスポート

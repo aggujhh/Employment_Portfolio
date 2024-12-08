@@ -21,55 +21,68 @@
 </template>
 
 <script setup>
-import { reactive, watch } from "vue"
+import { reactive } from "vue";
+import router from '@/router';
 import { login } from "@/api/empApi";
+import session from "@/utils/session";
+import { useUserStore } from '@/stores/userStore';
 
+// ログインフォームデータを reactive で作成
 const data = reactive({
-    id: '',
-    password: ''
+    id: '',        // ユーザー ID
+    password: ''   // パスワード
 });
 
-watch(data, (newValue) => {
-    console.log('data对象发生了变化：', newValue);
-})
-
+/**
+ * ログイン処理を送信
+ */
 const send = async () => {
+    // ユーザー名またはパスワードが入力されていない場合のエラーチェック
     if (!data.id.trim() || !data.password.trim()) {
-        alert("ユーザー名とパスワードを入力してください。");
+        alert("ユーザー名とパスワードを入力してください。"); // ユーザー入力を促す
         return;
     }
 
     try {
-        const res = await login(data); // 调用 API
+        // API を呼び出してログイン処理を行う
+        const res = await login(data); // API 呼び出し
         console.log(res);
+
+        // レスポンスデータを取得
+        const code = res.data.code; // ステータスコードを取得
+        const res_data = JSON.parse(res.data.data); // レスポンスの JSON データを解析
+
+        // Pinia ストアのインスタンスを取得
+        const userStore = useUserStore();
         
-        // const code = res.data.code;
-        // const dataStr = res.data.data; // 这里得到的是一个 JSON 字符串
-        // const data = JSON.parse(dataStr); // 将字符串解析为对象
+        // ユーザーデータをストアに保存または更新
+        userStore.upsertUser({
+            id: res_data.id,      // ユーザー ID
+            name: res_data.name,  // ユーザー名
+            type: res_data.type,  // ユーザータイプ
+            job: res_data.job     // ジョブタイトル
+        });
 
-        // // 更新 Vuex 状态
-        // store.commit("setName", data.name);
-        // store.commit("setJob", data.jobTitle);
-        // store.commit("setUsername", username.value);
+        // トークンを localStorage に保存
+        session.setSession(res_data.id, res_data.token, 15 * 60 * 1000); // トークンの有効期限を 15 分間に設定
 
-        // // 存储 token 到 localStorage
-        // localStorage.setItem("token", data.token);
-
-        // if (code == 1) {
-        //     // 跳转到 /home
-        //     router.push("/home");
-        // } else {
-        //     alert("パスワードまたはアカウントが正しくありません");
-        //     console.log(res.data.msg);
-        // }
+        // ログインが成功した場合
+        if (code == 1) {
+            // ホームページにリダイレクト
+            router.push("/home");
+        } else {
+            // エラーメッセージを表示
+            alert("パスワードまたはアカウントが正しくありません");
+            console.log(res.data.msg);
+        }
     } catch (error) {
-        console.error("请求出错:", error);
+        // リクエスト中にエラーが発生した場合の処理
+        console.error("リクエストエラー:", error);
         alert("ログインに失敗しました。もう一度お試しください。");
     }
 };
-
-
 </script>
+
 
 <style lang="less" scoped>
 @import '@/assets/css/login.less';

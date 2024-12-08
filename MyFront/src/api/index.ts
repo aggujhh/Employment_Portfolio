@@ -2,6 +2,7 @@
 import axios from 'axios';
 // Vue 3 のルーターAPIをインポート
 import { useRouter } from 'vue-router';
+import session from "@/utils/session"
 
 
 const instance = axios.create({
@@ -15,9 +16,9 @@ const instance = axios.create({
 instance.interceptors.request.use(
     config => {
         // リクエストを送信する前に行う処理
-        const token = localStorage.getItem('token'); // ローカルストレージからトークンを取得
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`; // ヘッダーにトークンを追加
+        const token_str = session.getSession()?.token; // ローカルストレージからトークンを取得
+        if (token_str) {
+            config.headers.Authorization = `Bearer ${token_str}`; // ヘッダーにトークンを追加
         }
         return config;
     },
@@ -35,7 +36,7 @@ instance.interceptors.response.use(
             response &&
             response.data.code === 0 &&
             response.data.msg === 'NOT_LOGIN'
-        ) {           
+        ) {
             const router = useRouter();// ルーターインスタンスを作成
             const currentRoute = router.currentRoute.value; // Vue 3ではrouter.currentRouteはrefであるためvalueが必要
             if (currentRoute.path !== '/login') {
