@@ -1,0 +1,32 @@
+# サーバーポート設定
+server:
+  port: 8080
+spring:
+  mvc:
+    servlet:
+      path: /api
+  datasource:
+    # データベースドライバークラス名
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # データベース接続URL
+    url: jdbc:mysql://localhost:3306/rest_man_sys_db
+    # データベースユーザー名
+    username: root
+    # データベースパスワード
+    password: 123456
+
+mybatis:
+  configuration:
+    # MyBatisのログ実装、標準出力に設定
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # MyBatis設定、データベースのアンダースコア命名をキャメルケースに自動変換
+    map-underscore-to-camel-case: true
+
+# Spring JDBCトランザクションマネージャーのログレベルをdebugに設定
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          support:
+            JdbcTransactionManager: debug

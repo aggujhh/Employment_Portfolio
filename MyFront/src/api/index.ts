@@ -5,9 +5,10 @@ import { useRouter } from 'vue-router';
 
 
 const instance = axios.create({
-    baseURL: 'https://api.example.com', // 基本URL
+    baseURL: 'http://localhost:8080', // 基本URL
     timeout: 10000, // タイムアウト時間（ミリ秒）
     headers: { 'Content-Type': 'application/json' }, // デフォルトのヘッダー
+    withCredentials: true,
 });
 
 // リクエストインターセプター

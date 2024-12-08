@@ -36,6 +36,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Mavenによるレポート出力の文字エンコーディングをUTF-8に設定します -->
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- 各種ライブラリのバージョンを指定 -->
+        <mybatis.version>3.0.3</mybatis.version>
+        <lombok.version>1.18.24</lombok.version>
+        <fastjson.version>2.0.28</fastjson.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <mysql.version>8.2.0</mysql.version>
+        <druid.version>1.2.16</druid.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <pagehelper.version>1.4.6</pagehelper.version>
+        <aop.version>3.2.1</aop.version>
     </properties>
 
     <!-- プロジェクト全体の依存関係を定義するセクション -->
@@ -51,6 +61,61 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- MyBatis依存関係 -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <!-- Lombok: コードの簡略化のための依存関係 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+        <!-- FastJSON: JSONデータの処理用ライブラリ -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+        <!-- Apache Commons Lang: 文字列処理などのユーティリティクラス -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <!-- MySQL接続ドライバ -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Druid: データソース管理用 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+        <!-- JWT: 認証トークンの生成と検証 -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <!-- MyBatis用のPageHelperプラグイン -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.version}</version>
+        </dependency>
+        <!-- AOP (Aspect Oriented Programming) の依存関係 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>${aop.version}</version>
         </dependency>
     </dependencies>
 </project>
