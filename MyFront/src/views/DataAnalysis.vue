@@ -1,5 +1,6 @@
 <template>
   <HeaderView></HeaderView>
+  <NavView></NavView>
   <section id="data_analysis">
     <h2>
       data_analysis

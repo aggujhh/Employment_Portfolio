@@ -1,5 +1,6 @@
 <template>
     <HeaderView></HeaderView>
+    <NavView></NavView>
     <section id="front_screen">
         <h2>
             front_screen

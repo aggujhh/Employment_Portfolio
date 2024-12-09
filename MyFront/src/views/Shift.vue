@@ -1,5 +1,6 @@
 <template>
   <HeaderView></HeaderView>
+  <NavView></NavView>
   <section id="shift">
       <h2>
           shift

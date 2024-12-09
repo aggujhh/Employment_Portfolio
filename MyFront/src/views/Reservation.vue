@@ -1,5 +1,6 @@
 <template>
     <HeaderView></HeaderView>
+    <NavView></NavView>
     <section id="reservation">
         <h2>
             reservation

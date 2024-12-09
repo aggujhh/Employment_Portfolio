@@ -1,5 +1,6 @@
 <template>
     <HeaderView></HeaderView>
+    <NavView></NavView>
     <section id="kitchen_screen">
         <h2>
             kitchen_screen

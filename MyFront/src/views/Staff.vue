@@ -1,5 +1,6 @@
 <template>
     <HeaderView></HeaderView>
+    <NavView></NavView>
     <section id="staff">
         <h2>
             staff
