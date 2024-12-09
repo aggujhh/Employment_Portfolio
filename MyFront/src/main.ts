@@ -6,6 +6,8 @@ import { createPinia } from 'pinia';
 // メインコンポーネントをインポート
 import App from "./App.vue";
 import router from "./router";
+import Header from '@/components/Header.vue';
+import Nav from "./components/Nav.vue";
 
 // アプリケーションを作成
 const app = createApp(App)
@@ -14,7 +16,12 @@ const pinia = createPinia();
 // ルーターをアプリケーションに登録
 app.use(router);
 app.use(pinia);
-localStorage.clear();
+// localStorage.clear();
+
+// 全局组件注册（在 mount 之前）
+app.component('HeaderView', Header);
+app.component('NavView', Nav);
 
 // アプリケーションを指定したDOM要素にマウント
 app.mount("#app"); 
+

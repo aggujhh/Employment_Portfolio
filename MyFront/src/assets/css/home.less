@@ -1,0 +1,86 @@
+#home {
+    background: #F9F6EF;
+    height: 88vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    ul {
+        width: 60%;
+        height: 70%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-column-gap: 60px;
+        grid-row-gap: 60px;
+
+        li {
+            background: linear-gradient(to right, #29323C, #485563);
+            border-radius: 10px;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            p {
+                color: #fff;
+                font-family: 'Kosugi Maru';
+                font-size: 24px;
+                transform: translateX(20px);
+                user-select: none;
+            }
+
+            .img {
+                position: absolute;
+                height: 100px;
+                width: 100px;
+                background-repeat: no-repeat;
+                background-position: center left;
+                background-size: cover;
+                right: 5%;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+        }
+
+        li:nth-of-type(1) .img{
+            background-image: url('@/assets/images/home_img/フロント画面.png');
+        }
+        li:nth-of-type(2) .img{
+            background-image: url('@/assets/images/home_img/厨房画面.png');
+        }
+        li:nth-of-type(3) .img{
+            background-image: url('@/assets/images/home_img/メニュー管理.png');
+        }
+        li:nth-of-type(4) .img{
+            background-image: url('@/assets/images/home_img/予約管理.png');
+        }
+        li:nth-of-type(5) .img{
+            background-image: url('@/assets/images/home_img/シフト管理.png');
+        }
+        li:nth-of-type(6) .img{
+            background-image: url('@/assets/images/home_img/データ分析.png');
+        }
+        li:nth-of-type(7) .img{
+            background-image: url('@/assets/images/home_img/社員管理.png');
+        }
+        li:nth-of-type(8) .img{
+            background-image: url('@/assets/images/home_img/権限管理.png');
+        }
+
+        li::before {
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 200%;
+            background-color: rgba(255, 255, 255, .6);
+            transform: skew(45deg) translate3d(-200px, 0, 0);
+        }
+
+        li:hover::before {
+            transition: ease-in-out .8s;
+            transform: skew(45deg) translate3d(450px, 0, 0);
+        }
+    }
+}

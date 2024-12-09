@@ -32,9 +32,7 @@ export function getSession(): SessionData | null {
     const data = localStorage.getItem("session"); // データを取得
     if (!data) {
         return null; // データがない場合は null を返す
-    }
-
-    try {
+    } else {
         const parsedData: SessionData = JSON.parse(data); // データを解析
         const now = Date.now(); // 現在時刻のタイムスタンプを取得
 
@@ -42,12 +40,22 @@ export function getSession(): SessionData | null {
             localStorage.removeItem("session"); // 有効期限切れの場合はセッションを削除
             return null;
         }
-
         return parsedData; // 有効なセッションデータを返す
-    } catch (error) {
-        console.error("セッションデータの解析中にエラーが発生しました:", error);
-        localStorage.removeItem("session"); // 不正データの場合は削除
-        return null;
+    }
+}
+
+
+/**
+ * 現在のユーザーIDを取得する関数
+ * @returns 現在のユーザーID（文字列）または null（データが存在しない場合）
+ */
+export function getCurrentUserId(): string | null {
+    const data = localStorage.getItem("session"); // データを取得
+    if (!data) {
+        return null; // データがない場合は null を返す
+    } else {
+        const parsedData: SessionData = JSON.parse(data); // データを解析
+        return parsedData.currentUserId
     }
 }
 

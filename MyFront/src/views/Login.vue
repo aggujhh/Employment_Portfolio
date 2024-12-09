@@ -54,7 +54,7 @@ const send = async () => {
 
         // Pinia ストアのインスタンスを取得
         const userStore = useUserStore();
-        
+
         // ユーザーデータをストアに保存または更新
         userStore.upsertUser({
             id: res_data.id,      // ユーザー ID
@@ -64,7 +64,7 @@ const send = async () => {
         });
 
         // トークンを localStorage に保存
-        session.setSession(res_data.id, res_data.token, 15 * 60 * 1000); // トークンの有効期限を 15 分間に設定
+        session.setSession(res_data.id, res_data.token, 60 * 60 * 1000); // トークンの有効期限を 15 分間に設定
 
         // ログインが成功した場合
         if (code == 1) {

@@ -25,5 +25,6 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, "")//重写路径,替换/api
       }
     }
-  }
+  },
+  assetsInclude: ['**/*.ttf'],
 })

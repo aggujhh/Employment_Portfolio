@@ -3,44 +3,34 @@ import { createRouter, createWebHistory } from 'vue-router';
 import session from "@/utils/session"
 // コンポーネントをインポートNews
 import Home from '@/views/Home.vue';
-import News from '@/views/News.vue';
-import About from '@/views/About.vue';
 import NotFound from '@/views/404.vue';
 import Login from '@/views/Login.vue';
-
+import FrontScreen from '@/views/FrontScreen.vue';
+import KitchenScreen from '@/views/KitchenScreen.vue';
+import Menu from '@/views/Menu.vue';
+import Reservation from '@/views/reservation.vue';
+import Shift from '@/views/Shift.vue';
+import DataAnalysis from '@/views/DataAnalysis.vue';
+import Staff from '@/views/Staff.vue';
+import Permission from '@/views/Permission.vue';
 
 // ルーターインスタンスを作成
 const router = createRouter({
     history: createWebHistory(), // HTML5のヒストリーモードを使用
-    routes: [{
-        path: '/home',
-        component: Home,
-    },
-    {
-        path: '/about',
-        component: About
-    },
-    {
-        path: '/login',
-        component: Login,
-        meta: { requiresAuth: false }
-    },
-    {
-        path: '/news',
-        component: News
-    },
-    {
-        path: '/404',
-        component: NotFound
-    },
-    {
-        path: '/',
-        redirect: '/login'
-    },
-    {
-        path: '/:pathMatch(.*)*',
-        redirect: '/404',
-    },
+    routes: [
+        { path: '/login', component: Login, meta: { requiresAuth: false } },
+        { path: '/home', component: Home, },
+        { path: '/front_screen', component: FrontScreen, },
+        { path: '/kitchen_screen', component: KitchenScreen, },
+        { path: '/menu', component: Menu, },
+        { path: '/reservation', component: Reservation, },
+        { path: '/shift', component: Shift, },
+        { path: '/data_analysis', component: DataAnalysis, },
+        { path: '/staff', component: Staff, },
+        { path: '/permission', component: Permission, },
+        { path: '/404', component: NotFound },
+        { path: '/', redirect: '/login' },
+        { path: '/:pathMatch(.*)*', redirect: '/404', },
     ], // ルートの設定を適用
 });
 
