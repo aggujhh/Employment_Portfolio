@@ -9,8 +9,9 @@
                 <p>MY SYSTEM</p>
             </div>
             <div class="input-box">
-                <input type="text" v-model="data.id" placeholder="ユーザー名" />
-                <input type="password" v-model="data.password" @keydown.enter="send()" placeholder="パスワード" />
+                <input ref="input1" type="text" v-model="data.id" @keydown.down="downInput()" @keydown.enter="downInput()" placeholder="ユーザー名" />
+                <input ref="input2" type="password" v-model="data.password" @keydown.enter="send()" @keydown.up="upInput()"
+                    placeholder="パスワード" />
                 <div class="btn" @click="send()">
                     <input type="button" />
                     <p>ログイン</p>
@@ -21,11 +22,22 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { ref,reactive } from "vue";
 import router from '@/router';
 import { login } from "@/api/empApi";
 import session from "@/utils/session";
 import { useUserStore } from '@/stores/userStore';
+
+const input1 = ref(null);
+const input2 = ref(null);
+
+const downInput = () => {
+    input2.value.focus()
+}
+
+const upInput = () => {
+    input1.value.focus()
+}
 
 // ログインフォームデータを reactive で作成
 const data = reactive({

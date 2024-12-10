@@ -15,7 +15,7 @@
                         <span>削除</span>
                     </div>
                 </li>
-                <li class="add">
+                <li class="add" @click="() => { isVisible = true }">
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24" height="30px"
                         width="30px">
                         <path class="cls-1" fill="#3b3632"
@@ -42,15 +42,21 @@
             </button> -->
         </nav>
         <RouterView></RouterView>
+        <AddDishCategory :isVisible="isVisible" :closeModal="closeModal"/>
     </section>
 </template>
 
 <script setup>
-import { ref,onMounted } from "vue"
+import { ref, onMounted } from "vue"
 import { useRouter, useRoute } from "vue-router";
 import { fetDishCategory } from "@/api/dishCategoryApi";
+import AddDishCategory from "@/components/AddDishCategory.vue";
 
-const res_list = ref([]); 
+const isVisible = ref(false);
+const closeModal = () => {
+    isVisible.value = false; // 更新状态以关闭弹窗
+};
+const res_list = ref([]);
 
 // fetDishCategory を呼び出してデータを取得するメソッドを定義
 const fetchDishCategories = async () => {
