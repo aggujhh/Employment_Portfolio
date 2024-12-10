@@ -13,6 +13,7 @@ import Shift from '@/views/Shift.vue';
 import DataAnalysis from '@/views/DataAnalysis.vue';
 import Staff from '@/views/Staff.vue';
 import Permission from '@/views/Permission.vue';
+import Dishes from '@/views/Dishes.vue';
 
 // ルーターインスタンスを作成
 const router = createRouter({
@@ -22,7 +23,10 @@ const router = createRouter({
         { path: '/home', component: Home, },
         { path: '/front_screen', component: FrontScreen, },
         { path: '/kitchen_screen', component: KitchenScreen, },
-        { path: '/menu', component: Menu, },
+        {
+            path: '/menu', component: Menu, redirect: '/menu/1',
+            children: [{ path: ':id', component: Dishes }]// 动态子路由],
+        },
         { path: '/reservation', component: Reservation, },
         { path: '/shift', component: Shift, },
         { path: '/data_analysis', component: DataAnalysis, },

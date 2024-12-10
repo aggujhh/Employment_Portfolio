@@ -42,20 +42,21 @@ import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
-// 导航方法
+// ナビゲーション
 const navigateTo = (path) => {
-    router.push(path);
+    router.push(path); 
 };
 
-// 判断当前路由是否激活
+// 現在のルートがアクティブかどうかを判断
 const isNavActive = (path) => {
-    return route.path === path;
+    return route.path === path; 
 };
 
-const isActive = ref(false);
+const isActive = ref(false); 
 
+// アクティブ状態を切り替える関数
 const toggleActive = () => {
-    isActive.value = !isActive.value;
+    isActive.value = !isActive.value; 
 };
 </script>
 

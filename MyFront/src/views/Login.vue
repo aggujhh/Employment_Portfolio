@@ -10,7 +10,7 @@
             </div>
             <div class="input-box">
                 <input type="text" v-model="data.id" placeholder="ユーザー名" />
-                <input type="password" v-model="data.password" placeholder="パスワード" />
+                <input type="password" v-model="data.password" @keydown.enter="send()" placeholder="パスワード" />
                 <div class="btn" @click="send()">
                     <input type="button" />
                     <p>ログイン</p>
