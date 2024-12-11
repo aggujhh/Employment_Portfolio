@@ -28,4 +28,25 @@ public class DishCategoryController {
         log.info("料理のカテゴリー全部をフェッチする:{}", results);
         return Result.success(results);
     }
+
+    @PostMapping
+    public Result addDishCategory(@RequestBody DishCategory dishCategory) {
+        log.info("新しい料理のカテゴリーを追加する:{}", dishCategory);
+        dishCategoryService.addDishCategory(dishCategory);
+        return Result.success();
+    }
+
+    @DeleteMapping
+    public Result deleteDishCategory(@RequestBody DishCategory dishCategory) {
+        log.info("料理のカテゴリーを削除する:{}", dishCategory);
+        dishCategoryService.deleteDishCategory(dishCategory);
+        return Result.success();
+    }
+
+    @PutMapping
+    public Result updateDishCategory(@RequestBody DishCategory dishCategory) {
+        log.info("料理のカテゴリーを修正する:{}", dishCategory);
+        dishCategoryService.updateDishCategory(dishCategory);
+        return Result.success();
+    }
 }

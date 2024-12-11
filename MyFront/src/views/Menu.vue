@@ -11,11 +11,11 @@
                         <p>{{ item.name }}</p>
                     </div>
                     <div class="handle">
-                        <span>修正</span>
-                        <span>削除</span>
+                        <span @click="() => { openUpdateDialog(item) }">修正</span>
+                        <span @click="() => { openDeleteDialog(item) }">削除</span>
                     </div>
                 </li>
-                <li class="add" @click="() => { isVisible = true }">
+                <li class="add" @click="() => { isVisible.add = true }">
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24" height="30px"
                         width="30px">
                         <path class="cls-1" fill="#3b3632"
@@ -27,36 +27,85 @@
                     </svg>
                 </li>
             </ul>
-            <!-- 
-            <button class="dishes" v-for="(category, index) in categories" :key="index"
-                :class="{ active: activeIndex === index }" @click="toScreen(index)">
-                <span>{{ category.name }}</span>
-                <img src="../../../assets/dishIcon.png" />
-                <span @click="ShowUpdateCategoryModal(index)">修正</span>
-                <span @click="ShowDeleteCategoryModal(index)">削除</span>
-            </button>
-            <button class="dishes" @click="showAddCategoryModal = true">
-                <div class="add">
-                    <img src="@/assets/images/icon/add_btn.svg">
-                </div>
-            </button> -->
         </nav>
         <RouterView></RouterView>
-        <AddDishCategory :isVisible="isVisible" :closeModal="closeModal"/>
+        <AddDishCategory :isVisible="isVisible.add" @close="closeModal" @refresh="reloadPage" />
+        <UpdateDishCategory :isVisible="isVisible.update" :name="dishCategorName" :id="dishCategorId"
+            @close="closeModal" @refresh="reloadPage" />
+        <DeleteDialog :isVisible="isVisible.delete" :name="dishCategorName" :deleteMethod="deleteMethod"
+            @close="closeModal" />
     </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"
+import { ref, reactive, onMounted, watch } from "vue"
 import { useRouter, useRoute } from "vue-router";
-import { fetDishCategory } from "@/api/dishCategoryApi";
+import { fetDishCategory, deleteDishCategory } from "@/api/dishCategoryApi";
 import AddDishCategory from "@/components/AddDishCategory.vue";
+import UpdateDishCategory from "@/components/UpdateDishCategory.vue";
 
-const isVisible = ref(false);
-const closeModal = () => {
-    isVisible.value = false; // 更新状态以关闭弹窗
-};
+const router = useRouter();
+const route = useRoute();
+const dishCategorName = ref("")
+const dishCategorId = ref("")
 const res_list = ref([]);
+const temp_page = ref("")
+
+const isVisible = reactive({
+    add: false,
+    delete: false,
+    update: false
+});
+const closeModal = () => {
+    isVisible.add = false;
+    isVisible.delete = false;
+    isVisible.update = false;
+};
+
+const openUpdateDialog = (item) => {
+    isVisible.update = true;
+    dishCategorId.value = item.id;
+    dishCategorName.value = item.name;
+}
+
+const openDeleteDialog = (item) => {
+    isVisible.delete = true;
+    dishCategorId.value = item.id;
+    dishCategorName.value = item.name;
+}
+
+watch(
+    () => route.params.id,
+    (newValue, oldValue) => {
+        temp_page.value = oldValue
+    }
+);
+
+const deleteMethod = async () => {
+    try {
+        // API メソッドを呼び出す
+        const res = await deleteDishCategory({ id: dishCategorId.value });
+        console.log(res);
+        // レスポンスデータを取得
+        const code = res.data.code; // ステータスコードを取得
+        // 成功した場合
+        if (code == 1) {
+            alert("カテゴリー「" + dishCategorName.value + "」が削除を成功しました。");
+            closeModal()
+            fetchDishCategories();
+            toDishPage(`/menu/${temp_page.value}`)
+        } else {
+            // エラーメッセージを表示
+            alert("削除失敗しました。もう一度お試しください。");
+            console.log(res.data.msg);
+        }
+    } catch (error) {
+        // リクエスト中にエラーが発生した場合の処理
+        console.error("リクエストエラー:", error);
+        alert("削除失敗しました。もう一度お試しください。");
+    }
+}
+
 
 // fetDishCategory を呼び出してデータを取得するメソッドを定義
 const fetchDishCategories = async () => {
@@ -64,8 +113,7 @@ const fetchDishCategories = async () => {
         // API メソッドを呼び出す
         const response = await fetDishCategory();
         res_list.value = response.data.data; // API から返されたデータを dishCategories に格納
-        console.log(res_list);
-
+        console.log("dishCategories>", res_list);
     } catch (err) {
         // リクエスト中にエラーが発生した場合の処理
         console.error("リクエストエラー:", err);
@@ -78,9 +126,6 @@ onMounted(() => {
     fetchDishCategories(); // データ取得メソッドを呼び出す
 });
 
-const router = useRouter();
-const route = useRoute();
-
 // 料理のページへ
 const toDishPage = (path) => {
     router.push(path);
@@ -88,6 +133,19 @@ const toDishPage = (path) => {
 // 現在のルートがアクティブかどうかを判断
 const isActive = (path) => {
     return route.path === path;
+};
+
+// ページをリロードするロジック
+const reloadPage = async (value) => {
+    console.log("ページを再読み込み中...");
+    await fetchDishCategories(); // データを再取得する関数を呼び出す
+    if (value) {
+        dishCategorId.value = value
+    } else {
+        dishCategorId.value = res_list.value[res_list.value.length - 1].id
+    }
+    console.log("newDishCategorId>", dishCategorId.value);
+    toDishPage(`/menu/${dishCategorId.value}`)
 };
 </script>
 

@@ -5,4 +5,10 @@ import org.example.pojo.entity.DishCategory;
 
 public interface DishCategoryService {
     List<DishCategory> getDishCategories();
+
+    void addDishCategory(DishCategory dishCategory);
+
+    void deleteDishCategory(DishCategory dishCategory);
+
+    void updateDishCategory(DishCategory dishCategory);
 }

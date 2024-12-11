@@ -3,4 +3,22 @@
     margin-top: 5vh;
     width: 80%;
     background: #f9f6ef;
+    padding: 0 30px;
+
+    ul {
+        height: 100%;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-column-gap: 30px;
+        grid-row-gap: 30px;
+        overflow: auto;
+
+        li {
+            background: red;
+            height: 250px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.5);
+        }
+    }
 }

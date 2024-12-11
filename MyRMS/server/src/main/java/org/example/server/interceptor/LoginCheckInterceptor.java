@@ -1,6 +1,7 @@
 package org.example.server.interceptor;
 
 import com.alibaba.fastjson2.JSON;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,7 +48,10 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         // 验证 Token
         try {
-            Jwt.parseJWT(jwt); // トークンを解析
+            Claims claims = Jwt.parseJWT(jwt); // トークンを解析
+            String userId = claims.get("id", String.class);
+            request.setAttribute("userId", userId); // 将用户信息传递给后续组件
+            log.info("トークンが合法: ユーザーID={}", userId);
         } catch (ExpiredJwtException e) {
             log.info("トークンが期限切れです");
             //エラーレスポンスを作成

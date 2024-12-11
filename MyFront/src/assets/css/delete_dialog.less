@@ -1,6 +1,6 @@
 @import "@/assets/css/dialog.less";
 
-#add_dish_category {
+#delete_dialog {
     .dialog {
         width: 400px;
         height: 200px;
@@ -11,11 +11,14 @@
         }
 
         >div:nth-of-type(1) {
-            input {
-                height: 35px;
-                width: 180px;
-                font-size: 18px;
-                margin-left: 10px;
+            display: flex;
+
+            p {
+                color: red;
+            }
+
+            img {
+                margin-right: 5px;
             }
         }
 
@@ -30,7 +33,6 @@
                 color: #fff;
                 border-radius: 5px;
             }
-
         }
     }
 }
