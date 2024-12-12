@@ -38,114 +38,119 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch } from "vue"
+import { ref, reactive, onMounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { fetDishCategory, deleteDishCategory } from "@/api/dishCategoryApi";
 import AddDishCategory from "@/components/AddDishCategory.vue";
 import UpdateDishCategory from "@/components/UpdateDishCategory.vue";
 
+// ルーターとルートの取得
 const router = useRouter();
 const route = useRoute();
-const dishCategorName = ref("")
-const dishCategorId = ref("")
-const res_list = ref([]);
-const temp_page = ref("")
 
+// リアクティブなデータの定義
+const dishCategorName = ref(""); // カテゴリ名
+const dishCategorId = ref(""); // カテゴリID
+const res_list = ref([]); // カテゴリリスト
+const temp_page = ref(""); // 一時的なページ保存
+
+// モーダルの表示・非表示管理
 const isVisible = reactive({
     add: false,
     delete: false,
-    update: false
+    update: false,
 });
+
+// モーダルを閉じる関数
 const closeModal = () => {
     isVisible.add = false;
     isVisible.delete = false;
     isVisible.update = false;
 };
 
+// 更新ダイアログを開く関数
 const openUpdateDialog = (item) => {
     isVisible.update = true;
     dishCategorId.value = item.id;
     dishCategorName.value = item.name;
-}
+};
 
+// 削除ダイアログを開く関数
 const openDeleteDialog = (item) => {
     isVisible.delete = true;
     dishCategorId.value = item.id;
     dishCategorName.value = item.name;
-}
+};
 
+// ルートのIDが変更された時に一時的なページ情報を保存
 watch(
     () => route.params.id,
     (newValue, oldValue) => {
-        temp_page.value = oldValue
+        temp_page.value = oldValue;
     }
 );
 
+// カテゴリ削除メソッド
 const deleteMethod = async () => {
     try {
-        // API メソッドを呼び出す
+        // API を呼び出してカテゴリを削除
         const res = await deleteDishCategory({ id: dishCategorId.value });
         console.log(res);
-        // レスポンスデータを取得
         const code = res.data.code; // ステータスコードを取得
-        // 成功した場合
-        if (code == 1) {
-            alert("カテゴリー「" + dishCategorName.value + "」が削除を成功しました。");
-            closeModal()
+        if (code === 1) {
+            alert(`カテゴリー「${dishCategorName.value}」が削除されました。`);
+            closeModal();
             fetchDishCategories();
-            toDishPage(`/menu/${temp_page.value}`)
+            toDishPage(`/menu/${temp_page.value}`);
         } else {
-            // エラーメッセージを表示
             alert("削除失敗しました。もう一度お試しください。");
             console.log(res.data.msg);
         }
     } catch (error) {
-        // リクエスト中にエラーが発生した場合の処理
+        // エラー処理
         console.error("リクエストエラー:", error);
         alert("削除失敗しました。もう一度お試しください。");
     }
-}
+};
 
-
-// fetDishCategory を呼び出してデータを取得するメソッドを定義
+// ディッシュカテゴリーを取得するメソッド
 const fetchDishCategories = async () => {
     try {
-        // API メソッドを呼び出す
         const response = await fetDishCategory();
-        res_list.value = response.data.data; // API から返されたデータを dishCategories に格納
-        console.log("dishCategories>", res_list);
+        res_list.value = response.data.data; // APIからデータを取得
+        console.log("dishCategories:", res_list.value);
     } catch (err) {
-        // リクエスト中にエラーが発生した場合の処理
         console.error("リクエストエラー:", err);
-        alert("料理のカテゴリーのフェッチに失敗しました。もう一度お試しください。");
+        alert("料理カテゴリーのフェッチに失敗しました。もう一度お試しください。");
     }
 };
 
-// コンポーネントのロード時に呼び出し
+// コンポーネントがマウントされたときにカテゴリデータを取得
 onMounted(() => {
-    fetchDishCategories(); // データ取得メソッドを呼び出す
+    fetchDishCategories();
 });
 
-// 料理のページへ
+// 料理のページに移動する関数
 const toDishPage = (path) => {
     router.push(path);
 };
-// 現在のルートがアクティブかどうかを判断
+
+// 現在のルートがアクティブか確認する関数
 const isActive = (path) => {
     return route.path === path;
 };
 
-// ページをリロードするロジック
+// ページをリロードする関数
 const reloadPage = async (value) => {
     console.log("ページを再読み込み中...");
-    await fetchDishCategories(); // データを再取得する関数を呼び出す
+    await fetchDishCategories(); // データを再取得
     if (value) {
-        dishCategorId.value = value
+        dishCategorId.value = value;
     } else {
-        dishCategorId.value = res_list.value[res_list.value.length - 1].id
+        dishCategorId.value = res_list.value[res_list.value.length - 1].id;
     }
     console.log("newDishCategorId>", dishCategorId.value);
-    toDishPage(`/menu/${dishCategorId.value}`)
+    toDishPage(`/menu/${dishCategorId.value}`);
 };
 </script>
 

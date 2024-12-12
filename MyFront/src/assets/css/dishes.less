@@ -5,8 +5,8 @@
     background: #f9f6ef;
     padding: 0 30px;
 
-    ul {
-        height: 100%;
+    >ul {
+        max-height: 82vh;
         width: 100%;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
@@ -14,11 +14,231 @@
         grid-row-gap: 30px;
         overflow: auto;
 
-        li {
-            background: red;
+        >li {
             height: 250px;
             border-radius: 10px;
-            box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.5);
+            position: relative;
+
+            .front,
+            .back {
+                position: absolute;
+                backface-visibility: hidden;
+                transition: transform 0.6s;
+                box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.5);
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                overflow: hidden;
+            }
+
+            .front {
+                .img {
+                    height: 100%;
+                    width: 100%;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    background-size: cover;
+
+                }
+
+                .changeImg {
+                    position: absolute;
+                    left: 20px;
+                    top: 20px;
+                    padding: 10px 20px;
+                    border-radius: 3px;
+                    border: 1px solid #3b3632;
+                }
+
+                .info {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    transform: translateY(80%);
+                    transition: 0.6s;
+                    background-color: rgba(59, 54, 50, 0.8);
+                    color: #fbb034;
+                    padding: 0 30px;
+
+                    .title {
+                        text-align: center;
+                        line-height: 50px;
+                    }
+
+                    p {
+                        margin-bottom: 5px;
+                        font-size: 1rem;
+                        color: #fff;
+
+                        span {
+                            color: #fbb034;
+                            margin-right: 10px;
+                        }
+                    }
+
+                    .price span:last-of-type {
+                        color: red;
+                    }
+
+
+                    button {
+                        position: absolute;
+                        bottom: 20px;
+                        padding: 8px 20px;
+                        border-radius: 3px;
+                        border: 1px solid #3b3632;
+                    }
+
+                    button:nth-of-type(1) {
+                        left: 15%;
+                    }
+
+                    button:nth-of-type(2) {
+                        right: 15%;
+                    }
+
+                    button:hover {
+                        color: #fff;
+                        background: #3b3632;
+                    }
+                }
+
+                .info:hover {
+                    transform: translateY(0);
+                }
+            }
+
+            .back {
+                background: #f9f6ef;
+                transform: rotateY(180deg);
+                padding: 30px;
+
+                li {
+                    margin-bottom: 5px;
+
+                    >label {
+                        position: relative;
+                        display: flex;
+                        justify-content: space-between;
+
+                        input[type='text'] {
+                            height: 25px;
+                            width: 65%;
+                        }
+
+                        span {
+                            position: absolute;
+                            right: 10px;
+                            top: 1px;
+                        }
+                    }
+
+                    >div {
+                        user-select: none;
+
+                        >label {
+                            cursor: pointer;
+                            margin-left: 30px;
+
+                            input[type="radio"] {
+                                margin-right: 5px;
+                            }
+                        }
+                    }
+                }
+
+                li:nth-of-type(3) {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                button {
+                    position: absolute;
+                    bottom: 20px;
+                    padding: 8px 35px;
+                    border-radius: 3px;
+                    border: 1px solid #3b3632;
+                    background: #3b3632;
+                    color: #fff;
+                }
+
+                button:nth-of-type(1) {
+                    left: 15%;
+                }
+
+                button:nth-of-type(2) {
+                    right: 15%;
+                }
+
+                button:hover {
+                    color: #3b3632;
+                    background: #fff;
+                }
+
+                textarea {
+                    width: 100%;
+                    height: 50px;
+                }
+            }
+        }
+
+        .add {
+            border: 1.5px solid #818181;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+
+            svg {
+                height: 60px;
+                width: 60px;
+
+                .cls-1 {
+                    fill: #f9f6ef;
+                }
+
+                .cls-2 {
+                    fill: #3b3632;
+                }
+
+                .cls-3 {
+                    fill: #3b3632;
+                }
+            }
+        }
+
+
+
+        .add:hover {
+            background: rgba(0, 0, 0, 0.1);
+
+            svg {
+                .cls-1 {
+                    fill: #3b3632;
+                }
+
+                .cls-2 {
+                    fill: #3b3632;
+                }
+
+                .cls-3 {
+                    fill: #f9f6ef;
+                }
+            }
+        }
+
+
+
+        .dish.flipped {
+            .front {
+                transform: rotateY(180deg);
+            }
+
+            .back {
+                transform: rotateY(360deg);
+            }
         }
     }
 }
