@@ -8,7 +8,7 @@
                     :class="{ active: isActive(`/menu/${item.id}`) }">
                     <div class="nav_name">
                         <img src="@/assets/images/icon/dishIcon.png" />
-                        <p>{{ item.name }}</p>
+                        <p :title="item.name">{{ item.name }}</p>
                     </div>
                     <div class="handle">
                         <span @click="() => { openUpdateDialog(item) }">修正</span>

@@ -49,9 +49,16 @@ button:hover {
   }
 }
 
+[type='text'],
+[type='password'],
+textarea {
+  border: 1.5px solid #818181;
+}
 
-input:focus {
-  border: 1.5px solid #fbb034 !important;
+[type='text']:focus,
+[type='password']:focus,
+textarea:focus {
+  border: 1.5px solid #fbb034;
 }
 
 textarea {
@@ -59,9 +66,7 @@ textarea {
   padding: 3px 20px;
 }
 
-textarea:focus {
-  border: 1.5px solid #fbb034 !important;
-}
+
 
 
 #__vue-devtools-container__ {

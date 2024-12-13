@@ -1,3 +1,131 @@
 @import "@/assets/css/dialog.less";
 
-#add_dish{}
+#add_dish {
+
+    .dialog {
+        padding: 30px 80px;
+
+        h3 {
+            font-size: 20px;
+            font-family: Kosugi Maru;
+            margin-bottom: 30px;
+        }
+
+        ul {
+            width: 300px;
+
+            li {
+                margin-bottom: 20px;
+
+                >label {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    position: relative;
+
+                    span {
+                        position: absolute;
+                        right: 10px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                    }
+                }
+
+
+                [type='text'] {
+                    width: 220px;
+                    height: 30px;
+                }
+
+                [type='file'] {
+                    display: none;
+                }
+            }
+
+            li:nth-of-type(3) {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                label {
+                    cursor: pointer;
+                    margin-left: 15px;
+
+                    [type="radio"] {
+                        margin-right: 5px;
+                    }
+                }
+            }
+
+            li:nth-of-type(4) {
+                p {
+                    margin-bottom: 5px;
+                }
+
+                label {
+                    height: 150px;
+                    width: 225px;
+                    border: 1.5px solid #818181;
+                    cursor: pointer;
+                    position: relative;
+                    background: rgba(0, 0, 0, 0.1);
+
+                    .dishImg {
+                        height: 100%;
+                        width: 100%;
+                        background-repeat: no-repeat;
+                        background-position: center center;
+                        background-size: cover;
+                    }
+
+                    div:nth-of-type(2) {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        padding: 10px;
+                        border: 1.5px solid #3b3632;
+                        color: #3b3632;
+                        font-weight: bold;
+                        border-radius: 10px;
+                    }
+                }
+
+                label:hover {
+                    background: rgba(0, 0, 0, 0.2);
+
+                    div:nth-of-type(2) {
+                        background: #3b3632;
+                        color: #fff;
+                    }
+                }
+
+            }
+
+            li:nth-of-type(5) {
+                p {
+                    margin-bottom: 5px;
+                }
+
+                textarea {
+                    height: 120px;
+                    width: 100%;
+                    padding: 10px 15px;
+                }
+            }
+        }
+
+        >div {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            button {
+                padding: 6px 30px;
+                background: #3b3632;
+                color: #fff;
+                border-radius: 5px;
+            }
+        }
+    }
+}

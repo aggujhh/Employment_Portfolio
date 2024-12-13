@@ -55,6 +55,13 @@ const send = async () => {
         return;
     }
 
+     // SQLインジェクションを引き起こす可能性のある特殊記号を禁止する正規表現を定義
+    const forbiddenRegex = /['"`;\\/\-\-#()=<>]/g;
+    if (forbiddenRegex.test(data.id)||forbiddenRegex.test(data.password)) {
+        alert('不適合な記号が入力されました: \' " ` ; \\ / -- # ( ) = < >');
+        return;
+    }
+
     try {
         // API を呼び出してログイン処理を行う
         const res = await login(data); // API 呼び出し
