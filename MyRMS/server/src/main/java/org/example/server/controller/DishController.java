@@ -42,4 +42,11 @@ public class DishController {
         dishService.updateDishImage(dish);
         return Result.success();
     }
+
+    @PutMapping
+    public Result updateDishInfo(@RequestBody Dish dish) {
+        log.info("料理の情報を修正する。引数：{}>>>", dish);
+        dishService.updateDishInfo(dish);
+        return Result.success();
+    }
 }

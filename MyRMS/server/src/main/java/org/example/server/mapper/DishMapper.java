@@ -17,6 +17,11 @@ public interface DishMapper {
             "VALUES(#{dishCategoryId},#{name},#{price},#{image},#{description},#{creator},#{createTime},null,null)")
     void addDish(Dish dish);
 
-    @Update("UPDATE dish SET updater=#{updater},update_time=#{updateTime} WHERE id=${id}")
+    @Update("UPDATE dish SET image=#{image}, updater=#{updater},update_time=#{updateTime} WHERE id=${id}")
     void updateDishImage(Dish dish);
+
+    @Update("UPDATE dish " +
+            "SET name=#{name},price=#{price},description=#{description},state=#{state}, updater=#{updater},update_time=#{updateTime} " +
+            "WHERE id=${id}")
+    void updateDishInfo(Dish dish);
 }

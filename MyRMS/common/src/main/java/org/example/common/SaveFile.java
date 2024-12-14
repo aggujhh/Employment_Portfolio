@@ -72,4 +72,29 @@ public class SaveFile {
             log.error("画像保存中にエラーが発生しました: ファイルパス: {}, エラー: ", file_path, e);
         }
     }
+
+    /**
+     * 指定されたパスのファイルを削除します。
+     *
+     * @param file_path 削除対象のファイルパス（例: "dish.jpg"）
+     * @return ファイルが正常に削除された場合は true、それ以外は false
+     */
+    public boolean deleteFile(String file_path) {
+        // 保存パスを組み立て
+        String targetPath = base_path + File.separator + "MyFront" + File.separator + "public" + File.separator + file_path;
+        File file = new File(targetPath);
+
+        if (file.exists()) { // ファイルが存在するか確認
+            if (file.delete()) { // ファイル削除
+                log.info("ファイル削除成功しました。削除対象: {}", targetPath);
+                return true;
+            } else {
+                log.error("ファイル削除に失敗しました: {}", targetPath);
+                return false;
+            }
+        } else {
+            log.warn("削除対象のファイルが存在しません: {}", targetPath);
+            return true;
+        }
+    }
 }

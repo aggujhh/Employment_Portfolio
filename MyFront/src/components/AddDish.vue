@@ -59,10 +59,10 @@ import { ref, reactive, watch } from "vue"
 import { addDish } from "@/api/dishApi";
 
 const props = defineProps(['isVisible', 'dishCategoryId'])
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close','refresh']);
 
 const defaultReq = {
-    dishCategoryId: "",
+    dishCategoryId: props.dishCategoryId,
     name: "",
     image: "",
     price: "",
@@ -173,9 +173,8 @@ const agree = async () => {
         if (code == 1) {
             // ホームページにリダイレクト
             alert("新しいメニューの種類が追加を成功しました。");
-            data.name = null
-            emit('refresh'); // 親コンポーネントに通知してページをリロードする
-            emit('close');   // 親コンポーネントに通知してモーダルを閉じる
+            emit('refresh',req.dishCategoryId); // 親コンポーネントに通知してページをリロードする
+            close();   // 親コンポーネントに通知してモーダルを閉じる
         } else {
             // エラーメッセージを表示
             alert("追加失敗しました。もう一度お試しください。");

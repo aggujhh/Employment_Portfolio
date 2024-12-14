@@ -34,3 +34,17 @@ export function updateDishImage(data: {
 }) {
     return instance.patch('/api/dish', data);
 }
+
+
+/**
+ * 料理の情報を修正するをする
+ */
+export function updateDishInfo(data: {
+    id: number,
+    name: string,
+    state: string,
+    price: number,
+    description: string
+}) {
+    return instance.put('/api/dish', data);
+}

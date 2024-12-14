@@ -103,7 +103,7 @@ const deleteMethod = async () => {
             fetchDishCategories();
             toDishPage(`/menu/${temp_page.value}`);
         } else {
-            alert("削除失敗しました。もう一度お試しください。");
+            alert(res.data.msg);
             console.log(res.data.msg);
         }
     } catch (error) {

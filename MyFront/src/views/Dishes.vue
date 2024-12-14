@@ -3,13 +3,14 @@
         <ul>
             <li class="dish" :class="{ flipped: isFlipped[index] }" v-for="(item, index) in res" :key="index">
                 <div class="front">
-                    <div class="img" :style="`background-image: url(${image_pathes[index]})`"></div>
+                    <div class="img" :style="`background-image: url(${image_pathes[index]})`">
+                    </div>
                     <label>
                         <input type="file" @change="(event) => onImageChange(event, item)" />
                         <button type="button" class="changeImg">画像更新</button>
                     </label>
                     <div class="info">
-                        <h3 class="title">{{ item.name }}</h3>
+                        <h3 class="title" :title="item.name">{{ item.name }}</h3>
                         <p class="price">
                             <span>値段:</span> <span>¥{{ item.price }}(税抜金額)</span>
                         </p>
@@ -50,12 +51,12 @@
                             料理の紹介<br /><textarea v-model="dish[index].description"></textarea>
                         </li>
                     </ul>
-                    <button>確認</button>
+                    <button @click="updateInfo(index)">確認</button>
                     <button @click="cancel(index)">戻る</button>
                 </div>
             </li>
             <li class="add" @click="() => { isVisible.add = true }">
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24" height="30px" width="30px">
+                <svg version="1.1" viewBox="0 0 24 24" height="30px" width="30px">
                     <path class="cls-1" fill="#3b3632"
                         d="M12,0C5.4,0,0,5.4,0,12s5.4,12,12,12,12-5.4,12-12S18.6,0,12,0ZM19,13h-6v6h-2v-6h-6v-2h6v-6h2v6h6v2Z" />
                     <path class="cls-2" fill="#fbb034"
@@ -65,15 +66,18 @@
                 </svg>
             </li>
         </ul>
-        <AddDish :isVisible="isVisible.add" :dishCategoryId="req.dishCategoryId" @close="closeModal" />
+        <AddDish :isVisible="isVisible.add" :dishCategoryId="req.dishCategoryId" @close="closeModal"
+            @refresh="reloadPage" />
     </section>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch } from "vue";
-import { fetDishByCategoryId, updateDishImage } from "@/api/dishApi";
+import { ref, reactive, onMounted, watch, toRaw } from "vue";
+import { fetDishByCategoryId, updateDishImage, updateDishInfo } from "@/api/dishApi";
 import { useRouter, useRoute } from "vue-router";
 import AddDish from "@/components/AddDish.vue";
+import cloneDeep from 'lodash/cloneDeep';
+
 
 // ルート情報
 const route = useRoute();
@@ -89,6 +93,7 @@ const res = ref([]); // 料理データ
 const image_pathes = ref([]); // 画像パス
 const dish = ref([]); // 編集用の料理データ
 const isFlipped = ref([]); // フリップ状態
+let TempDishArray = []
 
 // モーダルの表示・非表示管理
 const isVisible = reactive({
@@ -110,8 +115,15 @@ const flip = (index) => {
 };
 
 // キャンセル時の処理
+
+
 const cancel = (index) => {
     flip(index); // フリップを元に戻す
+    // 逐项替换，避免直接赋值整个数组
+    dish.value.forEach((_, i) => {
+        dish.value[i] = { ...TempDishArray[i] };
+    });
+    // dish.value[index].price = 123;
 };
 
 // 状態を表す文字列を取得
@@ -119,7 +131,8 @@ const toState = (state) => {
     const index = Number(state);
     const stateMap = {
         0: "販売中", // 販売中
-        1: "一時停止中", // 一時停止中
+        1: "完売", // 一時停止中
+        2: "一時停止中"
     };
     return stateMap[index];
 };
@@ -161,7 +174,12 @@ const setDishArray = (res) => {
             description: item.description,
         };
     });
+    TempDishArray = cloneDeep(dish.value);
+    console.log("TempDishArray", TempDishArray);
+    console.log("dish.value", dish.value);
 };
+
+
 
 // ルートIDの変更を監視し、データを再取得
 watch(
@@ -225,8 +243,7 @@ const updateImage = async () => {
         const code = response.data.code;
         if (code === 1) {
             alert(`画像チェンジを成功しました。`);
-            router.push("/menu/" + reqImage.dishCategoryId);
-            window.location.reload();
+            reloadPage(reqImage.dishCategoryId)
         } else {
             alert("画像チェンジを失敗しました。");
             console.log(response.data.msg);
@@ -236,6 +253,70 @@ const updateImage = async () => {
         alert("画像チェンジを失敗しました。");
     }
 };
+
+
+
+// ページをリロードする関数
+const reloadPage = (value) => {
+    console.log("ページを再読み込み中...");
+    fetchDishes({ dishCategoryId: value }); // データを再取得
+};
+
+
+const defaultReqInfo = {
+    id: "",
+    name: "",
+    state: "",
+    price: 0,
+    description: ""
+};
+
+const reqInfo = reactive({ ...defaultReqImage })
+
+// API から料理データを取得
+const updateInfo = async (index) => {
+    reqInfo.id = res.value[index].id
+    reqInfo.name = dish.value[index].name
+    reqInfo.state = dish.value[index].state
+    reqInfo.price = dish.value[index].price
+    reqInfo.description = dish.value[index].description
+    if (reqInfo.name === "" || reqInfo.price === "") {
+        alert('料理名または値段は空にできません、入力してください。');
+        return;
+    }
+
+    if (reqInfo.name.length > 30 || reqInfo.price.length > 7 || reqInfo.description.length > 70) {
+        alert("制限文字数内で入力してください。料理名30文字以内、値段7桁以内、説明70文字以内で。")
+        return;
+    }
+    const numberRegex = /^[0-9]+$/;
+    if (!numberRegex.test(reqInfo.price)) {
+        alert('値段は数字のみ入力してください。');
+        return;
+    }
+
+    const forbiddenRegex = /['"`;\\/\-\-#()=<>]/g;
+    if (forbiddenRegex.test(reqInfo.name) || forbiddenRegex.test(reqInfo.description)) {
+        alert('不適合な記号が入力されました: \' " ` ; \\ / -- # ( ) = < >');
+        return;
+    }
+    try {
+        const response = await updateDishInfo(reqInfo);
+        const code = response.data.code;
+        if (code === 1) {
+            alert(`料理修正を成功しました。`);
+            reloadPage(res.value[index].dishCategoryId)
+        } else {
+            alert("料理修正を失敗しました。");
+            console.log(response.data.msg);
+        }
+    } catch (err) {
+        console.error("リクエストエラー:", err);
+        alert("料理修正を失敗しました。");
+    }
+};
+
+
 </script>
 
 <style lang="less" scoped>

@@ -10,4 +10,6 @@ public interface DishService {
     void addDish(Dish dish);
 
     void updateDishImage(Dish dish);
+
+    void updateDishInfo(Dish dish);
 }
