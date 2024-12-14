@@ -8,7 +8,7 @@
         </div>
         <div class="admin">
             <img src="@\assets\images\icon\admin.svg">
-            <p>ADMIN : {{ name }}</p>
+            <p :title="name.value">ADMIN : {{ name }}</p>
             <svg class="logout" height="20" width="20" viewBox="0 0 29.14 35" fill="#fff" @click="logout()">
                 <path class="cls-1"
                     d="M25,7.5v-3.5c0-.55-.45-1-1-1H4c-.55,0-1,.45-1,1v27c0,.55.45,1,1,1h20c.55,0,1-.45,1-1v-4.5c0-.83.67-1.5,1.5-1.5s1.5.67,1.5,1.5v4.5c0,2.21-1.79,4-4,4H4c-2.21,0-4-1.79-4-4V4C0,1.79,1.79,0,4,0h20c2.21,0,4,1.79,4,4v3.5c0,.18-.03.34-.09.5-.2.58-.76,1-1.41,1s-1.21-.42-1.41-1c-.06-.16-.09-.32-.09-.5Z" />
@@ -20,17 +20,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue"
+import { ref, watch, computed } from "vue"
 import router from '@/router';
 import { useUserStore } from '@/stores/userStore';
 import { getCurrentUserId } from "@/utils/session";
 
-const name = ref("chen");
+
 const title = ref(window.location.pathname.split('/')[1].replace(/_/g, ' ').toUpperCase());
+const name = ref("")
 
 const updateTitle = () => {
     title.value = window.location.pathname.split('/')[1].replace(/_/g, ' ').toUpperCase()
 };
+
+const currentUserId = getCurrentUserId()
+if (currentUserId) {
+    const userStore = useUserStore();
+    name.value = computed(() => userStore.users[currentUserId]?.name || '');
+}
+
 
 // 监听路由变化
 watch(
@@ -41,7 +49,6 @@ watch(
 );
 
 const logout = () => {
-    const currentUserId = getCurrentUserId()
     useUserStore().removeUser(currentUserId)
     localStorage.removeItem("session");
     router.push("/login");

@@ -38,6 +38,10 @@ header {
         justify-content: center;
 
         p {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-size: 18px;
             font-weight: bolder;
             color: #fff;
@@ -57,11 +61,11 @@ header {
             0% {
                 transform: translateX(0);
             }
-        
+
             50% {
                 transform: translateX(5px);
             }
-        
+
             100% {
                 transform: translateX(0);
             }

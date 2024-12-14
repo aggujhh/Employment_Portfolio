@@ -4,7 +4,10 @@
             <li class="dish" :class="{ flipped: isFlipped[index] }" v-for="(item, index) in res" :key="index">
                 <div class="front">
                     <div class="img" :style="`background-image: url(${image_pathes[index]})`"></div>
-                    <button class="changeImg">画像更新</button>
+                    <label>
+                        <input type="file" @change="(event) => onImageChange(event, item)" />
+                        <button type="button" class="changeImg">画像更新</button>
+                    </label>
                     <div class="info">
                         <h3 class="title">{{ item.name }}</h3>
                         <p class="price">
@@ -14,8 +17,8 @@
                         <p class="description">
                             <span>紹介:</span> {{ item.description }}
                         </p>
-                        <button @click="flip(index)">修正する</button>
                         <button>削除する</button>
+                        <button @click="flip(index)">修正する</button>
                     </div>
                 </div>
                 <div class="back">
@@ -38,6 +41,8 @@
                                 <label><input type="radio" :name="'state-' + index" value="0"
                                         v-model="dish[index].state" />販売中</label>
                                 <label><input type="radio" :name="'state-' + index" value="1"
+                                        v-model="dish[index].state" />完売</label>
+                                <label><input type="radio" :name="'state-' + index" value="2"
                                         v-model="dish[index].state" />一時停止中</label>
                             </div>
                         </li>
@@ -60,18 +65,19 @@
                 </svg>
             </li>
         </ul>
-        <AddDish :isVisible="isVisible.add" @close="closeModal" />
+        <AddDish :isVisible="isVisible.add" :dishCategoryId="req.dishCategoryId" @close="closeModal" />
     </section>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, watch } from "vue";
-import { fetDishByCategoryId } from "@/api/dishApi";
-import { useRoute } from "vue-router";
+import { fetDishByCategoryId, updateDishImage } from "@/api/dishApi";
+import { useRouter, useRoute } from "vue-router";
 import AddDish from "@/components/AddDish.vue";
 
 // ルート情報
 const route = useRoute();
+const router = useRouter();
 
 // リクエストのデータ
 const req = reactive({
@@ -172,6 +178,64 @@ watch(
 onMounted(() => {
     fetchDishes(req); // データ取得メソッドを呼び出す
 });
+
+
+const defaultReqImage = {
+    id: "",
+    dishCategoryId: "",
+    name: "",
+    image: "",
+};
+
+const reqImage = reactive({ ...defaultReqImage })
+
+const onImageChange = (event, item) => {
+    const file = event.target.files[0];
+    // **画像形式の確認**
+    const imageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!imageTypes.includes(file.type)) {
+        alert("無効な画像形式です。使用可能な形式: JPG, JPEG, PNG");
+        return;
+    }
+
+    // **画像サイズの確認**
+    const maxSize = 2 * 1024 * 1024; // 制限 2MB
+    if (file.size > maxSize) {
+        alert("画像サイズが2MBを超えています。より小さい画像をアップロードしてください。");
+        return;
+    }
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            reqImage.image = e.target.result;
+            reqImage.name = item.image
+            reqImage.dishCategoryId = item.dishCategoryId
+            reqImage.id = item.id
+            updateImage()
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// API から料理データを取得
+const updateImage = async () => {
+    try {
+        const response = await updateDishImage(reqImage);
+        const code = response.data.code;
+        if (code === 1) {
+            alert(`画像チェンジを成功しました。`);
+            router.push("/menu/" + reqImage.dishCategoryId);
+            window.location.reload();
+        } else {
+            alert("画像チェンジを失敗しました。");
+            console.log(response.data.msg);
+        }
+    } catch (err) {
+        console.error("リクエストエラー:", err);
+        alert("画像チェンジを失敗しました。");
+    }
+};
 </script>
 
 <style lang="less" scoped>

@@ -9,11 +9,14 @@ import router from "./router";
 import Header from '@/components/Header.vue';
 import Nav from "./components/Nav.vue";
 import DeleteDialog from "./components/DeleteDialog.vue";
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 
 // アプリケーションを作成
 const app = createApp(App)
 const pinia = createPinia();
+
+pinia.use(piniaPluginPersistedstate);
 
 // ルーターをアプリケーションに登録
 app.use(router);

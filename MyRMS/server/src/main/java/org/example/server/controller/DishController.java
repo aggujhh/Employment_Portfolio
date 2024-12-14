@@ -28,4 +28,18 @@ public class DishController {
         log.info("カテゴリー{}に料理を取得しました、結果は{}。>>>", dishCategoryId, results);
         return Result.success(results);
     }
+
+    @PostMapping
+    public Result addDish(@RequestBody Dish dish) {
+        log.info("料理を追加する。カテゴリーID{}>>>", dish.getDishCategoryId());
+        dishService.addDish(dish);
+        return Result.success();
+    }
+
+    @PatchMapping
+    public Result updateDishImage(@RequestBody Dish dish) {
+        log.info("料理の写真を変換する。写真名{}>>>", dish.getName());
+        dishService.updateDishImage(dish);
+        return Result.success();
+    }
 }

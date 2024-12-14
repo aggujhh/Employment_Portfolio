@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface DishService {
     List<Dish> getDishByCategoryId(Long dish);
+
+    void addDish(Dish dish);
+
+    void updateDishImage(Dish dish);
 }

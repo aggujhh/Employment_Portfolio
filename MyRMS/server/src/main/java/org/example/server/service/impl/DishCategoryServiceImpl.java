@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.example.pojo.entity.DishCategory;
 import org.example.server.mapper.DishCategoryMapper;
-import org.example.server.mapper.EmpMapper;
 import org.example.server.service.DishCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -47,7 +47,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // すべてのパスを対象とする
                 .allowedOrigins("http://localhost:5173", "http://127.0.0.1:5173") // 許可するオリジン
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 許可するHTTPメソッド
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH") // 許可するHTTPメソッド
                 .allowedHeaders("*") // 許可するヘッダー
                 .allowCredentials(true); // クッキー情報を許可
     }

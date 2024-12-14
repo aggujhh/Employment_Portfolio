@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia';
 import session from "@/utils/session.ts";
 
+// @ts-expect-error 忽略类型错误
 export const useUserStore = defineStore('user', {
     state: () => ({
         users: {} as Record<
@@ -30,7 +31,7 @@ export const useUserStore = defineStore('user', {
          */
         upsertUser(user: { id: string; name: string; type: string; job: string }) {
             this.users[user.id] = user; // オブジェクトのキーを使用してユーザーを追加または更新
-            console.log("存储成功: ",user);
+            console.log("存储成功: ", user);
         },
 
         /**
@@ -44,5 +45,14 @@ export const useUserStore = defineStore('user', {
                 console.warn(`ユーザー ID ${userId} は存在しないため、削除できません`);
             }
         },
+    },
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                key: 'userStore', // 存储的键名
+                storage: localStorage, // 存储位置，可以改为 sessionStorage
+            },
+        ],
     },
 });

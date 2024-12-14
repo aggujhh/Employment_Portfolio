@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch,computed } from "vue";
+import { ref, reactive, watch, computed } from "vue";
 import { updateDishCategory } from "@/api/dishCategoryApi";
 
 const props = defineProps(['isVisible', 'id', 'name'])
@@ -42,10 +42,23 @@ const close = () => {
 }
 
 const agree = async () => {
+
+    if (data.name === "") {
+        alert('種類名は空にできません、入力してください。');
+        return;
+    }
+
     if (textCount.value > 20) {
         alert("種類名は20文字以内に抑えてください。")
         return;
     }
+
+    const forbiddenRegex = /['"`;\\/\-\-#()=<>]/g;
+    if (forbiddenRegex.test(data.name)) {
+        alert('不適合な記号が入力されました: \' " ` ; \\ / -- # ( ) = < >');
+        return;
+    }
+
     try {
         // API を呼び出してログイン処理を行う
         const res = await updateDishCategory(data); // API 呼び出し

@@ -33,10 +33,22 @@ const close = () => {
 }
 
 const agree = async () => {
-    if (textCount.value > 20) {
-        alert("種類名は20文字以内に抑えてください。")
+    if (data.name === "") {
+        alert('種類名は空にできません、入力してください。');
         return;
     }
+
+    if (textCount.value > 20) {
+        alert("種類名は20文字以内に抑えてください。")
+        return; name
+    }
+
+    const forbiddenRegex = /['"`;\\/\-\-#()=<>]/g;
+    if (forbiddenRegex.test(data.name)) {
+        alert('不適合な記号が入力されました: \' " ` ; \\ / -- # ( ) = < >');
+        return;
+    }
+
     try {
         // API を呼び出してログイン処理を行う
         const res = await addDishCategory(data); // API 呼び出し
