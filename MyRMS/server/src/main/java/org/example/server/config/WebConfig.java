@@ -30,10 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**") // すべてのURLパターンを対象にする
                 .excludePathPatterns( // 以下のパスはインターセプターの対象外とする
                         "/order",       // 注文ページ
-                        "/order/cart",  // カートページ
-                        "/order/hist",  // 注文履歴ページ
-                        "/dish/list",   // メニューリストページ
-                        "/category",    // カテゴリーページ
+                        "/order/*",  // カートページ
                         "/login"        // ログインページ
                 );
     }

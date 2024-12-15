@@ -48,3 +48,14 @@ export function updateDishInfo(data: {
 }) {
     return instance.put('/api/dish', data);
 }
+
+/**
+ * 料理を削除するをする
+ */
+export function deleteDish(data: {
+    id: number,
+    dishCategoryId: number,
+    image: string,
+}) {
+    return instance.delete('/api/dish', { data: data });
+}

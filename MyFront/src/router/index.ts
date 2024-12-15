@@ -14,6 +14,8 @@ import DataAnalysis from '@/views/DataAnalysis.vue';
 import Staff from '@/views/Staff.vue';
 import Permission from '@/views/Permission.vue';
 import Dishes from '@/views/Dishes.vue';
+import Order from '@/phoneViews/Index.vue';
+import OrderDishes from '@/phoneViews/Dishes.vue';
 
 // ルーターインスタンスを作成
 const router = createRouter({
@@ -32,9 +34,17 @@ const router = createRouter({
         { path: '/data_analysis', component: DataAnalysis, },
         { path: '/staff', component: Staff, },
         { path: '/permission', component: Permission, },
-        { path: '/404', component: NotFound },
+        {
+            path: '/order', component: Order, meta: { requiresAuth: false }, redirect: '/order/1',
+            children: [{
+                path: ':id',
+                component: OrderDishes,
+                meta: { requiresAuth: false }
+            }]
+        },// 动态子路由]
+        { path: '/404', component: NotFound, meta: { requiresAuth: false } },
         { path: '/', redirect: '/login' },
-        { path: '/:pathMatch(.*)*', redirect: '/404', },
+        { path: '/:pathMatch(.*)*', redirect: '/404' },
     ], // ルートの設定を適用
 });
 
@@ -45,11 +55,7 @@ router.beforeEach((to, from, next) => {
     const isAuthenticated = session.getSession(); // トークンがある場合はログイン状態とみなす
     const requiresAuth = to.meta.requiresAuth !== false; // デフォルトでは認証が必要
 
-
-    if (to.path === '/404') {
-        next(); // 允许访问404
-    }
-    else if (requiresAuth && !isAuthenticated) {
+    if (requiresAuth && !isAuthenticated) {
         // 認証が必要なルートにアクセスする場合、ログインページにリダイレクト
         next('/login');
     } else {

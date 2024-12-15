@@ -1,15 +1,19 @@
 <template>
     <section id="dishes">
         <ul>
+            <!-- 料理リストをループ表示 -->
             <li class="dish" :class="{ flipped: isFlipped[index] }" v-for="(item, index) in res" :key="index">
                 <div class="front">
+                    <!-- 料理画像 -->
                     <div class="img" :style="`background-image: url(${image_pathes[index]})`">
                     </div>
                     <label>
+                        <!-- 画像更新ボタン -->
                         <input type="file" @change="(event) => onImageChange(event, item)" />
                         <button type="button" class="changeImg">画像更新</button>
                     </label>
                     <div class="info">
+                        <!-- 料理情報表示 -->
                         <h3 class="title" :title="item.name">{{ item.name }}</h3>
                         <p class="price">
                             <span>値段:</span> <span>¥{{ item.price }}(税抜金額)</span>
@@ -18,11 +22,13 @@
                         <p class="description">
                             <span>紹介:</span> {{ item.description }}
                         </p>
-                        <button>削除する</button>
+                        <!-- 削除・修正ボタン -->
+                        <button @click="() => { openDeleteDialog(item) }">削除する</button>
                         <button @click="flip(index)">修正する</button>
                     </div>
                 </div>
                 <div class="back">
+                    <!-- 編集フォーム -->
                     <ul>
                         <li>
                             <label>
@@ -37,6 +43,7 @@
                             </label>
                         </li>
                         <li>
+                            <!-- 販売状況を選択 -->
                             <p>販売状況:</p>
                             <div>
                                 <label><input type="radio" :name="'state-' + index" value="0"
@@ -48,13 +55,16 @@
                             </div>
                         </li>
                         <li>
+                            <!-- 紹介文を編集 -->
                             料理の紹介<br /><textarea v-model="dish[index].description"></textarea>
                         </li>
                     </ul>
+                    <!-- 編集確認・キャンセルボタン -->
                     <button @click="updateInfo(index)">確認</button>
                     <button @click="cancel(index)">戻る</button>
                 </div>
             </li>
+            <!-- 新規追加ボタン -->
             <li class="add" @click="() => { isVisible.add = true }">
                 <svg version="1.1" viewBox="0 0 24 24" height="30px" width="30px">
                     <path class="cls-1" fill="#3b3632"
@@ -66,22 +76,24 @@
                 </svg>
             </li>
         </ul>
+        <!-- 新規追加モーダル -->
         <AddDish :isVisible="isVisible.add" :dishCategoryId="req.dishCategoryId" @close="closeModal"
             @refresh="reloadPage" />
+        <!-- 削除ダイアログ -->
+        <DeleteDialog :isVisible="isVisible.delete" :name="dishName" :deleteMethod="deleteMethod" @close="closeModal" />
     </section>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch, toRaw } from "vue";
-import { fetDishByCategoryId, updateDishImage, updateDishInfo } from "@/api/dishApi";
-import { useRouter, useRoute } from "vue-router";
+import { ref, reactive, onMounted, watch } from "vue";
+import { fetDishByCategoryId, updateDishImage, updateDishInfo, deleteDish } from "@/api/dishApi";
+import { useRoute } from "vue-router";
 import AddDish from "@/components/AddDish.vue";
 import cloneDeep from 'lodash/cloneDeep';
 
 
 // ルート情報
 const route = useRoute();
-const router = useRouter();
 
 // リクエストのデータ
 const req = reactive({
@@ -99,14 +111,12 @@ let TempDishArray = []
 const isVisible = reactive({
     add: false,
     delete: false,
-    update: false,
 });
 
 // モーダルを閉じる関数
 const closeModal = () => {
     isVisible.add = false;
     isVisible.delete = false;
-    isVisible.update = false;
 };
 
 // フリップ状態を切り替える
@@ -115,8 +125,6 @@ const flip = (index) => {
 };
 
 // キャンセル時の処理
-
-
 const cancel = (index) => {
     flip(index); // フリップを元に戻す
     // 逐项替换，避免直接赋值整个数组
@@ -207,8 +215,10 @@ const defaultReqImage = {
 
 const reqImage = reactive({ ...defaultReqImage })
 
+// **画像を変更する関数**
 const onImageChange = (event, item) => {
     const file = event.target.files[0];
+
     // **画像形式の確認**
     const imageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (!imageTypes.includes(file.type)) {
@@ -227,14 +237,14 @@ const onImageChange = (event, item) => {
         const reader = new FileReader();
         reader.onload = (e) => {
             reqImage.image = e.target.result;
-            reqImage.name = item.image
-            reqImage.dishCategoryId = item.dishCategoryId
-            reqImage.id = item.id
-            updateImage()
+            reqImage.name = item.image;
+            reqImage.dishCategoryId = item.dishCategoryId;
+            reqImage.id = item.id;
+            updateImage();
         };
         reader.readAsDataURL(file);
     }
-}
+};
 
 // API から料理データを取得
 const updateImage = async () => {
@@ -316,6 +326,44 @@ const updateInfo = async (index) => {
     }
 };
 
+// 削除ダイアログを開く関数
+const dishName = ref()
+const dishCategoryId = ref()
+const deleteReq = reactive({
+    id: "",
+    image: "",
+    dishCategoryId: ""
+})
+
+const openDeleteDialog = (item) => {
+    isVisible.delete = true;
+    dishName.value = item.name;
+    deleteReq.id = item.id;
+    deleteReq.image = item.image;
+    deleteReq.dishCategoryId = item.dishCategoryId
+};
+
+// 料理を削除メソッド
+const deleteMethod = async () => {
+    try {
+        // API を呼び出して料理を削除
+        const res = await deleteDish(deleteReq);
+        console.log(res);
+        const code = res.data.code; // ステータスコードを取得
+        if (code === 1) {
+            alert(`料理「${dishName.value}」が削除されました。`);
+            closeModal();
+            reloadPage(deleteReq.dishCategoryId)
+        } else {
+            alert(res.data.msg);
+            console.log(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+        alert("削除失敗しました。もう一度お試しください。");
+    }
+};
 
 </script>
 

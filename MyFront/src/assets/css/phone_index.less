@@ -1,0 +1,96 @@
+#order {
+    height: 100vh;
+    width: 100vw;
+    background-image: url("@/assets/images/order_img/order_bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+
+
+    header {
+        height: 20vh;
+        width: 10%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 30px;
+
+        div {
+            display: inline-block;
+            height: 40px;
+            width: 40px;
+            border: 3px solid #ff0707;
+            transform: rotate(45deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 1px 1px #fbb034;
+
+            p {
+                font-family: YujiSyuku;
+                transform: rotate(-45deg)translate(-1px, -5px);
+                font-size: 26px;
+                color: #ff0707;
+                text-shadow: 1px 1px 0 #fbb034;
+            }
+        }
+    }
+
+    main {
+        width: 100%;
+        height: 80vh;
+        // margin-top: 20%;
+        display: flex;
+        justify-content: space-between;
+
+        nav {
+            width: 24%;
+            height: 100%;
+
+            ul {
+                height: 100%;
+                width: 100%;
+                overflow: auto;
+
+
+                li {
+                    height: 60px;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    user-select: none;
+                    margin-bottom: 3px;
+                    background: #fbb034;
+                    color: #111;
+                    font-family: YujiSyuku;
+                    font-size: 20px;
+                    font-weight: bold;
+
+
+                    p {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        max-width: 80px;
+                    }
+                }
+
+                li.active {
+                    border: 1.5px solid #fbb034;
+                    background: none;
+
+                    p {
+                        color: #fbb034;
+                    }
+                }
+
+                li:last-of-type {
+                    margin-bottom: 200px;
+                }
+            }
+        }
+    }
+}

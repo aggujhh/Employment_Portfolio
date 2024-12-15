@@ -78,7 +78,7 @@ public class DishServiceImpl implements DishService {
         String dishImagePath = null; // 大サイズ画像の保存パス
         String orderImagePath = null; // 小サイズ画像の保存パス
         String oldDishImagePath = null; // 大サイズ画像の保存パス
-        String oldorderImagePath = null; // 小サイズ画像の保存パス
+        String oldOrderImagePath = null; // 小サイズ画像の保存パス
 
 
         // 画像が存在する場合、ファイル名と保存パスを生成
@@ -87,7 +87,7 @@ public class DishServiceImpl implements DishService {
             dishImagePath = "dish-img" + File.separator + dish.getDishCategoryId() + File.separator + fileName; // 大サイズ画像のパス
             orderImagePath = "order-img" + File.separator + dish.getDishCategoryId() + File.separator + fileName; // 小サイズ画像のパス
             oldDishImagePath = "dish-img" + File.separator + dish.getDishCategoryId() + File.separator + oldFileName; // 大サイズ画像のパス
-            oldorderImagePath = "order-img" + File.separator + dish.getDishCategoryId() + File.separator + oldFileName; // 小サイズ画像のパス
+            oldOrderImagePath = "order-img" + File.separator + dish.getDishCategoryId() + File.separator + oldFileName; // 小サイズ画像のパス
             dish.setImage(fileName); // 画像ファイル名をDishオブジェクトに設定
 
             // 作成者と作成時間を設定
@@ -100,7 +100,7 @@ public class DishServiceImpl implements DishService {
 
             // 画像が存在する場合は保存処理を実行
             SaveFile saveFile = new SaveFile();
-            if (saveFile.deleteFile(oldDishImagePath)&&saveFile.deleteFile(oldorderImagePath)) {
+            if (saveFile.deleteFile(oldDishImagePath) && saveFile.deleteFile(oldOrderImagePath)) {
                 saveFile.SaveImage(base64Image, dishImagePath, 800); // 大サイズ画像を保存
                 saveFile.SaveImage(base64Image, orderImagePath, 400); // 小サイズ画像を保存
             }
@@ -114,5 +114,17 @@ public class DishServiceImpl implements DishService {
         dish.setUpdater(userId); // 作成者を設定
         dish.setUpdateTime(LocalDateTime.now()); // 作成時間を現在時刻に設定
         dishMapper.updateDishInfo(dish);
+    }
+
+    @Override
+    public void deleteDish(Dish dish) {
+        dishMapper.deleteDish(dish);
+        String fileName = dish.getImage();
+        String dishImagePath = "dish-img" + File.separator + dish.getDishCategoryId() + File.separator + fileName; // 大サイズ画像のパス
+        String orderImagePath = "order-img" + File.separator + dish.getDishCategoryId() + File.separator + fileName; // 小サイズ画像のパス
+
+        SaveFile saveFile = new SaveFile();
+        saveFile.deleteFile(dishImagePath);
+        saveFile.deleteFile(orderImagePath);
     }
 }

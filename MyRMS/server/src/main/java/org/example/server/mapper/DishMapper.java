@@ -1,9 +1,6 @@
 package org.example.server.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.example.pojo.entity.Dish;
 
 import java.util.List;
@@ -24,4 +21,7 @@ public interface DishMapper {
             "SET name=#{name},price=#{price},description=#{description},state=#{state}, updater=#{updater},update_time=#{updateTime} " +
             "WHERE id=${id}")
     void updateDishInfo(Dish dish);
+
+    @Delete("DELETE FROM dish WHERE id=#{id}")
+    void deleteDish(Dish dish);
 }

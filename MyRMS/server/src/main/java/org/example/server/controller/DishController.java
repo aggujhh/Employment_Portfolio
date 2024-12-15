@@ -3,6 +3,7 @@ package org.example.server.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.Result;
 import org.example.pojo.entity.Dish;
+import org.example.pojo.entity.DishCategory;
 import org.example.server.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,13 @@ public class DishController {
     public Result updateDishInfo(@RequestBody Dish dish) {
         log.info("料理の情報を修正する。引数：{}>>>", dish);
         dishService.updateDishInfo(dish);
+        return Result.success();
+    }
+
+    @DeleteMapping
+    public Result deleteDish(@RequestBody Dish dish) {
+        log.info("料理のを削除する:{}", dish);
+        dishService.deleteDish(dish);
         return Result.success();
     }
 }

@@ -12,4 +12,6 @@ public interface DishService {
     void updateDishImage(Dish dish);
 
     void updateDishInfo(Dish dish);
+
+    void deleteDish(Dish dish);
 }
