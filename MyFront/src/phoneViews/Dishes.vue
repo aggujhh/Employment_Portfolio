@@ -10,25 +10,26 @@
                     <p class="description" :title="dish.description">{{ dish.description }}</P>
                     <p class="price"><span>&yen;</span>{{ dish.price }}</p>
                     <div class="count">
-                        <div class="minus" @click="minus(i)">
+                        <div class="minus" @click="minus(dish.id)">
                             <p>－</p>
                         </div>
-                        <span>{{ dishCount[i] }}</span>
-                        <div class="add" @click="plus(i)">
+                        <span>{{ store.dishes[countParam.deskId][dish.id].count || 0 }}</span>
+                        <div class="add" @click="plus(dish.id)">
                             <p>＋</p>
                         </div>
                     </div>
                 </div>
-                <!-- </div> -->
             </li>
         </ul>
     </section>
 </template>
 
 <script setup>
-import { ref, reactive, watch } from "vue"
+import { ref, reactive, watch, onMounted } from "vue"
 import { useRoute } from "vue-router";
 import { fetchDishByCategoryId } from "@/api/orderApi";
+const emit = defineEmits(['sumOrderAndPrice']);
+import { useDishStore } from "@/stores/dishStore";
 
 // ルート情報
 const route = useRoute();
@@ -39,7 +40,10 @@ const req = reactive({
 });
 const res = ref([]); // 料理データ
 const image_pathes = ref([]); // 画像パス
-const dishCount = ref([]);
+const store = useDishStore();
+const countParam = reactive({
+    deskId: route.params.desk_id,
+})
 
 // API から料理データを取得
 const fetchDishes = async (req) => {
@@ -49,7 +53,9 @@ const fetchDishes = async (req) => {
         res.value = response.data; // データを保存
         console.log("dish: ", res.value);
         setImgPath(res.value); // 画像パスを設定
-        setDishCount()
+        setDishStore()
+
+
     } catch (err) {
         console.error("リクエストエラー:", err);
         alert("料理の取得に失敗しました。");
@@ -74,21 +80,23 @@ const setImgPath = (res) => {
     );
 };
 
-const setDishCount = () => {
-    dishCount.value = res.value.map(
-        (item) => 0
-    );
+const setDishStore = () => {
+    res.value.forEach(
+        (item) => store.setDish(route.params.desk_id, item.id, item.name, item.price)
+    )
 }
 
-const plus = (index) => {
-    if (dishCount.value[index] < 10) {
-        dishCount.value[index]++
+const plus = (dishId) => {
+    if (store.getDishCount(countParam.deskId, dishId) < 10) {
+        store.plusDishCount(countParam.deskId, dishId)
+        emit('sumOrderAndPrice')
     }
 }
 
-const minus = (index) => {
-    if (dishCount.value[index] > 0) {
-        dishCount.value[index]--
+const minus = (dishId) => {
+    if (store.getDishCount(countParam.deskId, dishId) > 0) {
+        store.minusDishCount(countParam.deskId, dishId)
+        emit('sumOrderAndPrice')
     }
 }
 </script>

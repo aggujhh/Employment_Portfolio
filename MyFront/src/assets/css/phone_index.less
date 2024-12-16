@@ -9,36 +9,49 @@
 
 
     header {
-        height: 20vh;
-        width: 10%;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        height: 15vh;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
         padding: 30px;
 
-        div {
-            display: inline-block;
-            height: 40px;
-            width: 40px;
-            border: 3px solid #ff0707;
-            transform: rotate(45deg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 1px 1px #fbb034;
+        .title {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            width: 20%;
 
-            p {
-                font-family: YujiSyuku;
-                transform: rotate(-45deg)translate(-1px, -5px);
-                font-size: 26px;
-                color: #ff0707;
-                text-shadow: 1px 1px 0 #fbb034;
+            div {
+                display: inline-block;
+                height: 40px;
+                width: 40px;
+                border: 3px solid #ff0707;
+                transform: rotate(45deg);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-shadow: 1px 1px #fbb034;
+
+                p {
+                    font-family: YujiSyuku;
+                    transform: rotate(-45deg)translate(-1px, -5px);
+                    font-size: 26px;
+                    color: #ff0707;
+                    text-shadow: 1px 1px 0 #fbb034;
+                }
             }
+        }
+
+        .desk_id {
+            color: #fbb034;
+            transform: translateY(20px);
+            font-weight: bold;
         }
     }
 
     main {
         width: 100%;
-        height: 80vh;
+        height: 85vh;
         // margin-top: 20%;
         display: flex;
         justify-content: space-between;
@@ -92,5 +105,115 @@
                 }
             }
         }
+    }
+
+    footer {
+        position: fixed;
+        height: 8vh;
+        width: 95%;
+        bottom: 0;
+        left: 2.5%;
+        background: #333;
+        border-radius: 30px;
+        transition: ease-in-out 0.6s;
+
+        >div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            font-family: YujiSyuku;
+            font-weight: bold;
+            transition: ease-in-out 0.6s;
+            height: 40px;
+            width: 120px;
+            border-radius: 20px;
+            font-size: 18px;
+            border: none;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+
+            p {
+                transition: ease-in-out 0.6s;
+            }
+
+            .info {
+                position: absolute;
+                top: 20%;
+                left: 30%;
+                opacity: 0;
+                width: 400px;
+
+                li {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 500px;
+                }
+            }
+        }
+
+        >div.active {
+            height: 600px;
+            width: 600px;
+            z-index: 3;
+            border-radius: 50%;
+            // align-items: start;
+
+            p {
+                font-size: 30px;
+                transform: translateY(80%);
+            }
+
+            .info {
+                opacity: 1;
+            }
+        }
+
+
+
+        .accounting {
+            background: #fbb034;
+            left: 9px;
+        }
+
+        .accounting.active {
+            transform: translate(-20%, -80%);
+        }
+
+        .price {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+        }
+
+        .shoppingCart {
+            background: #c60608;
+            color: #fbb034;
+            right: 9px;
+            font-size: 16px;
+
+            .countOrder {
+                height: 25px;
+                width: 25px;
+                position: absolute;
+                border-radius: 50%;
+                top: -10px;
+                right: -10px;
+                background: #fbb034;
+                color: #c60608;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        .shoppingCart.active {
+            transform: translate(20%, -80%);
+        }
+
     }
 }

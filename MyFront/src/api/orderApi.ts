@@ -13,3 +13,10 @@ export function fetDishCategory() {
 export function fetchDishByCategoryId(data: { dishCategoryId: number }) { 
     return instance.get(`/api/order/${data.dishCategoryId}`);
 }
+
+/**
+ * テーブルをフェッチ
+ */
+export function fetchAllTables() {
+    return instance.get('/api/order/desk');
+}

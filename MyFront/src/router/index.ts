@@ -35,7 +35,9 @@ const router = createRouter({
         { path: '/staff', component: Staff, },
         { path: '/permission', component: Permission, },
         {
-            path: '/order', component: Order, meta: { requiresAuth: false }, redirect: '/order/1',
+            path: '/order/:desk_id', component: Order, meta: { requiresAuth: false }, redirect: (to) => {
+                return `/order/${to.params.desk_id}/1`;
+            },
             children: [{
                 path: ':id',
                 component: OrderDishes,

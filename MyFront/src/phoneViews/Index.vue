@@ -1,18 +1,21 @@
 <template>
     <section id='order'>
-        <header class="title">
-            <div>
-                <p>メ</p>
+        <header>
+            <div class="title">
+                <div>
+                    <p>メ</p>
+                </div>
+                <div>
+                    <p>ニ</p>
+                </div>
+                <div>
+                    <p>ュ</p>
+                </div>
+                <div>
+                    <p>ー</p>
+                </div>
             </div>
-            <div>
-                <p>ニ</p>
-            </div>
-            <div>
-                <p>ュ</p>
-            </div>
-            <div>
-                <p>ー</p>
-            </div>
+            <div class="desk_id">テーブル番号：{{ route.params.desk_id }}</div>
         </header>
         <!-- <div class="deskNumber" @click="visible">
             {{ $store.state.deskId }}番テーブル
@@ -27,21 +30,99 @@
         <main>
             <nav>
                 <ul>
-                    <!-- <li v-for="(category, index) in categories" :key="index"
-                    :class="{ navActive: $store.state.dishViewIndex === index }" @click="toScreen(index)">
-                    {{ category.name }}
-                </li> -->
-                    <li v-for="(item, index) in res" :key="index" @click="toDishPage(`/order/${item.id}`)"
-                        :class="{ active: isActive(`/order/${item.id}`) }">
+                    <li v-for="(item, index) in res" :key="index"
+                        @click="toDishPage(`/order/${route.params.desk_id}/${item.id}`)"
+                        :class="{ active: isActive(`/order/${route.params.desk_id}/${item.id}`) }">
                         <div class="nav_name">
                             <p :title="item.name">{{ item.name }}</p>
                         </div>
                     </li>
                 </ul>
             </nav>
-            <RouterView></RouterView>
+            <RouterView @sumOrderAndPrice="sumOrderAndPrice"></RouterView>
         </main>
-        
+        <footer>
+            <div class="accounting" @click="toAccounting" :class="{ active: active.accounting }">
+                <p>注文履歴</p>
+            </div>
+            <p class="price"><span>&yen;</span>{{ count.price }}</p>
+            <div class="shoppingCart" :class="{ active: active.shoppingCart }" @click="toCart">
+                <p>注文リスト</p>
+                <ul class="info" ref="info"></ul>
+                <div class="countOrder">{{ count.order }}</div>
+            </div>
+            <!-- 
+            <div
+                class="shoppingCartText"
+                :class="{ cartTextActive: isCartTextActive }"
+            >
+                <h3>注文カート</h3>
+                <ul>
+                    <li v-for="(cart, i) in carts" :key="i">
+                        <p>{{ cart.name }}</p>
+                        <p>
+                            <i class="icon-minus-outline" @click="minus(i)"></i>
+                            <span>{{ cart.number }}</span>
+                            <i class="icon-add-solid" @click="plus(i)"></i>
+                        </p>
+                    </li>
+                </ul>
+                <p>
+                    合計<span>{{ countNumber }}</span
+                    >点
+                </p>
+                <button @click="addHist()">注文する</button>
+                <button @click="closeCart()">キャンセル</button>
+            </div>
+            <div class="ordersText">
+                <button class="closeBtn" @click="closeAccounting()">
+                    &times;
+                </button>
+                <h3>注文明細</h3>
+                <ul>
+                    <li v-for="(hist, i) in orderHists" :key="i">
+                        <p>
+                            {{ hist.name }}
+                            <span>&times;</span>
+                            {{ hist.number }}
+                        </p>
+                        <p
+                            :style="{
+                                color: statusColor(hist.status),
+                            }"
+                        >
+                            {{ statusValue(hist.status) }}
+                        </p>
+                    </li>
+                </ul>
+                <li class="totalPrice">合計金額: {{ countPrice }}</li>
+                <P class="payMethod">
+                    支払い方法 :
+                    <div class="radio">
+                        <label
+                            ><input
+                                type="radio"
+                                name="status"
+                                value="1"
+                                v-model="status"
+                            />現金
+                        </label>
+                        <label
+                            ><input
+                                type="radio"
+                                name="status"
+                                value="2"
+                                v-model="status"
+                            />クレジットカード
+                        </label>
+                        <button class="reqAccounting" @click="accounting">
+                            会計する
+                        </button>
+                    </div>
+                </P>
+            </div> -->
+        </footer>
+
         <!-- <div class="main"><router-view /></div>
         <footer :class="{ accountingActive: isAccountingActive }">
             <button class="accounting" @click="toAccounting">会計する</button>
@@ -108,13 +189,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"
-import { fetDishCategory } from "@/api/orderApi";
+import { ref, reactive, onMounted } from "vue"
+import { fetDishCategory, fetchAllTables } from "@/api/orderApi";
 import { useRouter, useRoute } from "vue-router";
+import { useDishStore } from "@/stores/dishStore";
 
+const store = useDishStore();
 const res = ref([]);
+const tables = ref([]);
+const tableIdArray = ref([]);
 const route = useRoute();
 const router = useRouter();
+
 
 // ディッシュカテゴリーを取得するメソッド
 const fetchDishCategories = async () => {
@@ -128,8 +214,21 @@ const fetchDishCategories = async () => {
     }
 };
 
+const fetchTables = async () => {
+    try {
+        const response = await fetchAllTables();
+        tables.value = response.data.data; // APIからデータを取得
+        setTableIdArray()
+        checkHasTable()
+    } catch (err) {
+        console.error("リクエストエラー:", err);
+        alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
+    }
+};
+
 // コンポーネントがマウントされたときにカテゴリデータを取得
 onMounted(() => {
+    fetchTables();
     fetchDishCategories();
 });
 
@@ -142,6 +241,48 @@ const toDishPage = (path) => {
 const isActive = (path) => {
     return route.path === path;
 };
+
+const active = reactive({
+    accounting: false,
+    shoppingCart: false
+})
+
+// const=isActive
+const toAccounting = () => {
+    active.accounting = !active.accounting
+}
+
+const toCart = () => {
+    active.shoppingCart = !active.shoppingCart
+}
+
+const count = reactive({
+    price: 0,
+    order: 0
+})
+
+const info = ref(null)
+const sumOrderAndPrice = () => {
+    count.order = store.sumDishCount(route.params.desk_id)
+    count.price = store.sumDishPrice(route.params.desk_id)
+    info.value.innerHTML = store.getInfo(route.params.desk_id)
+}
+
+const setTableIdArray = () => {
+    tableIdArray.value = tables.value.map(
+        (item) => item.id
+    );
+}
+const checkHasTable = () => {
+    console.log("tableId", route.params.desk_id);
+
+    const flag = tableIdArray.value.includes(route.params.desk_id.toUpperCase());
+    if (!flag) {
+        router.push("/404");
+    }
+}
+
+
 
 
 </script>
