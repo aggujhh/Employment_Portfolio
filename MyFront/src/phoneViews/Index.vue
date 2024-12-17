@@ -48,7 +48,27 @@
             <p class="price"><span>&yen;</span>{{ count.price }}</p>
             <div class="shoppingCart" :class="{ active: active.shoppingCart }" @click="toCart">
                 <p>注文リスト</p>
-                <ul class="info" ref="info"></ul>
+                <div class="info">
+                    <ul>
+                        <li v-for="(item, index) in infoList" :key="index" class="info-item">
+                            <p>{{ item.name }}</p>
+                            <div class="count">
+                                <div class="minus" @click="minus(item.id)">
+                                    <p>－</p>
+                                </div>
+                                <span>{{ store.dishes[route.params.desk_id][item.id].count || 0 }}</span>
+                                <div class="add" @click="plus(item.id)">
+                                    <p>＋</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <p>合計<span>{{ count.order }}</span>点</p>
+                    <div class="btns">
+                        <button @click.stop="closeCart">キャンセル</button>
+                        <button>注文する</button>
+                    </div>
+                </div>
                 <div class="countOrder">{{ count.order }}</div>
             </div>
             <!-- 
@@ -253,20 +273,45 @@ const toAccounting = () => {
 }
 
 const toCart = () => {
-    active.shoppingCart = !active.shoppingCart
+    active.shoppingCart = true
 }
+
+const closeCart = () => {
+    active.shoppingCart = false
+}
+
 
 const count = reactive({
     price: 0,
     order: 0
 })
 
-const info = ref(null)
+
+const infoList = ref([])
 const sumOrderAndPrice = () => {
     count.order = store.sumDishCount(route.params.desk_id)
     count.price = store.sumDishPrice(route.params.desk_id)
-    info.value.innerHTML = store.getInfo(route.params.desk_id)
+    infoList.value = store.getInfo(route.params.desk_id);
+};
+
+const plus = (dishId) => {
+    if (store.getDishCount(route.params.desk_id, dishId) < 10) {
+        store.plusDishCount(route.params.desk_id, dishId)
+        count.order = store.sumDishCount(route.params.desk_id)
+        count.price = store.sumDishPrice(route.params.desk_id)
+        infoList.value = store.getInfo(route.params.desk_id);
+    }
 }
+
+const minus = (dishId) => {
+    if (store.getDishCount(route.params.desk_id, dishId) > 0) {
+        store.minusDishCount(route.params.desk_id, dishId)
+        count.order = store.sumDishCount(route.params.desk_id)
+        count.price = store.sumDishPrice(route.params.desk_id)
+        infoList.value = store.getInfo(route.params.desk_id);
+    }
+}
+
 
 const setTableIdArray = () => {
     tableIdArray.value = tables.value.map(

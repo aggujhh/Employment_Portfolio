@@ -84,29 +84,12 @@ export const useDishStore = defineStore('dishCount', {
             return Object.values(deskDishes).reduce((sum, dish) => sum + (dish.count * dish.price), 0);
         },
 
-        getInfo(desk_id: string): string {
+        getInfo(desk_id: string): Array<{ id: string; name: string; count: number }> {
             const deskDishes = this.dishes[desk_id];
-            console.log("deskDishes:", deskDishes);
-            let result = ""; // 初期化された文字列
-
-            if (deskDishes) {
-                result = Object.values(deskDishes).reduce((result, dish) => {
-                    if (dish.count !== 0) {
-                        return (
-                            result +
-                            `<li>
-                                <div>${dish.title} × ${dish.count}</div>
-                                <div>${dish.price}円</div>
-                            </li>`
-                        );
-                    }
-                    // 如果 count 为 0，返回当前 result 不做更改
-                    return result;
-                }, ""); // 初期值を空文字列に設定
-            }
-
-            console.log("Generated HTML:", result);
-            return result; // 最终返回结果
+            if (!deskDishes) return []; // 如果没有菜品，返回空数组
+            return Object.entries(deskDishes) // 获取键值对数组 [id, dish]
+                .filter(([_, dish]) => dish.count !== 0) // 过滤 count 为 0 的菜品
+                .map(([id, dish]) => ({ id, name: dish.title, count: dish.count })); // 返回新数组，包含 id
         }
     },
 });
