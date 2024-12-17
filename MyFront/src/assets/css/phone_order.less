@@ -1,58 +1,11 @@
 #order {
-    height: 100vh;
-    width: 100vw;
-    background-image: url("@/assets/images/order_img/order_bg.jpg");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    position: relative;
-
-
-    header {
-        height: 15vh;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: end;
-        padding: 30px;
-
-        .title {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            width: 20%;
-
-            div {
-                display: inline-block;
-                height: 40px;
-                width: 40px;
-                border: 3px solid #ff0707;
-                transform: rotate(45deg);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                box-shadow: 1px 1px #fbb034;
-
-                p {
-                    font-family: YujiSyuku;
-                    transform: rotate(-45deg)translate(-1px, -5px);
-                    font-size: 26px;
-                    color: #ff0707;
-                    text-shadow: 1px 1px 0 #fbb034;
-                }
-            }
-        }
-
-        .desk_id {
-            color: #fbb034;
-            transform: translateY(20px);
-            font-weight: bold;
-        }
-    }
+    width: 100%;
+    height: 85vh;
+    // position: relative;
 
     main {
         width: 100%;
-        height: 85vh;
-        // margin-top: 20%;
+        height: 100%;
         display: flex;
         justify-content: space-between;
 
@@ -182,13 +135,13 @@
                                 height: 25px;
                                 width: 25px;
                                 border-radius: 50%;
-                                background: red;
-                                color: #fff;
+                                background: #fbb034;
                                 display: flex;
                                 justify-content: center;
                                 align-items: center;
 
                                 p {
+                                    color: #c60608;
                                     font-size: 20px;
                                     font-weight: bold;
                                     transform: translate(2px, -2px);
@@ -197,11 +150,11 @@
                             }
 
                             .minus {
-                                border: 1.5px solid red;
-                                background: #fff;
-                                color: red;
+                                border: 1.5px solid #fbb034;
+                                background: #c60608;
 
                                 p {
+                                    color: #fbb034;
                                     transform: translate(2px, -2px) scaleX(1.5)
                                 }
                             }
@@ -239,7 +192,7 @@
                         color: #333;
                     }
 
-                    button:nth-of-type(2){
+                    button:nth-of-type(2) {
                         padding: 8px 27px;
                     }
 

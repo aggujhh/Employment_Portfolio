@@ -9,12 +9,13 @@
                 <p>MY SYSTEM</p>
             </div>
             <div class="input-box">
-                <input ref="input1" type="text" v-model="data.id" @keydown.down="downInput()" @keydown.enter="downInput()" placeholder="ユーザー名" />
-                <input ref="input2" type="password" v-model="data.password" @keydown.enter="send()" @keydown.up="upInput()"
-                    placeholder="パスワード" />
-                <div class="btn" @click="send()">
+                <input ref="input1" type="text" v-model="data.id" @keydown.down="downInput()"
+                    @keydown.enter="downInput()" placeholder="ユーザー名" />
+                <input ref="input2" type="password" v-model="data.password" @keydown.enter="send()"
+                    @keydown.up="upInput()" placeholder="パスワード" />
+                <div class="btn" @click="send()" :class="{ block: isBlock }">
                     <input type="button" />
-                    <p>ログイン</p>
+                    <p>{{ btnText }}</p>
                 </div>
             </div>
         </div>
@@ -22,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref,reactive } from "vue";
+import { ref, reactive } from "vue";
 import router from '@/router';
 import { login } from "@/api/empApi";
 import session from "@/utils/session";
@@ -38,6 +39,8 @@ const downInput = () => {
 const upInput = () => {
     input1.value.focus()
 }
+
+
 
 // ログインフォームデータを reactive で作成
 const data = reactive({
@@ -55,9 +58,9 @@ const send = async () => {
         return;
     }
 
-     // SQLインジェクションを引き起こす可能性のある特殊記号を禁止する正規表現を定義
+    // SQLインジェクションを引き起こす可能性のある特殊記号を禁止する正規表現を定義
     const forbiddenRegex = /['"`;\\/\-\-#()=<>]/g;
-    if (forbiddenRegex.test(data.id)||forbiddenRegex.test(data.password)) {
+    if (forbiddenRegex.test(data.id) || forbiddenRegex.test(data.password)) {
         alert('不適合な記号が入力されました: \' " ` ; \\ / -- # ( ) = < >');
         return;
     }
@@ -70,28 +73,34 @@ const send = async () => {
         // レスポンスデータを取得
         const code = res.data.code; // ステータスコードを取得
         const res_data = JSON.parse(res.data.data); // レスポンスの JSON データを解析
+        if (res_data) {
+            // Pinia ストアのインスタンスを取得
+            const userStore = useUserStore();
 
-        // Pinia ストアのインスタンスを取得
-        const userStore = useUserStore();
+            // ユーザーデータをストアに保存または更新
+            userStore.upsertUser({
+                id: res_data.id,      // ユーザー ID
+                name: res_data.name,  // ユーザー名
+                type: res_data.type,  // ユーザータイプ
+                job: res_data.job     // ジョブタイトル
+            });
 
-        // ユーザーデータをストアに保存または更新
-        userStore.upsertUser({
-            id: res_data.id,      // ユーザー ID
-            name: res_data.name,  // ユーザー名
-            type: res_data.type,  // ユーザータイプ
-            job: res_data.job     // ジョブタイトル
-        });
-
-        // トークンを localStorage に保存
-        session.setSession(res_data.id, res_data.token, 60 * 60 * 1000); // トークンの有効期限を 15 分間に設定
-
+            // トークンを localStorage に保存
+            session.setSession(res_data.id, res_data.token, 60 * 60 * 1000); // トークンの有効期限を 15 分間に設定
+        }
         // ログインが成功した場合
         if (code == 1) {
             // ホームページにリダイレクト
             router.push("/home");
         } else {
-            // エラーメッセージを表示
-            alert("パスワードまたはアカウントが正しくありません");
+            mistakeCount.value++
+            if (mistakeCount.value > 3) {
+                alert("入力を3回間違えた場合、登録が一時停止されます。");
+                blockRegistration(6)
+            } else {
+                // エラーメッセージを表示
+                alert("ユーザーまたはパスワードが正しくありません");
+            }
             console.log(res.data.msg);
         }
     } catch (error) {
@@ -100,6 +109,27 @@ const send = async () => {
         alert("ログインに失敗しました。もう一度お試しください。");
     }
 };
+
+
+const isBlock = ref(false)
+const btnText = ref("ログイン")
+const mistakeCount = ref(0);
+const blockRegistration = (count) => {
+    isBlock.value = true
+    btnText.value = `ログイン(${count})`
+    count--
+    let intervalID = setInterval(() => {
+        btnText.value = `ログイン(${count})`
+        count--;
+        if (count < 0) {
+            btnText.value = 'ログイン'
+            isBlock.value = false
+            mistakeCount.value = 0
+            clearInterval(intervalID);
+        }
+    }, 1000);
+}
+
 </script>
 
 

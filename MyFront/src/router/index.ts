@@ -14,8 +14,10 @@ import DataAnalysis from '@/views/DataAnalysis.vue';
 import Staff from '@/views/Staff.vue';
 import Permission from '@/views/Permission.vue';
 import Dishes from '@/views/Dishes.vue';
-import Order from '@/phoneViews/Index.vue';
+import Order from '@/phoneViews/Order.vue';
 import OrderDishes from '@/phoneViews/Dishes.vue';
+import OrderBase from '@/phoneViews/OrderBase.vue';
+import CustomerCount from '@/phoneViews/CustomerCount.vue';
 
 // ルーターインスタンスを作成
 const router = createRouter({
@@ -35,15 +37,31 @@ const router = createRouter({
         { path: '/staff', component: Staff, },
         { path: '/permission', component: Permission, },
         {
-            path: '/order/:desk_id', component: Order, meta: { requiresAuth: false }, redirect: (to) => {
-                return `/order/${to.params.desk_id}/1`;
-            },
-            children: [{
-                path: ':id',
-                component: OrderDishes,
-                meta: { requiresAuth: false }
-            }]
-        },// 动态子路由]
+            path: '/order/:desk_id',
+            component: OrderBase,
+            meta: { requiresAuth: false },
+            redirect: (to) => `/order/${to.params.desk_id}/0`, // 默认重定向到 id=0
+            children: [
+                {
+                    path: '0', // 子路由不需要加 "/"
+                    component: CustomerCount,
+                    meta: { requiresAuth: false },
+                },
+                {
+                    path: '', // 空路径表示匹配父路径 /order/:desk_id
+                    component: Order,
+                    meta: { requiresAuth: false },
+                    redirect: (to) => `/order/${to.params.desk_id}/1/1`,
+                    children: [
+                        {
+                            path: ':id', // 动态子路由
+                            component: OrderDishes,
+                            meta: { requiresAuth: false },
+                        },
+                    ],
+                },
+            ],
+        },
         { path: '/404', component: NotFound, meta: { requiresAuth: false } },
         { path: '/', redirect: '/login' },
         { path: '/:pathMatch(.*)*', redirect: '/404' },
