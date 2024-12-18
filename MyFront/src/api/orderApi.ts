@@ -10,13 +10,29 @@ export function fetDishCategory() {
 /**
  * カテゴリー別に料理を取得する
  */
-export function fetchDishByCategoryId(data: { dishCategoryId: number }) { 
+export function fetchDishByCategoryId(data: { dishCategoryId: number }) {
     return instance.get(`/api/order/${data.dishCategoryId}`);
 }
 
 /**
- * テーブルをフェッチ
+ * テーブルをすべてフェッチ
  */
 export function fetchAllTables() {
-    return instance.get('/api/order/desk');
+    return instance.get('/api/order/desk/all');
+}
+
+/**
+ * テーブルによりデータをフェッチ
+ */
+export function fetchDateByTableId(data: { id: string }) {
+    return instance.get('/api/order/desk', {
+        params: data
+    });
+}
+
+/**
+ * 人数を設定する
+ */
+export function setCustomerCount(data: { id: string, guestCount: number }) {
+    return instance.patch('/api/order/desk', data);
 }

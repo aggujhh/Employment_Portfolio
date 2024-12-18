@@ -29,4 +29,14 @@ public class DeskServiceImpl implements DeskService {
     public List<Desk> fetchAllTables() {
         return deskMapper.fetchAllTables();
     }
+
+    @Override
+    public Desk fetchDateByTableId(Desk desk) {
+        return deskMapper.fetchDateByTableId(desk);
+    }
+
+    @Override
+    public void setCustomerCount(Desk desk) {
+        deskMapper.setCustomerCount(desk);
+    }
 }

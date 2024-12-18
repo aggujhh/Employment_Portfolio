@@ -31,6 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns( // 以下のパスはインターセプターの対象外とする
                         "/order",       // 注文ページ
                         "/order/*",  // カートページ
+                        "/order/*/*",
                         "/login"        // ログインページ
                 );
     }

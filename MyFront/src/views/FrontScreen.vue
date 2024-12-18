@@ -86,14 +86,14 @@
                     </div>
                 </div>
                 <div class="area">
-                    <div class="deskes deskes2">
+                    <div class="deskes deskes3">
                         <div>
                             <div class="desk">
                                 <div class="seat"></div>
                                 <div class="seat"></div>
                                 <div class="seat"></div>
                                 <div class="seat"></div>
-                                <div class="center">B1</div>
+                                <div class="center">C1</div>
                                 <div class="bar">
                                     <div></div>
                                     <span>00:00</span>
@@ -106,7 +106,7 @@
                                 <div class="seat"></div>
                                 <div class="seat"></div>
                                 <div class="seat"></div>
-                                <div class="center">B2</div>
+                                <div class="center">C2</div>
                                 <div class="bar">
                                     <div></div>
                                     <span>00:00</span>
@@ -119,7 +119,7 @@
                                 <div class="seat"></div>
                                 <div class="seat"></div>
                                 <div class="seat"></div>
-                                <div class="center">B3</div>
+                                <div class="center">C3</div>
                                 <div class="bar">
                                     <div></div>
                                     <span>00:00</span>
@@ -132,7 +132,7 @@
                                 <div class="seat"></div>
                                 <div class="seat"></div>
                                 <div class="seat"></div>
-                                <div class="center">B4</div>
+                                <div class="center">C4</div>
                                 <div class="bar">
                                     <div></div>
                                     <span>00:00</span>
@@ -141,26 +141,117 @@
                         </div>
                     </div>
                     <div class="area">
-                        <div class="deskes deskes3">
-                            <div></div>
+                        <div class="deskes deskes5">
+                            <div>
+                                <div class="desk">
+                                    <div class="seat"></div>
+                                    <div class="seat"></div>
+                                    <div class="seat"></div>
+                                    <div class="seat"></div>
+                                    <div class="seat"></div>
+                                    <div class="seat"></div>
+                                    <div class="seat"></div>
+                                    <div class="seat"></div>
+                                    <div class="center">E</div>
+                                    <div class="bar">
+                                        <div></div>
+                                        <span>00:00</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="area">
                             <div class="deskes deskes4">
-                                <div></div>
-                                <div></div>
+                                <div>
+                                    <div class="desk">
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="center">D1</div>
+                                        <div class="bar">
+                                            <div></div>
+                                            <span>00:00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="desk">
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="center">D1</div>
+                                        <div class="bar">
+                                            <div></div>
+                                            <span>00:00</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="deskes deskes5">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
+                            <div class="deskes deskes2">
+                                <div>
+                                    <div class="desk">
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="center">B1</div>
+                                        <div class="bar">
+                                            <div></div>
+                                            <span>00:00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="desk">
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="center">B2</div>
+                                        <div class="bar">
+                                            <div></div>
+                                            <span>00:00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="desk">
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="center">B3</div>
+                                        <div class="bar">
+                                            <div></div>
+                                            <span>00:00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="desk">
+                                        <div class="seat"></div>
+                                        <div class="seat"></div>
+                                        <div class="center">B4</div>
+                                        <div class="bar">
+                                            <div></div>
+                                            <span>00:00</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
-        <article></article>
+        <article>
+            <div class="serving_info">
+                <h3>料理の提供情報</h3>
+            </div>
+            <div class="business_info">
+                <h3>営業情報</h3>
+            </div>
+        </article>
     </section>
 </template>
 

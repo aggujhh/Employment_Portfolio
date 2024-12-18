@@ -159,13 +159,23 @@ const setTableIdArray = () => {
     );
 }
 const checkHasTable = () => {
-    console.log("tableId", route.params.desk_id);
+    // URLのパラメーターからdesk_idを取得し、大文字に変換する
+    const deskId = route.params.desk_id.toUpperCase();
 
-    const flag = tableIdArray.value.includes(route.params.desk_id.toUpperCase());
-    if (!flag) {
+    // テーブルリストから対象のテーブルを検索する
+    const table = tables.value.find((item) => item.id === deskId);
+
+    // テーブルが見つからない場合、404ページにリダイレクトする
+    if (!table) {
         router.push("/404");
+    } else {
+        // テーブルのゲスト人数が4人の場合、注文ページにリダイレクトする
+        if (table.guestCount === 0) {
+            router.push(`/order/${route.params.desk_id}/0`);
+        }
     }
-}
+};
+
 
 </script>
 

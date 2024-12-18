@@ -10,10 +10,7 @@ import org.example.server.service.DeskService;
 import org.example.server.service.DishCategoryService;
 import org.example.server.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,10 +44,28 @@ public class OrderController {
         return dishService.getDishByCategoryId(dishCategoryId);
     }
 
-    @GetMapping("/desk")
+    @GetMapping("/desk/all")
     public Result fetchAllTables() {
         List<Desk> results = deskService.fetchAllTables();
         log.info("テーブルをすべてフェッチする:{}", results);
         return Result.success(results);
+    }
+
+    @GetMapping("/desk")
+    public Result fetchDateByTableId(@RequestParam("id") String id) {
+        Desk desk = new Desk();
+        desk.setId(id);
+        log.info("テーブルによりデータをフェッチ:{}", desk);
+        Desk result = deskService.fetchDateByTableId(desk);
+        log.info("フェッチした結果:{}", result);
+        return Result.success(result);
+    }
+
+    @PatchMapping("/desk")
+    public Result setCustomerCount(@RequestBody Desk desk) {
+        log.info("テーブル人数を保存する:{}", desk);
+        deskService.setCustomerCount(desk);
+        log.info("保存成功しました。");
+        return Result.success();
     }
 }
