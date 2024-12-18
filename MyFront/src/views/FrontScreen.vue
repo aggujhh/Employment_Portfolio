@@ -247,9 +247,108 @@
         <article>
             <div class="serving_info">
                 <h3>料理の提供情報</h3>
+                <ul>
+                    <li>
+                        <p>席番号</p>
+                        <p>料理名</p>
+                        <p>数量</p>
+                        <p>確認</p>
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                    <li>
+                        <p>C4</p>
+                        <p>前菜の盛り合わせ</p>
+                        <p>4</p>
+                        <input type="checkbox">
+                    </li>
+                </ul>
             </div>
             <div class="business_info">
                 <h3>営業情報</h3>
+                <ul>
+                    <li>
+                        <p>今日の来店客数:</p>
+                        <p>100人</p>
+                    </li>
+                    <li>
+                        <p>今日の売上:</p>
+                        <p>1000000円</p>
+                    </li>
+                    <li>
+                        <p>今日の回転率:</p>
+                        <p>213%</p>
+                    </li>
+
+                    <li>
+                        <p>営業残り:</p>
+                        <p>03:03</p>
+                    </li>
+                </ul>
             </div>
         </article>
     </section>
