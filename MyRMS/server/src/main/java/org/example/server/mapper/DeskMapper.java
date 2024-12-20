@@ -18,6 +18,9 @@ public interface DeskMapper {
     @Select("SELECT * FROM desk WHERE id=#{id}")
     Desk fetchDateByTableId(Desk desk);
 
-    @Update("UPDATE desk SET guest_count=#{guestCount} WHERE id=#{id}")
+    @Update("UPDATE desk SET guest_count=#{guestCount},desk_state='1' WHERE id=#{id}")
     void setCustomerCount(Desk desk);
+
+    @Update("UPDATE desk SET guest_count=0,desk_state='0',order_state='0'")
+    void resetAllTables();
 }

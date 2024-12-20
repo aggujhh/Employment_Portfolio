@@ -9,4 +9,6 @@ public interface DeskService {
     Desk fetchDateByTableId(Desk desk);
 
     void setCustomerCount(Desk desk);
+
+    void resetAllTables();
 }

@@ -36,3 +36,13 @@ export function fetchDateByTableId(data: { id: string }) {
 export function setCustomerCount(data: { id: string, guestCount: number }) {
     return instance.patch('/api/order/desk', data);
 }
+
+export function addOrder(data: {
+    deskId: string,
+    dishes: {
+        id: number,
+        count: string
+    }
+}) {
+    return instance.put('/api/order', data);
+}

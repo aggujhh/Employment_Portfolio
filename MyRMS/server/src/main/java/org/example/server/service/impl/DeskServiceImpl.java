@@ -39,4 +39,9 @@ public class DeskServiceImpl implements DeskService {
     public void setCustomerCount(Desk desk) {
         deskMapper.setCustomerCount(desk);
     }
+
+    @Override
+    public void resetAllTables() {
+        deskMapper.resetAllTables();
+    }
 }

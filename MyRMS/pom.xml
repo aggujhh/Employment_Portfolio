@@ -139,11 +139,12 @@
             <artifactId>imageio-core</artifactId>
             <version>3.7.0</version>
         </dependency>
-<!--        &lt;!&ndash; TwelveMonkeys ImageIO &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.twelvemonkeys.imageio</groupId>-->
-<!--            <artifactId>imageio-webp</artifactId>-->
-<!--            <version>3.8.0</version>-->
-<!--        </dependency>-->
+        <!--NanoIdライブラリを導入。
+        NanoIdは軽量で高速なランダムID生成ライブラリで、デフォルトでは21文字の一意なIDを生成します。-->
+        <dependency>
+            <groupId>com.aventrix.jnanoid</groupId>
+            <artifactId>jnanoid</artifactId>
+            <version>2.0.0</version>
+        </dependency>
     </dependencies>
 </project>

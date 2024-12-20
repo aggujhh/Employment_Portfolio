@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.common.Result;
 import org.example.pojo.entity.Desk;
 import org.example.pojo.entity.Dish;
+import org.example.pojo.entity.Order;
 import org.example.pojo.entity.DishCategory;
 import org.example.server.service.DeskService;
 import org.example.server.service.DishCategoryService;
 import org.example.server.service.DishService;
+import org.example.server.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,15 +22,20 @@ import java.util.List;
 public class OrderController {
     private final DishCategoryService dishCategoryService;
     private final DishService dishService;
-
     private final DeskService deskService;
+    private final OrderService orderService;
+
 
     @Autowired
-    public OrderController(DishCategoryService dishCategoryService, DishService dishService, DeskService deskService) {
+    public OrderController(DishCategoryService dishCategoryService,
+                           DishService dishService,
+                           DeskService deskService,
+                           OrderService orderService) {
         // フィールドにインターセプターを設定
         this.dishCategoryService = dishCategoryService;
         this.dishService = dishService;
         this.deskService = deskService;
+        this.orderService = orderService;
     }
 
     @GetMapping
@@ -65,6 +72,14 @@ public class OrderController {
     public Result setCustomerCount(@RequestBody Desk desk) {
         log.info("テーブル人数を保存する:{}", desk);
         deskService.setCustomerCount(desk);
+        log.info("保存成功しました。");
+        return Result.success();
+    }
+
+    @PutMapping
+    public Result addOrder(@RequestBody Order order) {
+        log.info("オーダーを追加する:{}", order);
+        orderService.addOrder(order);
         log.info("保存成功しました。");
         return Result.success();
     }

@@ -39,7 +39,7 @@
                     <p>合計<span>{{ count.order }}</span>点</p>
                     <div class="btns">
                         <button @click.stop="closeCart">キャンセル</button>
-                        <button>注文する</button>
+                        <button @click.stop="api_addOrder()">注文する</button>
                     </div>
                 </div>
                 <div class="countOrder">{{ count.order }}</div>
@@ -175,6 +175,36 @@ const checkHasTable = () => {
         }
     }
 };
+
+
+//注文データをサーバに送信
+import { addOrder } from "@/api/orderApi";
+const req = reactive({
+    deskId: route.params.desk_id,
+    dishes: []
+})
+const api_addOrder = async () => {
+    infoList.value.forEach(item => {
+        req.dish.push({id:item.id,count:item.count})
+    })
+    try {
+        const res = await addOrder(req);
+        console.log(res);
+        const code = res.data.code; // ステータスコードを取得
+        if (code === 1) {
+            console.log("注文成功");
+            closeCart()
+        } else {
+            alert(res.data.msg);
+            console.log(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+        alert("注文失敗しました。もう一度お試しください。");
+    }
+}
+
 
 
 </script>
