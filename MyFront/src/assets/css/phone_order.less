@@ -114,7 +114,7 @@
                         width: 280px;
                         margin-bottom: 15px;
 
-                        p {
+                        >p {
                             font-size: 18px;
                             width: 180px;
                             color: #fbb034;
@@ -143,7 +143,7 @@
                                     color: #c60608;
                                     font-size: 20px;
                                     font-weight: bold;
-                                    transform: translate(2px, -2px);
+                                    transform: translate(-0.5px, -2px);
                                     user-select: none;
                                 }
                             }
@@ -154,7 +154,7 @@
 
                                 p {
                                     color: #fbb034;
-                                    transform: translate(2px, -2px) scaleX(1.5)
+                                    transform: translate(-0.5px, -2px) scaleX(1.5)
                                 }
                             }
 
@@ -183,7 +183,7 @@
                     justify-content: space-between;
 
                     button {
-                        padding: 10px 20px;
+                        padding: 10px 40px;
                         border-radius: 5px;
                         border: 0;
                         background: #fbb034;
@@ -220,6 +220,41 @@
         .accounting {
             background: #fbb034;
             left: 9px;
+
+            .info {
+                ul {
+                    li {
+                        div {
+                            display: flex;
+                            color: #333;
+
+                            >p:nth-of-type(1) {
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                max-width: 160px;
+                            }
+
+                            span {
+                                margin-left: 5px;
+                                margin-right: 5px;
+                            }
+                        }
+
+                        >p {
+                            max-width: 60px;
+                            color: red;
+                        }
+                    }
+                }
+
+                .btns {
+                    button {
+                        background: #333;
+                        color: #fff;
+                    }
+                }
+            }
         }
 
         .accounting.active {

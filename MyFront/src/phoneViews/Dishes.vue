@@ -13,7 +13,7 @@
                         <div class="minus" @click="minus(dish.id)">
                             <p>－</p>
                         </div>
-                        <span>{{ store.dishes[countParam.deskId][dish.id].count || 0 }}</span>
+                        <span>{{ store?.dishes[countParam.deskId][dish.id]?.count || 0 }}</span>
                         <div class="add" @click="plus(dish.id)">
                             <p>＋</p>
                         </div>
@@ -54,8 +54,6 @@ const fetchDishes = async (req) => {
         console.log("dish: ", res.value);
         setImgPath(res.value); // 画像パスを設定
         setDishStore()
-
-
     } catch (err) {
         console.error("リクエストエラー:", err);
         alert("料理の取得に失敗しました。");

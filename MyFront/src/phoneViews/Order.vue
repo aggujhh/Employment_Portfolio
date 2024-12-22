@@ -17,6 +17,23 @@
         <footer>
             <div class="accounting" @click="toAccounting" :class="{ active: active.accounting }">
                 <p>注文履歴</p>
+                <div class="info">
+                    <ul>
+                        <li v-for="(item, index) in completedOrders" :key="index" class="info-item">
+                            <div>
+                                <p>{{ item.name }}</p>
+                                <span>×</span>
+                                <p>{{ item.count }}</p>
+                            </div>
+                            <p>未提供</p>
+                        </li>
+                    </ul>
+                    <p>合計金額<span>{{ totalPrice }}</span>円</p>
+                    <div class="btns">
+                        <button @click.stop="closeAccounting">戻る</button>
+                        <button @click.stop="">会計する</button>
+                    </div>
+                </div>
             </div>
             <p class="price"><span>&yen;</span>{{ count.price }}</p>
             <div class="shoppingCart" :class="{ active: active.shoppingCart }" @click="toCart">
@@ -29,7 +46,7 @@
                                 <div class="minus" @click="minus(item.id)">
                                     <p>－</p>
                                 </div>
-                                <span>{{ store.dishes[route.params.desk_id][item.id].count || 0 }}</span>
+                                <span>{{ store?.dishes[route.params.desk_id][item.id]?.count || 0 }}</span>
                                 <div class="add" @click="plus(item.id)">
                                     <p>＋</p>
                                 </div>
@@ -38,7 +55,7 @@
                     </ul>
                     <p>合計<span>{{ count.order }}</span>点</p>
                     <div class="btns">
-                        <button @click.stop="closeCart">キャンセル</button>
+                        <button @click.stop="closeCart">戻る</button>
                         <button @click.stop="api_addOrder()">注文する</button>
                     </div>
                 </div>
@@ -90,6 +107,8 @@ const fetchTables = async () => {
 onMounted(() => {
     fetchTables();
     fetchDishCategories();
+    api_getOrderTotalPrice();
+    api_fetchAllCompletedOrders();
 });
 
 // 料理のページに移動する関数
@@ -109,7 +128,7 @@ const active = reactive({
 
 // const=isActive
 const toAccounting = () => {
-    active.accounting = !active.accounting
+    active.accounting = true
 }
 
 const toCart = () => {
@@ -118,6 +137,10 @@ const toCart = () => {
 
 const closeCart = () => {
     active.shoppingCart = false
+}
+
+const closeAccounting = () => {
+    active.accounting = false
 }
 
 
@@ -130,7 +153,7 @@ const count = reactive({
 const infoList = ref([])
 const sumOrderAndPrice = () => {
     count.order = store.sumDishCount(route.params.desk_id)
-    count.price = store.sumDishPrice(route.params.desk_id)
+    count.price = totalPrice.value + store.sumDishPrice(route.params.desk_id)
     infoList.value = store.getInfo(route.params.desk_id);
 };
 
@@ -138,7 +161,7 @@ const plus = (dishId) => {
     if (store.getDishCount(route.params.desk_id, dishId) < 10) {
         store.plusDishCount(route.params.desk_id, dishId)
         count.order = store.sumDishCount(route.params.desk_id)
-        count.price = store.sumDishPrice(route.params.desk_id)
+        count.price = totalPrice.value + store.sumDishPrice(route.params.desk_id)
         infoList.value = store.getInfo(route.params.desk_id);
     }
 }
@@ -147,7 +170,7 @@ const minus = (dishId) => {
     if (store.getDishCount(route.params.desk_id, dishId) > 0) {
         store.minusDishCount(route.params.desk_id, dishId)
         count.order = store.sumDishCount(route.params.desk_id)
-        count.price = store.sumDishPrice(route.params.desk_id)
+        count.price = totalPrice.value + store.sumDishPrice(route.params.desk_id)
         infoList.value = store.getInfo(route.params.desk_id);
     }
 }
@@ -184,15 +207,25 @@ const req = reactive({
     dishes: []
 })
 const api_addOrder = async () => {
+    req.dishes = []
     infoList.value.forEach(item => {
-        req.dish.push({id:item.id,count:item.count})
+        req.dishes.push({ dishId: item.id, count: item.count })
     })
+    if (req.dishes.length === 0) {
+        alert("注文項目がありません。")
+        return;
+    }
     try {
         const res = await addOrder(req);
         console.log(res);
         const code = res.data.code; // ステータスコードを取得
         if (code === 1) {
             console.log("注文成功");
+            store.resetDishes(req.deskId)
+            count.order = 0
+            api_getOrderTotalPrice()
+            api_fetchAllCompletedOrders();
+            infoList.value = []
             closeCart()
         } else {
             alert(res.data.msg);
@@ -205,8 +238,34 @@ const api_addOrder = async () => {
     }
 }
 
+//オーダーの総値段を取得する
+import { getOrderTotalPrice } from "@/api/orderApi";
+const totalPrice = ref(0)
+const api_getOrderTotalPrice = async () => {
+    try {
+        const res = await getOrderTotalPrice({ deskId: req.deskId });
+        totalPrice.value = res.data.data
+        count.price = totalPrice.value
+        console.log("総値段", res.data.data);
+    } catch (err) {
+        console.error("リクエストエラー:", err);
+        alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
+    }
+}
 
-
+//すべて注文完了オーダーを取得する
+import { fetchAllCompletedOrders } from "@/api/orderApi";
+const completedOrders = ref([])
+const api_fetchAllCompletedOrders = async () => {
+    try {
+        const res = await fetchAllCompletedOrders({ deskId: req.deskId });
+        completedOrders.value = res.data.data
+        console.log("注文完了オーダー", completedOrders.value);
+    } catch (err) {
+        console.error("リクエストエラー:", err);
+        alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
+    }
+}
 </script>
 
 <style lang="less" scoped>

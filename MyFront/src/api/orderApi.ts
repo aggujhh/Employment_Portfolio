@@ -37,12 +37,34 @@ export function setCustomerCount(data: { id: string, guestCount: number }) {
     return instance.patch('/api/order/desk', data);
 }
 
+
+/**
+ * 新しいオーダーを追加
+ */
 export function addOrder(data: {
     deskId: string,
     dishes: {
-        id: number,
+        dishId: number,
         count: string
     }
 }) {
     return instance.put('/api/order', data);
+}
+
+/**
+ * オーダーの総値段を取得する
+ */
+export function getOrderTotalPrice(data: { deskId: string }) {
+    return instance.get('/api/order/price', {
+        params: data
+    });
+}
+
+/**
+ * すべて注文完了オーダーを取得する
+ */
+export function fetchAllCompletedOrders(data: { deskId: string }) {
+    return instance.get('/api/order/completed', {
+        params: data
+    });
 }

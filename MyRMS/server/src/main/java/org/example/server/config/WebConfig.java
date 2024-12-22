@@ -3,11 +3,13 @@ package org.example.server.config;
 import org.example.server.interceptor.LoginCheckInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration // 設定クラスとしてSpringコンテナに登録
+@EnableTransactionManagement//トランザクション管理を有効化するためのアノテーションです。
 public class WebConfig implements WebMvcConfigurer {
     // LoginCheckInterceptorをフィールドとして保持
     private final LoginCheckInterceptor loginCheckInterceptor;

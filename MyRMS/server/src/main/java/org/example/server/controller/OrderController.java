@@ -83,4 +83,20 @@ public class OrderController {
         log.info("保存成功しました。");
         return Result.success();
     }
+
+    @GetMapping("/price")
+    public Result getOrderTotalPrice(@RequestParam("deskId") String deskId) {
+        log.info("オーダーの総値段を取得する:{}", deskId);
+        Integer result = orderService.getOrderTotalPrice(deskId);
+        log.info("取得成功しました。");
+        return Result.success(result);
+    }
+
+    @GetMapping("/completed")
+    public Result fetchAllCompletedOrders(@RequestParam("deskId") String deskId) {
+        log.info("すべて注文完了オーダーを取得する");
+        List<Order.Dishes> result = orderService.fetchAllCompletedOrders(deskId);
+        log.info("取得成功しました。");
+        return Result.success(result);
+    }
 }

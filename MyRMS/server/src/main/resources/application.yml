@@ -29,4 +29,10 @@ logging:
       springframework:
         jdbc:
           support:
-            JdbcTransactionManager: debug
+            JdbcTransactionManager: DEBUG  # Spring JDBC トランザクションマネージャーのログ
+      apache:
+        ibatis: DEBUG  # MyBatis のログ
+      mybatis: DEBUG  # MyBatis コアのログ
+    jdbc:
+      sql: DEBUG  # SQL 実行の詳細ログ
+      resultset: TRACE  # 結果セットの詳細ログ

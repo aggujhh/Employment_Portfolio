@@ -90,6 +90,17 @@ export const useDishStore = defineStore('dishCount', {
             return Object.entries(deskDishes) // 获取键值对数组 [id, dish]
                 .filter(([_, dish]) => dish.count !== 0) // 过滤 count 为 0 的菜品
                 .map(([id, dish]) => ({ id, name: dish.title, count: dish.count })); // 返回新数组，包含 id
+        },
+
+        resetDishes(desk_id: string) {
+            // 检查 desk_id 是否存在
+            if (!this.dishes[desk_id]) {
+                return;
+            }
+            // 重置该 desk_id 下所有 dish 的 count 为 0
+            Object.values(this.dishes[desk_id]).forEach(dish => {
+                dish.count = 0;
+            });
         }
     },
 });

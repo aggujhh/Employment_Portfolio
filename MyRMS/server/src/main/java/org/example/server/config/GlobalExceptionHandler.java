@@ -35,8 +35,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result handleGeneralException(Exception e) {
-        log.error("システム例外：{}", e.getMessage());
-        // システムエラーが発生した場合のエラーメッセージを返します。
+        // 记录完整堆栈信息
+        log.error("システム例外が発生しました。詳細：", e);
+
+        // 返回统一的错误信息
         return Result.error("システムエラーが発生しました。管理者に連絡してください。");
     }
 }
