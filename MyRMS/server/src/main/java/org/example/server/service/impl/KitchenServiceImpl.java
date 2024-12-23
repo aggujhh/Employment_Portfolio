@@ -1,7 +1,9 @@
 package org.example.server.service.impl;
 
+import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.example.pojo.entity.Order;
+import org.example.pojo.entity.OrderSnapshot;
 import org.example.server.mapper.KitchenMapper;
 import org.example.server.service.KitchenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +33,54 @@ public class KitchenServiceImpl implements KitchenService {
             orderDishes.addAll(dishes);
         });
         return orders;
+    }
+
+    @Override
+    public String changeOrderDishState(Order.Dishes dish) {
+        kitchenMapper.changeOrderDishState(dish);
+        Integer count = kitchenMapper.countCookedDish(dish);
+        if (count == 0) {
+            String id = dish.getOrderId();
+            kitchenMapper.changeOrderState(id);
+        }
+        return initializationVersion();
+    }
+
+    @Override
+    public String resetAllOrderAmdDishState() {
+        kitchenMapper.resetAllOrderState();
+        kitchenMapper.resetAllOrderDishState();
+        return initializationVersion();
+    }
+
+    @Override
+    public void undoOrRedo(OrderSnapshot orderSnapshot) {
+        // 一次性获取所有订单快照
+        List<OrderSnapshot> orders = kitchenMapper.fetchOrderIdAndOrderStateByVersion(orderSnapshot);
+        // 一次性获取所有菜品快照
+        List<OrderSnapshot> dishes = kitchenMapper.fetchDishIdAndDishStateByVersion(orderSnapshot);
+
+        // 遍历订单快照并处理
+        orders.forEach(order -> {
+            // 撤销或重做订单
+            kitchenMapper.undoOrRedoOrder(order);
+            // 过滤出属于当前订单的菜品快照
+            List<OrderSnapshot> filteredDishes = dishes.stream()
+                    .filter(dish -> dish.getOrderId().equals(order.getOrderId()))
+                    .toList();
+            // 遍历并处理菜品
+            filteredDishes.forEach(dish -> kitchenMapper.undoOrRedoDish(order.getOrderId(), dish));
+        });
+    }
+
+    @Override
+    public String initializationVersion() {
+        String version = NanoIdUtils.randomNanoId();
+        kitchenMapper.saveOrderSnapshot(version);
+        Integer versionCount = kitchenMapper.countVersion();
+        if (versionCount > 5) {
+            kitchenMapper.deleteFirstSnapshot();
+        }
+        return version;
     }
 }

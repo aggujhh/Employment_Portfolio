@@ -10,15 +10,15 @@
         justify-content: start;
         align-items: center;
         padding-left: 40px;
-        gap: 1%;
 
         div {
             height: 40px;
-            width: 50px;
+            width: 60px;
             position: relative;
             text-align: center;
             cursor: pointer;
             border-radius: 5px;
+            user-select: none;
 
             p {
                 font-size: 12px;
@@ -26,6 +26,17 @@
                 bottom: 0;
                 left: 50%;
                 transform: translateX(-50%);
+                white-space: nowrap;
+            }
+        }
+
+        .undo.disabled,
+        .redo.disabled {
+            color: #818181;
+            pointer-events: none;
+
+            svg {
+                fill: #818181;
             }
         }
 

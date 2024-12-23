@@ -3,17 +3,37 @@
     <NavView></NavView>
     <section id="kitchen_screen">
         <div class="header">
-            <div>
+            <div @click="api_fetAllOrders">
                 <img src="@/assets/images/icon/Renew.svg" />
                 <p>更新</p>
             </div>
-            <div>
-                <img src="@/assets/images/icon/Return.svg" />
-                <p>戻る</p>
+            <div @click="undo" class="undo" :class="{ disabled: !canUndo }">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2">
+                        <path d="M3 7v6h6" />
+                        <path d="M21 17a9 9 0 0 0-9-9a9 9 0 0 0-6 2.3L3 13" />
+                    </g>
+                </svg>
+                <p>元に戻す</p>
+            </div>
+            <div @click="redo" class="redo" :class="{ disabled: !canRedo }">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2">
+                        <path d="M21 7v6h-6" />
+                        <path d="M3 17a9 9 0 0 1 9-9a9 9 0 0 1 6 2.3l3 2.7" />
+                    </g>
+                </svg>
+                <p>やり直す</p>
             </div>
             <div>
                 <img src="@/assets/images/icon/History.svg" />
                 <p>履歴</p>
+            </div>
+            <div @click="api_resetAllOrderAmdDishState">
+                <img src="@/assets/images/icon/Reset.svg" />
+                <p>リセット</p>
             </div>
         </div>
         <div class="main">
@@ -25,7 +45,8 @@
                         <p>{{ order.guestCount }}名</p>
                     </div>
                     <div v-for="(dish, dishIndex) in order.dishes" :key="dishIndex" class="dish"
-                        @click="checkedDish(index, dishIndex)" :class="{ active: isActiveList[index][dishIndex] }">
+                        @click="api_changeOrderDishState(dish.orderId, dish.dishId)"
+                        :class="{ active: isActiveList[index][dishIndex] }">
                         <div></div>
                         <p><img src="@/assets/images/icon/Checkmark.svg" />{{ dish.name }}</p>
                         <div>
@@ -43,13 +64,14 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, onBeforeUnmount, computed } from "vue";
 
 /*************************************
 * ページの初期化時に実行
 **************************************/
 onMounted(() => {
     api_fetAllOrders();
+    api_initializationVersion();
 });
 
 /*************************************
@@ -83,7 +105,7 @@ const setOrderHeight = () => {
         order.left = columnIndex * (orderWidth.value + 20) + 40;
 
         // 列の高さを更新（注文の高さと間隔を加算）
-        columnHeights.value[columnIndex] += order.height + 40;
+        columnHeights.value[columnIndex] += order.height + 20;
     });
 };
 
@@ -95,7 +117,7 @@ const orders = ref([])
 const api_fetAllOrders = async () => {
     try {
         const res = await fetAllOrders();
-        orders.value = res.data.data
+        orders.value = filteredOrders(res.data.data)
         initializeOrderPosition()
         setOrderHeight()
         setTimeColor()
@@ -105,6 +127,11 @@ const api_fetAllOrders = async () => {
         console.error("リクエストエラー:", err);
         alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
     }
+}
+
+const filteredOrders = (orders) => {
+    return orders.filter(order => order.state === '0')
+        .sort((a, b) => new Date(a.orderTime) - new Date(b.orderTime)); // 按时间升序排序（时间越久排越前）;
 }
 
 const initializeOrderPosition = () => {
@@ -158,18 +185,177 @@ const isActiveList = ref([])
 const setIsActiveList = () => {
     // 再実行時にリストをリセット
     isActiveList.value = orders.value.map(order =>
-        new Array(order.dishes.length).fill(false) // 各注文の料理ごとに false を設定
+        order.dishes.map(dish =>
+            dish.state == '0' ? false : true  // 状態に基づいて true または false を設定
+        )
     );
-    console.log("isActiveList",isActiveList.value);
+    console.log("isActiveList", isActiveList.value);
 };
 
-// 指定された料理をアクティブ状態に変更する関数
-const checkedDish = (index1, index2) => {
-    isActiveList.value[index1][index2] = true; // 指定された料理を true に設定
+/*************************************
+* ユーザーが注文後の時、画面をリフレッシュ
+* SSE（Server-Sent Events）を使用してリアルタイム更新を実現
+**************************************/
+import SseService from "@/utils/sseService";
+/**
+* SSE サービスのインスタンスを作成
+* @param url サーバーの URL
+* @param callback 新しいメッセージが届いた時の処理
+*/
+const sseService = new SseService("http://localhost:8080/api/order/kitchen", () => {
+    // 注文リストをリフレッシュ
+    api_fetAllOrders();
+    api_initializationVersion();
+});
+// SSE 接続を開始
+sseService.connect();
+//コンポーネントが破棄される前に呼び出されるフック
+onBeforeUnmount(() => {
+    sseService.close(); // SSE 接続を閉じる
+});
+
+/*************************************
+* 調理済み料理の状態を変更する
+**************************************/
+import { changeOrderDishState } from "@/api/kitchenApi";
+
+const api_changeOrderDishState = async (orderId, dishId) => {
+    try {
+        const res = await changeOrderDishState({ orderId: orderId, dishId: dishId });
+        const code = res.data.code; // ステータスコードを取得
+        if (code === 1) {
+            saveVersion(res.data.data)
+            api_fetAllOrders();
+        } else {
+            alert(res.data.msg);
+            console.log(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+        alert("状態変更を失敗しました。もう一度お試しください。");
+    }
+}
+
+/*************************************
+* すべて料理の状態を最初の状態をリセットする
+**************************************/
+import { resetAllOrderAmdDishState } from "@/api/kitchenApi";
+const api_resetAllOrderAmdDishState = async () => {
+    try {
+        const res = await resetAllOrderAmdDishState();
+        const code = res.data.code; // ステータスコードを取得
+        if (code === 1) {
+            saveVersion(res.data.data)
+            api_fetAllOrders();
+        } else {
+            alert(res.data.msg);
+            console.log(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+        alert("リセット失敗しました。もう一度お試しください。");
+    }
+}
+
+
+const versionArray = ref([]); // すべての履歴状態を保存
+const currentIndex = ref(-1); // 現在の状態のインデックスi
+
+import { initializationVersion } from "@/api/kitchenApi";
+const api_initializationVersion = async () => {
+    try {
+        const res = await initializationVersion();
+        const code = res.data.code; // ステータスコードを取得
+        if (code === 1) {
+            saveVersion(res.data.data)
+        } else {
+            alert(res.data.msg); // エラーメッセージを表示
+            console.log(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+        alert("リセット失敗しました。もう一度お試しください。");
+    }
+}
+
+// 現在の状態（ポインタに基づいて計算）
+const currentVersion = computed(() =>
+    currentIndex.value >= 0 ? versionArray.value[currentIndex.value] : []
+);
+// 元に戻せるかを判断
+const canUndo = computed(() => currentIndex.value > 0);
+
+// やり直し可能かを判断
+const canRedo = computed(() => currentIndex.value < versionArray.value.length - 1);
+
+// バージョンを保存
+const saveVersion = (version) => {
+    // 現在のポインタが最新状態でない場合、将来の履歴を切り捨てる
+    if (currentIndex.value < versionArray.value.length - 1) {
+        versionArray.value = versionArray.value.slice(0, currentIndex.value + 1);
+    }
+    // 新しい状態を追加
+    versionArray.value.push(version);
+    console.log(versionArray.value, currentIndex.value);
+
+
+    // ポインタを更新
+    currentIndex.value++;
+
+    // 履歴を最大5件に制限
+    if (versionArray.value.length > 5) {
+        versionArray.value.shift(); // 古い履歴を削除
+        currentIndex.value--;
+    }
 };
 
+// 元に戻す操作
+import { undoAllOrderAmdDishState } from "@/api/kitchenApi";
+const undo = async () => {
+    if (canUndo.value) {
+        currentIndex.value--; // ポインタを戻す
+        try {
+            const res = await undoAllOrderAmdDishState({ version: currentVersion.value });
+            const code = res.data.code; // ステータスコードを取得
+            if (code === 1) {
+                api_fetAllOrders(); // 最新の注文データを再取得
+            } else {
+                alert(res.data.msg); // エラーメッセージを表示
+                console.log(res.data.msg);
+            }
+        } catch (error) {
+            // エラー処理
+            console.error("リクエストエラー:", error);
+            alert("リセット失敗しました。もう一度お試しください。");
+        }
+    }
+};
 
-
+// やり直し操作
+import { redoAllOrderAmdDishState } from "@/api/kitchenApi";
+const redo = async () => {
+    if (canRedo.value) {
+        currentIndex.value++;
+        try {
+            const res = await redoAllOrderAmdDishState({ version: currentVersion.value });
+            const code = res.data.code; // ステータスコードを取得
+            if (code === 1) {
+                // ポインタを進める
+                api_fetAllOrders(); // 最新の注文データを再取得
+            } else {
+                alert(res.data.msg); // エラーメッセージを表示
+                console.log(res.data.msg);
+            }
+        } catch (error) {
+            // エラー処理
+            console.error("リクエストエラー:", error);
+            alert("リセット失敗しました。もう一度お試しください。");
+        }
+    }
+};
 </script>
 <style lang="less" scoped>
 @import '@/assets/css/kitchen_screen.less';

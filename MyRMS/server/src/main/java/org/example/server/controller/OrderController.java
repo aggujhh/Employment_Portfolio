@@ -3,6 +3,7 @@ package org.example.server.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.Result;
+import org.example.common.SseService;
 import org.example.pojo.entity.Desk;
 import org.example.pojo.entity.Dish;
 import org.example.pojo.entity.Order;
@@ -13,6 +14,8 @@ import org.example.server.service.DishService;
 import org.example.server.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 
@@ -24,19 +27,34 @@ public class OrderController {
     private final DishService dishService;
     private final DeskService deskService;
     private final OrderService orderService;
+    private final SseService sseService;
 
 
     @Autowired
     public OrderController(DishCategoryService dishCategoryService,
                            DishService dishService,
                            DeskService deskService,
-                           OrderService orderService) {
+                           OrderService orderService,
+                           SseService sseService) {
         // フィールドにインターセプターを設定
         this.dishCategoryService = dishCategoryService;
         this.dishService = dishService;
         this.deskService = deskService;
         this.orderService = orderService;
+        this.sseService = sseService;
     }
+
+    // SSE 接口，厨房连接实时接收订单
+    @GetMapping(value = "/kitchen", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> streamToKitchen() {
+        return sseService.getKitchenSseFlux();
+    }
+
+// SSE 接口，前台连接实时接收订单
+//    @GetMapping(value = "/front", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//    public Flux<String> streamToFrontDesk() {
+//        return sseService.getFrontDeskSseFlux();
+//    }
 
     @GetMapping
     public Result getDishCategories() {
@@ -81,6 +99,8 @@ public class OrderController {
         log.info("オーダーを追加する:{}", order);
         orderService.addOrder(order);
         log.info("保存成功しました。");
+        // 推送订单到厨房和前台
+        sseService.sendToKitchen("新しいオーダーを追加");
         return Result.success();
     }
 
