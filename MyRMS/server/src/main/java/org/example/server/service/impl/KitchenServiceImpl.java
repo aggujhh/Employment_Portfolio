@@ -78,7 +78,7 @@ public class KitchenServiceImpl implements KitchenService {
         String version = NanoIdUtils.randomNanoId();
         kitchenMapper.saveOrderSnapshot(version);
         Integer versionCount = kitchenMapper.countVersion();
-        if (versionCount > 5) {
+        if (versionCount > 10) {
             kitchenMapper.deleteFirstSnapshot();
         }
         return version;

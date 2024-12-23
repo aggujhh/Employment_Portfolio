@@ -93,8 +93,6 @@ const setOrderHeight = () => {
         // 注文内の料理数を取得し、高さを計算
         const count = order.dishes.length;
         order.height = count * 60 + 157; // 注文の高さを計算
-        console.log(order);
-
 
         // 最も低い列を見つける
         const minHeight = Math.min(...columnHeights.value);
@@ -122,7 +120,6 @@ const api_fetAllOrders = async () => {
         setOrderHeight()
         setTimeColor()
         setIsActiveList()
-        console.log("オーダー", orders.value);
     } catch (err) {
         console.error("リクエストエラー:", err);
         alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
@@ -189,7 +186,6 @@ const setIsActiveList = () => {
             dish.state == '0' ? false : true  // 状態に基づいて true または false を設定
         )
     );
-    console.log("isActiveList", isActiveList.value);
 };
 
 /*************************************
@@ -205,6 +201,8 @@ import SseService from "@/utils/sseService";
 const sseService = new SseService("http://localhost:8080/api/order/kitchen", () => {
     // 注文リストをリフレッシュ
     api_fetAllOrders();
+    versionArray.value.pop();
+    currentIndex.value--;
     api_initializationVersion();
 });
 // SSE 接続を開始
@@ -281,10 +279,10 @@ const api_initializationVersion = async () => {
     }
 }
 
-// 現在の状態（ポインタに基づいて計算）
-const currentVersion = computed(() =>
-    currentIndex.value >= 0 ? versionArray.value[currentIndex.value] : []
-);
+// // 現在の状態（ポインタに基づいて計算）
+// const currentVersion = computed(() =>
+//     currentIndex.value >= 0 ? versionArray.value[currentIndex.value] : []
+// );
 // 元に戻せるかを判断
 const canUndo = computed(() => currentIndex.value > 0);
 
@@ -299,9 +297,6 @@ const saveVersion = (version) => {
     }
     // 新しい状態を追加
     versionArray.value.push(version);
-    console.log(versionArray.value, currentIndex.value);
-
-
     // ポインタを更新
     currentIndex.value++;
 
@@ -310,6 +305,7 @@ const saveVersion = (version) => {
         versionArray.value.shift(); // 古い履歴を削除
         currentIndex.value--;
     }
+    console.log(versionArray.value, currentIndex.value);
 };
 
 // 元に戻す操作
@@ -317,8 +313,9 @@ import { undoAllOrderAmdDishState } from "@/api/kitchenApi";
 const undo = async () => {
     if (canUndo.value) {
         currentIndex.value--; // ポインタを戻す
+        console.log(versionArray.value, currentIndex.value);
         try {
-            const res = await undoAllOrderAmdDishState({ version: currentVersion.value });
+            const res = await undoAllOrderAmdDishState({ version: versionArray.value[currentIndex.value] });
             const code = res.data.code; // ステータスコードを取得
             if (code === 1) {
                 api_fetAllOrders(); // 最新の注文データを再取得
@@ -339,8 +336,9 @@ import { redoAllOrderAmdDishState } from "@/api/kitchenApi";
 const redo = async () => {
     if (canRedo.value) {
         currentIndex.value++;
+        console.log(versionArray.value, currentIndex.value);
         try {
-            const res = await redoAllOrderAmdDishState({ version: currentVersion.value });
+            const res = await redoAllOrderAmdDishState({ version: versionArray.value[currentIndex.value] });
             const code = res.data.code; // ステータスコードを取得
             if (code === 1) {
                 // ポインタを進める
