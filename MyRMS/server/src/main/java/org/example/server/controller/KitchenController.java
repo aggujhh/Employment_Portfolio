@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.common.Result;
 import org.example.pojo.entity.DishCategory;
 import org.example.pojo.entity.Order;
+import org.example.pojo.entity.OrderHistory;
 import org.example.pojo.entity.OrderSnapshot;
 import org.example.server.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,14 @@ public class KitchenController {
         return Result.success(versionCode);
     }
 
+    @PutMapping
+    public Result changeOrderState(@RequestBody Order order) {
+        log.info("オーダー内のすべての料理を調理済み状態に変更します。引数>>>>>>>>>>({})", order.getId());
+        String versionCode = kitchenService.changeOrderState(order);
+        log.info(">>>>>>>>>>>>>変更成功!");
+        return Result.success(versionCode);
+    }
+
     @PutMapping("/reset")
     public Result resetAllOrderAmdDishState() {
         log.info("すべて料理の状態を最初の状態をリセットする");
@@ -72,6 +81,14 @@ public class KitchenController {
         String versionCode = kitchenService.initializationVersion();
         log.info(">>>>>>>>>>>>>>>>初期化成功!,引数{}", versionCode);
         return Result.success(versionCode);
+    }
+
+    @GetMapping("/history")
+    public Result fetchAllOrderHistory() {
+        log.info("すべての注文履歴をフェッチする。");
+        List<OrderHistory> results = kitchenService.fetchAllOrderHistory();
+        log.info("フェッチ成功:{}", results);
+        return Result.success(results);
     }
 
 }

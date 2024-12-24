@@ -3,6 +3,7 @@ package org.example.server.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.example.pojo.entity.Order;
+import org.example.pojo.entity.OrderHistory;
 import org.example.pojo.entity.OrderSnapshot;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface KitchenMapper {
             "WHERE order_dish.order_id=#{orderId}")
     List<Order.Dishes> fetDishesByOrderId(String orderId);
 
-    @Update("UPDATE order_dish SET state='1' " +
+    @Update("UPDATE order_dish SET state='1',completion_time=NOW() " +
             "WHERE order_id=#{orderId} AND dish_id=#{dishId}")
     void changeOrderDishState(Order.Dishes dish);
 
@@ -36,7 +37,7 @@ public interface KitchenMapper {
     @Update("UPDATE `order` SET state='0'")
     void resetAllOrderState();
 
-    @Update("UPDATE order_dish SET state='0'")
+    @Update("UPDATE order_dish SET state='0' WHERE state='1'")
     void resetAllOrderDishState();
 
     @Insert("INSERT INTO order_snapshot (version,order_id, dish_id, order_state, dish_state) " +
@@ -73,4 +74,18 @@ public interface KitchenMapper {
     @Update("UPDATE order_dish SET state=#{dish.dishState} " +
             "WHERE order_id=#{orderId} AND dish_id=#{dish.dishId}")
     void undoOrRedoDish(String orderId, OrderSnapshot dish);
+
+    @Update("UPDATE order_dish SET state='1',completion_time=NOW() " +
+            "WHERE order_id=#{id}")
+    void changeAllDishStateByOrderId(String id);
+
+    @Select("SELECT order_dish.order_id,`order`.desk_id,dish.name AS 'dishName',order_dish.count,`order`.order_time, order_dish.completion_time " +
+            "FROM order_dish " +
+            "INNER JOIN `order` " +
+            "ON order_dish.order_id = `order`.id " +
+            "INNER JOIN dish " +
+            "ON order_dish.dish_id=dish.id " +
+            "WHERE order_dish.state != '0' " +
+            "ORDER BY order_dish.completion_time DESC ")
+    List<OrderHistory> fetchAllOrderHistory();
 }

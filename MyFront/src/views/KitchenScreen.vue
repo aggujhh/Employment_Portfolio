@@ -27,7 +27,7 @@
                 </svg>
                 <p>やり直す</p>
             </div>
-            <div>
+            <div @click="() => { isVisible = true }">
                 <img src="@/assets/images/icon/History.svg" />
                 <p>履歴</p>
             </div>
@@ -58,16 +58,27 @@
                     </div>
                     <div class="order-fooder">
                         <p :style="{ color: timeColor[index] }">{{ computedOrderAfterTime(index, order.orderTime) }}</p>
-                        <button>すべて調理済</button>
+                        <button @click="api_changeOrderState(order.id)">すべて調理済</button>
                     </div>
                 </li>
             </ul>
         </div>
     </section>
+    <OrderHistoryDialog :isVisible="isVisible" @close="closeModal" />
 </template>
 
 <script setup>
 import { reactive, ref, onMounted, onBeforeUnmount, computed } from "vue";
+
+/*************************************
+* オーダー履歴モーダル
+**************************************/
+import OrderHistoryDialog from "@/components/OrderHistoryDialog.vue";
+const isVisible = ref(false)
+// モーダルを閉じる関数
+const closeModal = () => {
+    isVisible.value = false;
+};
 
 /*************************************
 * ページの初期化時に実行
@@ -237,6 +248,29 @@ const api_changeOrderDishState = async (orderId, dishId) => {
     }
 }
 
+/*************************************************
+このオーダー内のすべての料理を調理済み状態に変更します
+**************************************************/
+import { changeOrderState } from "@/api/kitchenApi";
+const api_changeOrderState = async (orderId) => {
+    try {
+        const res = await changeOrderState({ id: orderId });
+        const code = res.data.code; // ステータスコードを取得
+        if (code === 1) {
+            saveVersion(res.data.data)
+            api_fetAllOrders();
+            canReset.value = true
+        } else {
+            alert(res.data.msg);
+            console.log(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+        alert("状態変更を失敗しました。もう一度お試しください。");
+    }
+}
+
 /*************************************
 * すべて料理の状態を最初の状態をリセットする
 **************************************/
@@ -262,6 +296,9 @@ const api_resetAllOrderAmdDishState = async () => {
 }
 
 
+/*************************************
+* 元に戻すとやり直す機能
+**************************************/
 import Stack from "@/utils/Stack";
 // 定义 undo 和 redo 栈
 const undoStack = ref(new Stack(5)); // 最大容量为 5
@@ -300,7 +337,6 @@ const saveVersion = (version) => {
     }
     currentVersion.value = version; // 更新当前版本
     redoStack.value.clear(); // 清空 redo 栈
-    console.log("保存版本:", undoStack.value, currentVersion.value, redoStack.value);
 };
 
 // 元に戻す操作
@@ -309,7 +345,6 @@ const undo = async () => {
     if (canUndo.value) {
         redoStack.value.push(currentVersion.value); // 当前版本入 redo 栈
         currentVersion.value = undoStack.value.pop(); // 从 undo 栈弹出
-        console.log("撤销后状态:", undoStack.value, currentVersion.value, redoStack.value);
         try {
             const res = await undoAllOrderAmdDishState({ version: currentVersion.value });
             const code = res.data.code; // ステータスコードを取得
@@ -333,7 +368,6 @@ const redo = async () => {
     if (canRedo.value) {
         undoStack.value.push(currentVersion.value); // 当前版本入 undo 栈
         currentVersion.value = redoStack.value.pop(); // 从 redo 栈弹出
-        console.log("重做后状态:", undoStack.value, currentVersion.value, redoStack.value);
         try {
             const res = await redoAllOrderAmdDishState({ version: currentVersion.value });
             const code = res.data.code; // ステータスコードを取得
