@@ -35,9 +35,16 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.addOrder(order);
         order.getDishes().forEach(dish -> {
             dish.setOrderId(orderId);
-            System.out.println(dish);
             orderMapper.addOrderDishRelation(dish);
         });
+        String deskId = order.getDeskId();
+        boolean hasOrderTime = orderMapper.checkDeskHasOrderTime(deskId);
+        System.out.println("hasOrderTime>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+hasOrderTime);
+        if (hasOrderTime) {
+            orderMapper.setNewDeskState(deskId);
+        } else {
+            orderMapper.setNewDeskStateAndOrderTime(deskId);
+        }
     }
 
     @Override

@@ -14,6 +14,8 @@ spring:
     username: root
     # データベースパスワード
     password: 123456
+  jackson:
+    default-property-inclusion: NON_NULL
 
 mybatis:
   configuration:

@@ -1,6 +1,4 @@
 package org.example.server.controller;
-
-
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.Result;
 import org.example.common.SseService;
@@ -16,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import org.springframework.http.MediaType;
-
 import java.util.List;
 
 @Slf4j
@@ -50,11 +47,11 @@ public class OrderController {
         return sseService.getKitchenSseFlux();
     }
 
-// SSE 接口，前台连接实时接收订单
-//    @GetMapping(value = "/front", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//    public Flux<String> streamToFrontDesk() {
-//        return sseService.getFrontDeskSseFlux();
-//    }
+    //SSE 接口，前台连接实时接收订单
+    @GetMapping(value = "/front", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> streamToFrontDesk() {
+        return sseService.getFrontDeskSseFlux();
+    }
 
     @GetMapping
     public Result getDishCategories() {
@@ -91,6 +88,7 @@ public class OrderController {
         log.info("テーブル人数を保存する:{}", desk);
         deskService.setCustomerCount(desk);
         log.info("保存成功しました。");
+        sseService.sendToFrontDesk("テーブル人数を保存成功");
         return Result.success();
     }
 
@@ -101,6 +99,7 @@ public class OrderController {
         log.info("保存成功しました。");
         // 推送订单到厨房和前台
         sseService.sendToKitchen("新しいオーダーを追加");
+        sseService.sendToFrontDesk("新しいオーダーを追加");
         return Result.success();
     }
 

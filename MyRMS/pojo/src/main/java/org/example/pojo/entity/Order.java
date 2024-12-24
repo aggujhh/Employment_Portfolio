@@ -18,7 +18,6 @@ public class Order {
     private Integer guestCount;
     private String state;
     private LocalDateTime orderTime;
-    private LocalDateTime completionTime;
     private List<Dishes> dishes = new ArrayList<>();
 
     // 嵌套的 Dish 类
@@ -31,5 +30,6 @@ public class Order {
         private String name;
         private String state;
         private Integer count;
+        private LocalDateTime completionTime;
     }
 }

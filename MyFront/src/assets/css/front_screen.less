@@ -1,3 +1,17 @@
+@keyframes blink {
+    0% {
+        background-color: #59FF80;
+    }
+
+    50% {
+        background-color: #ffffff;
+    }
+
+    100% {
+        background-color: #59FF80;
+    }
+}
+
 #front_screen {
     height: 87vh;
     width: 100%;
@@ -128,20 +142,33 @@
                         font-size: 26px;
                     }
 
+                    .center.state1 {
+                        background: #59FF80;
+                        animation: blink 1s infinite;
+                    }
+
                     .bar {
                         position: absolute;
                         width: 100%;
                         left: 0;
-                        bottom: 0;
+                        bottom: -30px;
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
+                        color: #333;
 
                         div {
                             width: 75%;
-                            height: 4px;
-                            border-radius: 2px;
+                            height: 6px;
+                            border-radius: 3px;
                             background: #818181;
+                            border: 0.5px solid #818181;
+                            overflow: hidden;
+
+                            div{
+                                height: 100%;
+                                background: #fff;
+                            }
                         }
 
 
@@ -154,8 +181,8 @@
 
             .deskes1 {
                 display: grid;
-                grid-template-rows: 0.6fr 1fr 1fr 1fr 1fr 1fr;
-                grid-row-gap: 5px;
+                grid-template-rows: 0.4fr 1fr 1fr 1fr 1fr 1fr;
+                grid-row-gap: 20px;
 
                 >div {
                     .desk {
@@ -179,6 +206,8 @@
 
                         .bar {
                             padding: 0 5px;
+                            z-index: 10;
+                            transform: translateY(-12px);
                         }
                     }
                 }
@@ -187,7 +216,8 @@
                     .desk {
                         height: 100%;
                         width: 80%;
-                        border-radius: 60px 60px 0 0;
+                        border-radius: 120px 120px 0 0;
+                        transform: translateY(18px);
                     }
                 }
             }
@@ -308,12 +338,12 @@
                         }
 
                         .center {
-                            height: 35%;
+                            height: 40%;
+                            font-size: 40px;
                         }
 
                         .bar {
                             padding: 0 50px;
-                            transform: translateY(-50px);
                         }
                     }
                 }
@@ -430,7 +460,7 @@
                     }
 
                     .center {
-                        height: 60%;
+                        height: 52%;
                     }
 
                     .bar {

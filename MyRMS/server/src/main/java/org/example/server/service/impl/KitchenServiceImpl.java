@@ -36,14 +36,20 @@ public class KitchenServiceImpl implements KitchenService {
         return orders;
     }
 
+    private String getDeskIdByOrderId(String id) {
+        return kitchenMapper.getDeskIdByOrderId(id);
+    }
+
     @Override
     public String changeOrderDishState(Order.Dishes dish) {
         kitchenMapper.changeOrderDishState(dish);
         Integer count = kitchenMapper.countCookedDish(dish);
+        String id = dish.getOrderId();
         if (count == 0) {
-            String id = dish.getOrderId();
             kitchenMapper.changeOrderState(id);
         }
+        String deskId = getDeskIdByOrderId(id);
+        kitchenMapper.setTableOrderState(deskId);
         return initializationVersion();
     }
 
@@ -52,6 +58,8 @@ public class KitchenServiceImpl implements KitchenService {
         String id = order.getId();
         kitchenMapper.changeOrderState(id);
         kitchenMapper.changeAllDishStateByOrderId(id);
+        String deskId = getDeskIdByOrderId(id);
+        kitchenMapper.setTableOrderState(deskId);
         return initializationVersion();
     }
 
@@ -64,6 +72,7 @@ public class KitchenServiceImpl implements KitchenService {
     public String resetAllOrderAmdDishState() {
         kitchenMapper.resetAllOrderState();
         kitchenMapper.resetAllOrderDishState();
+        kitchenMapper.resetAllDeskState();
         return initializationVersion();
     }
 

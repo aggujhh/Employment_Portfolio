@@ -19,4 +19,5 @@ public class Desk {
     private String orderState;//オーダーの状態
     private Integer seatCount;//席数
     private Integer guestCount;//客人数
+    private LocalDateTime orderTime;
 }

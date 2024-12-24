@@ -40,6 +40,9 @@ public interface KitchenMapper {
     @Update("UPDATE order_dish SET state='0' WHERE state='1'")
     void resetAllOrderDishState();
 
+    @Update("UPDATE desk SET order_state='0' WHERE order_state='1'")
+    void resetAllDeskState();
+
     @Insert("INSERT INTO order_snapshot (version,order_id, dish_id, order_state, dish_state) " +
             "SELECT #{version},order_dish.order_id, order_dish.dish_id, `order`.state, order_dish.state " +
             "FROM `order` " +
@@ -88,4 +91,11 @@ public interface KitchenMapper {
             "WHERE order_dish.state != '0' " +
             "ORDER BY order_dish.completion_time DESC ")
     List<OrderHistory> fetchAllOrderHistory();
+
+    @Update("UPDATE desk SET desk_state='1',order_state='1' WHERE id=#{deskId}")
+    void setTableOrderState(String deskId);
+
+    @Select("SELECT desk_id FROM `order` WHERE id=#{id}")
+    String getDeskIdByOrderId(String id);
+
 }
