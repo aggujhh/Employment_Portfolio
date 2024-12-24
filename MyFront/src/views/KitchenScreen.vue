@@ -31,8 +31,11 @@
                 <img src="@/assets/images/icon/History.svg" />
                 <p>履歴</p>
             </div>
-            <div @click="api_resetAllOrderAmdDishState">
-                <img src="@/assets/images/icon/Reset.svg" />
+            <div @click="api_resetAllOrderAmdDishState" class="reset" :class="{ disabled: !canReset }">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M7.207 2.543a1 1 0 0 1 0 1.414L5.414 5.75h7.836a8 8 0 1 1-8 8a1 1 0 1 1 2 0a6 6 0 1 0 6-6H5.414l1.793 1.793a1 1 0 0 1-1.414 1.414l-3.5-3.5a1 1 0 0 1 0-1.414l3.5-3.5a1 1 0 0 1 1.414 0" />
+                </svg>
                 <p>リセット</p>
             </div>
         </div>
@@ -201,8 +204,6 @@ import SseService from "@/utils/sseService";
 const sseService = new SseService("http://localhost:8080/api/order/kitchen", () => {
     // 注文リストをリフレッシュ
     api_fetAllOrders();
-    versionArray.value.pop();
-    currentIndex.value--;
     api_initializationVersion();
 });
 // SSE 接続を開始
@@ -224,6 +225,7 @@ const api_changeOrderDishState = async (orderId, dishId) => {
         if (code === 1) {
             saveVersion(res.data.data)
             api_fetAllOrders();
+            canReset.value = true
         } else {
             alert(res.data.msg);
             console.log(res.data.msg);
@@ -239,6 +241,7 @@ const api_changeOrderDishState = async (orderId, dishId) => {
 * すべて料理の状態を最初の状態をリセットする
 **************************************/
 import { resetAllOrderAmdDishState } from "@/api/kitchenApi";
+const canReset = ref(true)
 const api_resetAllOrderAmdDishState = async () => {
     try {
         const res = await resetAllOrderAmdDishState();
@@ -246,6 +249,7 @@ const api_resetAllOrderAmdDishState = async () => {
         if (code === 1) {
             saveVersion(res.data.data)
             api_fetAllOrders();
+            canReset.value = false
         } else {
             alert(res.data.msg);
             console.log(res.data.msg);
@@ -258,8 +262,11 @@ const api_resetAllOrderAmdDishState = async () => {
 }
 
 
-const versionArray = ref([]); // すべての履歴状態を保存
-const currentIndex = ref(-1); // 現在の状態のインデックスi
+import Stack from "@/utils/Stack";
+// 定义 undo 和 redo 栈
+const undoStack = ref(new Stack(5)); // 最大容量为 5
+const redoStack = ref(new Stack()); // 不限制容量
+const currentVersion = ref(null); // 当前状态
 
 import { initializationVersion } from "@/api/kitchenApi";
 const api_initializationVersion = async () => {
@@ -279,43 +286,32 @@ const api_initializationVersion = async () => {
     }
 }
 
-// // 現在の状態（ポインタに基づいて計算）
-// const currentVersion = computed(() =>
-//     currentIndex.value >= 0 ? versionArray.value[currentIndex.value] : []
-// );
-// 元に戻せるかを判断
-const canUndo = computed(() => currentIndex.value > 0);
+// 是否可以撤销
+const canUndo = computed(() => !undoStack.value.isEmpty());
 
-// やり直し可能かを判断
-const canRedo = computed(() => currentIndex.value < versionArray.value.length - 1);
+// 是否可以重做
+const canRedo = computed(() => !redoStack.value.isEmpty());
 
 // バージョンを保存
+// 保存版本
 const saveVersion = (version) => {
-    // 現在のポインタが最新状態でない場合、将来の履歴を切り捨てる
-    if (currentIndex.value < versionArray.value.length - 1) {
-        versionArray.value = versionArray.value.slice(0, currentIndex.value + 1);
+    if (currentVersion.value !== null) {
+        undoStack.value.push(currentVersion.value); // 当前版本入栈
     }
-    // 新しい状態を追加
-    versionArray.value.push(version);
-    // ポインタを更新
-    currentIndex.value++;
-
-    // 履歴を最大5件に制限
-    if (versionArray.value.length > 5) {
-        versionArray.value.shift(); // 古い履歴を削除
-        currentIndex.value--;
-    }
-    console.log(versionArray.value, currentIndex.value);
+    currentVersion.value = version; // 更新当前版本
+    redoStack.value.clear(); // 清空 redo 栈
+    console.log("保存版本:", undoStack.value, currentVersion.value, redoStack.value);
 };
 
 // 元に戻す操作
 import { undoAllOrderAmdDishState } from "@/api/kitchenApi";
 const undo = async () => {
     if (canUndo.value) {
-        currentIndex.value--; // ポインタを戻す
-        console.log(versionArray.value, currentIndex.value);
+        redoStack.value.push(currentVersion.value); // 当前版本入 redo 栈
+        currentVersion.value = undoStack.value.pop(); // 从 undo 栈弹出
+        console.log("撤销后状态:", undoStack.value, currentVersion.value, redoStack.value);
         try {
-            const res = await undoAllOrderAmdDishState({ version: versionArray.value[currentIndex.value] });
+            const res = await undoAllOrderAmdDishState({ version: currentVersion.value });
             const code = res.data.code; // ステータスコードを取得
             if (code === 1) {
                 api_fetAllOrders(); // 最新の注文データを再取得
@@ -335,10 +331,11 @@ const undo = async () => {
 import { redoAllOrderAmdDishState } from "@/api/kitchenApi";
 const redo = async () => {
     if (canRedo.value) {
-        currentIndex.value++;
-        console.log(versionArray.value, currentIndex.value);
+        undoStack.value.push(currentVersion.value); // 当前版本入 undo 栈
+        currentVersion.value = redoStack.value.pop(); // 从 redo 栈弹出
+        console.log("重做后状态:", undoStack.value, currentVersion.value, redoStack.value);
         try {
-            const res = await redoAllOrderAmdDishState({ version: versionArray.value[currentIndex.value] });
+            const res = await redoAllOrderAmdDishState({ version: currentVersion.value });
             const code = res.data.code; // ステータスコードを取得
             if (code === 1) {
                 // ポインタを進める
