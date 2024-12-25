@@ -14,6 +14,7 @@ import java.util.List;
 public class OrderHistory {
     private String orderId;
     private String deskId;
+    private String dishId;
     private String dishName;
     private Integer count;
     private LocalDateTime orderTime;

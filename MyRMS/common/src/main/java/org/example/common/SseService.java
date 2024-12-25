@@ -1,7 +1,9 @@
 package org.example.common;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import org.springframework.stereotype.Service;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -37,7 +39,11 @@ public class SseService {
     public void sendToKitchen(String message) {
         FluxSink<String> client = kitchenClient.get();
         if (client != null) {
-            client.next(message);
+            try {
+                client.next(message);
+            } catch (Exception e) {
+                System.err.println("Failed to send message to kitchen: " + e.getMessage());
+            }
         }
     }
 
@@ -45,7 +51,11 @@ public class SseService {
     public void sendToFrontDesk(String message) {
         FluxSink<String> client = frontDeskClient.get();
         if (client != null) {
-            client.next(message);
+            try {
+                client.next(message);
+            } catch (Exception e) {
+                System.err.println("Failed to send message to kitchen: " + e.getMessage());
+            }
         }
     }
 }

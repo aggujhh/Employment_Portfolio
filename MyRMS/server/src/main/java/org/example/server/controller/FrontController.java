@@ -9,9 +9,7 @@ import org.example.pojo.entity.OrderHistory;
 import org.example.server.service.FrontService;
 import org.example.server.service.KitchenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,5 +35,11 @@ public class FrontController {
         return Result.success(results);
     }
 
-
+    @PatchMapping
+    public Result changeOrderDishState(@RequestBody OrderHistory orderHistory) {
+        log.info("提供済み料理の状態を変更する。引数({})>>>>>>>>>>>>", orderHistory);
+        frontService.changeOrderDishState(orderHistory);
+        log.info(">>>>>>>>>>>>変更成功！");
+        return Result.success();
+    }
 }

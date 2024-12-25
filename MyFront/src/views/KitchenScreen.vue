@@ -299,7 +299,7 @@ const api_resetAllOrderAmdDishState = async () => {
 /*************************************
 * 元に戻すとやり直す機能
 **************************************/
-import Stack from "@/utils/Stack";
+import Stack from "@/utils/stack";
 // 定义 undo 和 redo 栈
 const undoStack = ref(new Stack(5)); // 最大容量为 5
 const redoStack = ref(new Stack()); // 不限制容量

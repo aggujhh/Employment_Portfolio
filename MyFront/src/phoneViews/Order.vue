@@ -266,6 +266,18 @@ const api_fetchAllCompletedOrders = async () => {
         alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
     }
 }
+
+/*************************************
+* 料理状態により、表示変更
+**************************************/
+const setServedInfoByDishState = (state) => {
+    const servedInfo = {
+        servedText="",
+        servedColor=""
+    }
+}
+
+
 </script>
 
 <style lang="less" scoped>

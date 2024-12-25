@@ -162,10 +162,10 @@
                             height: 6px;
                             border-radius: 3px;
                             background: #818181;
-                            border: 0.5px solid #818181;
+                            border: 0.5px solid #333;
                             overflow: hidden;
 
-                            div{
+                            div {
                                 height: 100%;
                                 background: #fff;
                             }
@@ -508,6 +508,11 @@
                         justify-content: center;
                     }
 
+                    p:nth-of-type(2) {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
                 }
 
                 li:first-of-type {

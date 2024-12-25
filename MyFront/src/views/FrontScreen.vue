@@ -40,9 +40,10 @@
                             <div class="center" :class="classNameArray['A1']">A1</div>
                             <div class="bar" v-if="progressBarArray['A1']?.isVisible">
                                 <div>
-                                    <div :style="{ width: progressBarArray['A1']?.progressBar + '%' }"></div>
+                                    <div :style="progressBarArray['A1']?.progressBarStyle" />
                                 </div>
-                                <span>{{ progressBarArray['A1']?.timeData }}</span>
+                                <span :style="{ color: progressBarArray['A1']?.timeColor }">{{
+                                    progressBarArray['A1']?.timeData }}</span>
                             </div>
                             <div v-for="(seat, index) in Array.from({ length: seatStateArray?.A1?.seatCount })"
                                 :key="index" class="seat" :style="index < seatStateArray?.A1?.guestCount
@@ -55,10 +56,10 @@
                             <div class="center" :class="classNameArray['A2']">A2</div>
                             <div class="bar" v-if="progressBarArray['A2']?.isVisible">
                                 <div>
-                                    <div :style="{ width: progressBarArray['A2']?.progressBar + '%' }">
-                                    </div>
+                                    <div :style="progressBarArray['A2']?.progressBarStyle" />
                                 </div>
-                                <span>{{ progressBarArray['A2']?.timeData }}</span>
+                                <span :style="{ color: progressBarArray['A2']?.timeColor }">{{
+                                    progressBarArray['A2']?.timeData }}</span>
                             </div>
                             <div v-for="(seat, index) in Array.from({ length: seatStateArray?.A2?.seatCount })"
                                 :key="index" class="seat" :style="index < seatStateArray?.A2?.guestCount
@@ -71,10 +72,10 @@
                             <div class="center" :class="classNameArray['A3']">A3</div>
                             <div class="bar" v-if="progressBarArray['A3']?.isVisible">
                                 <div>
-                                    <div :style="{ width: progressBarArray['A3']?.progressBar + '%' }">
-                                    </div>
+                                    <div :style="progressBarArray['A3']?.progressBarStyle" />
                                 </div>
-                                <span>{{ progressBarArray['A3']?.timeData }}</span>
+                                <span :style="{ color: progressBarArray['A3']?.timeColor }">{{
+                                    progressBarArray['A3']?.timeData }}</span>
                             </div>
                             <div v-for="(seat, index) in Array.from({ length: seatStateArray?.A3?.seatCount })"
                                 :key="index" class="seat" :style="index < seatStateArray?.A3?.guestCount
@@ -87,10 +88,10 @@
                             <div class="center" :class="classNameArray['A4']">A4</div>
                             <div class="bar" v-if="progressBarArray['A4']?.isVisible">
                                 <div>
-                                    <div :style="{ width: progressBarArray['A4']?.progressBar + '%' }">
-                                    </div>
+                                    <div :style="progressBarArray['A4']?.progressBarStyle" />
                                 </div>
-                                <span>{{ progressBarArray['A4']?.timeData }}</span>
+                                <span :style="{ color: progressBarArray['A4']?.timeColor }">{{
+                                    progressBarArray['A4']?.timeData }}</span>
                             </div>
                             <div v-for="(seat, index) in Array.from({ length: seatStateArray?.A4?.seatCount })"
                                 :key="index" class="seat" :style="index < seatStateArray?.A4?.guestCount
@@ -103,10 +104,10 @@
                             <div class="center" :class="classNameArray['A5']">A5</div>
                             <div class="bar" v-if="progressBarArray['A5']?.isVisible">
                                 <div>
-                                    <div :style="{ width: progressBarArray['A5']?.progressBar + '%' }">
-                                    </div>
+                                    <div :style="progressBarArray['A5']?.progressBarStyle" />
                                 </div>
-                                <span>{{ progressBarArray['A5']?.timeData }}</span>
+                                <span :style="{ color: progressBarArray['A5']?.timeColor }">{{
+                                    progressBarArray['A5']?.timeData }}</span>
                             </div>
                             <div v-for="(seat, index) in Array.from({ length: seatStateArray?.A5?.seatCount })"
                                 :key="index" class="seat" :style="index < seatStateArray?.A5?.guestCount
@@ -126,10 +127,10 @@
                                 <div class="center" :class="classNameArray['C1']">C1</div>
                                 <div class="bar" v-if="progressBarArray['C1']?.isVisible">
                                     <div>
-                                        <div :style="{ width: progressBarArray['C1']?.progressBar + '%' }">
-                                        </div>
+                                        <div :style="progressBarArray['C1']?.progressBarStyle" />
                                     </div>
-                                    <span>{{ progressBarArray['C1']?.timeData }}</span>
+                                    <span :style="{ color: progressBarArray['C1']?.timeColor }">{{
+                                        progressBarArray['C1']?.timeData }}</span>
                                 </div>
                             </div>
                         </div>
@@ -142,10 +143,10 @@
                                 <div class="center" :class="classNameArray['C2']">C2</div>
                                 <div class="bar" v-if="progressBarArray['C2']?.isVisible">
                                     <div>
-                                        <div :style="{ width: progressBarArray['C2']?.progressBar + '%' }">
-                                        </div>
+                                        <div :style="progressBarArray['C2']?.progressBarStyle" />
                                     </div>
-                                    <span>{{ progressBarArray['C2']?.timeData }}</span>
+                                    <span :style="{ color: progressBarArray['C2']?.timeColor }">{{
+                                        progressBarArray['C2']?.timeData }}</span>
                                 </div>
                             </div>
                         </div>
@@ -158,10 +159,10 @@
                                 <div class="center" :class="classNameArray['C3']">C3</div>
                                 <div class="bar" v-if="progressBarArray['C3']?.isVisible">
                                     <div>
-                                        <div :style="{ width: progressBarArray['C3']?.progressBar + '%' }">
-                                        </div>
+                                        <div :style="progressBarArray['C3']?.progressBarStyle" />
                                     </div>
-                                    <span>{{ progressBarArray['C3']?.timeData }}</span>
+                                    <span :style="{ color: progressBarArray['C3']?.timeColor }">{{
+                                        progressBarArray['C3']?.timeData }}</span>
                                 </div>
                             </div>
                         </div>
@@ -174,10 +175,10 @@
                                 <div class="center" :class="classNameArray['C4']">C4</div>
                                 <div class="bar" v-if="progressBarArray['C4']?.isVisible">
                                     <div>
-                                        <div :style="{ width: progressBarArray['C4']?.progressBar + '%' }">
-                                        </div>
+                                        <div :style="progressBarArray['C4']?.progressBarStyle" />
                                     </div>
-                                    <span>{{ progressBarArray['C4']?.timeData }}</span>
+                                    <span :style="{ color: progressBarArray['C4']?.timeColor }">{{
+                                        progressBarArray['C4']?.timeData }}</span>
                                 </div>
                             </div>
                         </div>
@@ -193,10 +194,10 @@
                                     <div class="center" :class="classNameArray['E']">E</div>
                                     <div class="bar" v-if="progressBarArray['E']?.isVisible">
                                         <div>
-                                            <div :style="{ width: progressBarArray['E']?.progressBar + '%' }">
-                                            </div>
+                                            <div :style="progressBarArray['E']?.progressBarStyle" />
                                         </div>
-                                        <span>{{ progressBarArray['E']?.timeData }}</span>
+                                        <span :style="{ color: progressBarArray['E']?.timeColor }">{{
+                                            progressBarArray['E']?.timeData }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -212,10 +213,10 @@
                                         <div class="center" :class="classNameArray['D1']">D1</div>
                                         <div class="bar" v-if="progressBarArray['D1']?.isVisible">
                                             <div>
-                                                <div :style="{ width: progressBarArray['D1']?.progressBar + '%' }">
-                                                </div>
+                                                <div :style="progressBarArray['D1']?.progressBarStyle" />
                                             </div>
-                                            <span>{{ progressBarArray['D1']?.timeData }}</span>
+                                            <span :style="{ color: progressBarArray['D1']?.timeColor }">{{
+                                                progressBarArray['D1']?.timeData }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -228,10 +229,10 @@
                                         <div class="center" :class="classNameArray['D2']">D2</div>
                                         <div class="bar" v-if="progressBarArray['D2']?.isVisible">
                                             <div>
-                                                <div :style="{ width: progressBarArray['D2']?.progressBar + '%' }">
-                                                </div>
+                                                <div :style="progressBarArray['D2']?.progressBarStyle" />
                                             </div>
-                                            <span>{{ progressBarArray['D2']?.timeData }}</span>
+                                            <span :style="{ color: progressBarArray['D2']?.timeColor }">{{
+                                                progressBarArray['D2']?.timeData }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -246,10 +247,10 @@
                                         <div class="center" :class="classNameArray['B1']">B1</div>
                                         <div class="bar" v-if="progressBarArray['B1']?.isVisible">
                                             <div>
-                                                <div :style="{ width: progressBarArray['B1']?.progressBar + '%' }">
-                                                </div>
+                                                <div :style="progressBarArray['B1']?.progressBarStyle" />
                                             </div>
-                                            <span>{{ progressBarArray['B1']?.timeData }}</span>
+                                            <span :style="{ color: progressBarArray['B1']?.timeColor }">{{
+                                                progressBarArray['B1']?.timeData }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -262,10 +263,10 @@
                                         <div class="center" :class="classNameArray['B2']">B2</div>
                                         <div class="bar" v-if="progressBarArray['B2']?.isVisible">
                                             <div>
-                                                <div :style="{ width: progressBarArray['B2']?.progressBar + '%' }">
-                                                </div>
+                                                <div :style="progressBarArray['B2']?.progressBarStyle" />
                                             </div>
-                                            <span>{{ progressBarArray['B2']?.timeData }}</span>
+                                            <span :style="{ color: progressBarArray['B2']?.timeColor }">{{
+                                                progressBarArray['B2']?.timeData }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -278,10 +279,10 @@
                                         <div class="center" :class="classNameArray['B3']">B3</div>
                                         <div class="bar" v-if="progressBarArray['B3']?.isVisible">
                                             <div>
-                                                <div :style="{ width: progressBarArray['B3']?.progressBar + '%' }">
-                                                </div>
+                                                <div :style="progressBarArray['B3']?.progressBarStyle" />
                                             </div>
-                                            <span>{{ progressBarArray['B3']?.timeData }}</span>
+                                            <span :style="{ color: progressBarArray['B3']?.timeColor }">{{
+                                                progressBarArray['B3']?.timeData }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -294,10 +295,10 @@
                                         <div class="center" :class="classNameArray['B4']">B4</div>
                                         <div class="bar" v-if="progressBarArray['B4']?.isVisible">
                                             <div>
-                                                <div :style="{ width: progressBarArray['B4']?.progressBar + '%' }">
-                                                </div>
+                                                <div :style="progressBarArray['B4']?.progressBarStyle" />
                                             </div>
-                                            <span>{{ progressBarArray['B4']?.timeData }}</span>
+                                            <span :style="{ color: progressBarArray['B4']?.timeColor }">{{
+                                                progressBarArray['B4']?.timeData }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -321,7 +322,8 @@
                         <p>{{ item.deskId }}</p>
                         <p>{{ item.dishName }}</p>
                         <p>{{ item.count }}</p>
-                        <input type="checkbox">
+                        <input type="checkbox" :checked="item.checked"
+                            @change="send_changeOrderDishState(index, item.deskId, item.orderId, item.dishId)">
                     </li>
                 </ul>
             </div>
@@ -371,7 +373,6 @@ const api_fetchAllTables = async () => {
 const api_resetAllTables = async () => {
     try {
         const res = await resetAllTables();
-        console.log(res);
         const code = res.data.code; // ステータスコードを取得
         if (code === 1) {
             api_fetchAllTables();
@@ -447,16 +448,26 @@ const timeIntoProgressBar = (time) => {
         const specifiedTime = new Date(time); // 注文時刻を Date オブジェクトに変換
         const timeDiff = now.value - specifiedTime; // 現在時刻との時間差を計算
         const totalSeconds = Math.floor(timeDiff / 1000); // 総秒数を計算
-        const minutes = Math.floor((totalSeconds % 3600) / 60); // 分
+        const minutes = Math.floor(totalSeconds / 60); // 分
         const seconds = totalSeconds % 60; // 秒
         const timeData = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-        // 進捗バーの計算（最大100）
         let progressBar = Math.floor(totalSeconds / 6);
-        if (progressBar > 100) {
-            progressBar = 100;
+        let timeColor = '#333'
+        let progressBarStyle = {
+            width: progressBar + '%',
+            backgroundColor: '#fff'
         }
-        return { timeData, progressBar, isVisible: true };
+        // 進捗バーの計算（最大100）
+        if (progressBar > 100) {
+            timeColor = 'red'
+            progressBarStyle = {
+                width: '100%',
+                backgroundColor: '#FF8080',
+                border: '0.5px solid red'
+            }
+        }
+        return { timeData, timeColor, progressBarStyle, isVisible: true };
     });
 };
 
@@ -489,6 +500,11 @@ const send_fetchAllCompletedOrders = async () => {
         const code = res.data.code;
         if (code === 1) {
             completedorders.value = res.data.data
+            completedorders.value = res.data.data.map(item => ({
+                ...item,
+                checked: false, // 每次重新加载时重置 checked 状态
+            }));
+            console.log(completedorders.value);
         } else {
             alert(res.data.msg);
             console.log(res.data.msg);
@@ -529,6 +545,32 @@ onBeforeUnmount(() => {
     sseService1.close();
     sseService2.close();
 });
+
+/*************************************
+* 料理状態を提供済みに変更
+**************************************/
+import { changeOrderDishState } from "@/api/frontApi";
+const send_changeOrderDishState = async (index, deskId, orderId, dishId) => {
+    try {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        const res = await changeOrderDishState({ index, deskId, orderId, dishId });
+        const code = res.data.code;
+        if (code === 1) {
+            completedorders.value[index].checked = !completedorders.value[index].checked;
+            send_fetchAllCompletedOrders()
+            api_fetchAllTables();
+        } else {
+            alert(res.data.msg);
+            console.log(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+        alert("フェッチ失敗しました。もう一度お試しください。");
+    }
+}
+
+
 </script>
 
 <style lang="less" scoped>
