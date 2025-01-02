@@ -50,7 +50,7 @@ const router = createRouter({
                     path: '', // 空路径表示匹配父路径 /order/:desk_id
                     component: Order,
                     meta: { requiresAuth: false },
-                    redirect: (to) => `/order/${to.params.desk_id}/0`,
+                    redirect: (to) => `/order/${to.params.desk_id}/1`,
                     children: [
                         {
                             path: ':id', // 动态子路由

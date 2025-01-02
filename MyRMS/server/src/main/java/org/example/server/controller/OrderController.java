@@ -1,11 +1,9 @@
 package org.example.server.controller;
+
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.Result;
 import org.example.common.SseService;
-import org.example.pojo.entity.Desk;
-import org.example.pojo.entity.Dish;
-import org.example.pojo.entity.Order;
-import org.example.pojo.entity.DishCategory;
+import org.example.pojo.entity.*;
 import org.example.server.service.DeskService;
 import org.example.server.service.DishCategoryService;
 import org.example.server.service.DishService;
@@ -14,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import org.springframework.http.MediaType;
+
 import java.util.List;
 
 @Slf4j
@@ -117,5 +116,14 @@ public class OrderController {
         List<Order.Dishes> result = orderService.fetchAllCompletedOrders(deskId);
         log.info("取得成功しました。");
         return Result.success(result);
+    }
+
+    @PatchMapping("/finish")
+    public Result finishOrder(@RequestBody OrderHistory orderHistory) {
+        log.info("会計完了,オーダー履歴を保存する:{}", orderHistory);
+        orderService.finishOrder(orderHistory);
+        log.info("保存成功しました。");
+        sseService.sendToFrontDesk("会計あり");
+        return Result.success();
     }
 }

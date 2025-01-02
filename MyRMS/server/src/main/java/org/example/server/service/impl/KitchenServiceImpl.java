@@ -3,7 +3,7 @@ package org.example.server.service.impl;
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.example.pojo.entity.Order;
-import org.example.pojo.entity.OrderHistory;
+import org.example.pojo.entity.OrderCompletion;
 import org.example.pojo.entity.OrderSnapshot;
 import org.example.server.mapper.KitchenMapper;
 import org.example.server.service.KitchenService;
@@ -64,7 +64,7 @@ public class KitchenServiceImpl implements KitchenService {
     }
 
     @Override
-    public List<OrderHistory> fetchAllOrderHistory() {
+    public List<OrderCompletion> fetchAllOrderHistory() {
         return kitchenMapper.fetchAllOrderHistory();
     }
 

@@ -1,14 +1,17 @@
 package org.example.server.controller;
+
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.Result;
 import org.example.common.SseService;
 import org.example.pojo.entity.Order;
-import org.example.pojo.entity.OrderHistory;
+import org.example.pojo.entity.OrderCompletion;
 import org.example.pojo.entity.OrderSnapshot;
 import org.example.server.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 import reactor.core.publisher.Flux;
 import org.springframework.http.MediaType;
 
@@ -99,7 +102,7 @@ public class KitchenController {
     @GetMapping("/history")
     public Result fetchAllOrderHistory() {
         log.info("すべての注文履歴をフェッチする。");
-        List<OrderHistory> results = kitchenService.fetchAllOrderHistory();
+        List<OrderCompletion> results = kitchenService.fetchAllOrderHistory();
         log.info("フェッチ成功:{}", results);
         return Result.success(results);
     }

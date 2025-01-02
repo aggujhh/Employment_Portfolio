@@ -7,25 +7,25 @@
             <div class="header">
                 <ul>
                     <li>
-                        <div></div>空席：111
+                        <div></div>空席：{{ stateCounts.deskState0 }}
                     </li>
                     <li>
-                        <div></div>客あり：111
+                        <div></div>客あり：{{ stateCounts.deskState1 }}
                     </li>
                     <li>
-                        <div></div>予約済：111
+                        <div></div>予約済：{{ stateCounts.deskState2 }}
                     </li>
                     <li>
-                        <div></div>利用不可：111
+                        <div></div>利用不可：{{ stateCounts.deskState3 }}
                     </li>
                     <li>
-                        <div></div>仕上あり：111
+                        <div></div>仕上あり：{{ stateCounts.orderState1 }}
                     </li>
                     <li>
-                        <div></div>会計あり：111
+                        <div></div>会計あり：{{ stateCounts.orderState2 }}
                     </li>
                     <li>
-                        <div></div>呼び込み：111
+                        <div></div>呼び出し：{{ stateCounts.orderState3 }}
                     </li>
                 </ul>
             </div>
@@ -37,7 +37,9 @@
                     </div>
                     <div>
                         <div class="desk" :style="tableStateArray['A1']">
-                            <div class="center" :class="classNameArray['A1']">A1</div>
+                            <div class="center" :class="classNameArray['A1']"
+                                @click="openAccountingConfirmationDialog('A1')">
+                                A1</div>
                             <div class="bar" v-if="progressBarArray['A1']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A1']?.progressBarStyle" />
@@ -53,7 +55,8 @@
                     </div>
                     <div>
                         <div class="desk" :style="tableStateArray['A2']">
-                            <div class="center" :class="classNameArray['A2']">A2</div>
+                            <div class="center" :class="classNameArray['A2']"
+                                @click="openAccountingConfirmationDialog('A2')">A2</div>
                             <div class="bar" v-if="progressBarArray['A2']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A2']?.progressBarStyle" />
@@ -69,7 +72,8 @@
                     </div>
                     <div>
                         <div class="desk" :style="tableStateArray['A3']">
-                            <div class="center" :class="classNameArray['A3']">A3</div>
+                            <div class="center" :class="classNameArray['A3']"
+                                @click="openAccountingConfirmationDialog('A3')">A3</div>
                             <div class="bar" v-if="progressBarArray['A3']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A3']?.progressBarStyle" />
@@ -85,7 +89,8 @@
                     </div>
                     <div>
                         <div class="desk" :style="tableStateArray['A4']">
-                            <div class="center" :class="classNameArray['A4']">A4</div>
+                            <div class="center" :class="classNameArray['A4']"
+                                @click="openAccountingConfirmationDialog('A4')">A4</div>
                             <div class="bar" v-if="progressBarArray['A4']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A4']?.progressBarStyle" />
@@ -101,7 +106,8 @@
                     </div>
                     <div>
                         <div class="desk" :style="tableStateArray['A5']">
-                            <div class="center" :class="classNameArray['A5']">A5</div>
+                            <div class="center" :class="classNameArray['A5']"
+                                @click="openAccountingConfirmationDialog('A5')">A5</div>
                             <div class="bar" v-if="progressBarArray['A5']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A5']?.progressBarStyle" />
@@ -124,7 +130,8 @@
                                     :key="index" class="seat" :style="index < seatStateArray?.C1?.guestCount
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
-                                <div class="center" :class="classNameArray['C1']">C1</div>
+                                <div class="center" :class="classNameArray['C1']"
+                                    @click="openAccountingConfirmationDialog('C1')">C1</div>
                                 <div class="bar" v-if="progressBarArray['C1']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C1']?.progressBarStyle" />
@@ -140,7 +147,8 @@
                                     :key="index" class="seat" :style="index < seatStateArray?.C2?.guestCount
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
-                                <div class="center" :class="classNameArray['C2']">C2</div>
+                                <div class="center" :class="classNameArray['C2']"
+                                    @click="openAccountingConfirmationDialog('C2')">C2</div>
                                 <div class="bar" v-if="progressBarArray['C2']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C2']?.progressBarStyle" />
@@ -156,7 +164,8 @@
                                     :key="index" class="seat" :style="index < seatStateArray?.C3?.guestCount
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
-                                <div class="center" :class="classNameArray['C3']">C3</div>
+                                <div class="center" :class="classNameArray['C3']"
+                                    @click="openAccountingConfirmationDialog('C3')">C3</div>
                                 <div class="bar" v-if="progressBarArray['C3']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C3']?.progressBarStyle" />
@@ -172,7 +181,8 @@
                                     :key="index" class="seat" :style="index < seatStateArray?.C4?.guestCount
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
-                                <div class="center" :class="classNameArray['C4']">C4</div>
+                                <div class="center" :class="classNameArray['C4']"
+                                    @click="openAccountingConfirmationDialog('C4')">C4</div>
                                 <div class="bar" v-if="progressBarArray['C4']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C4']?.progressBarStyle" />
@@ -191,7 +201,8 @@
                                         :key="index" class="seat" :style="index < seatStateArray?.E?.guestCount
                                             ? { background: '#FBB034' }
                                             : { background: '#505050' }" />
-                                    <div class="center" :class="classNameArray['E']">E</div>
+                                    <div class="center" :class="classNameArray['E']"
+                                        @click="openAccountingConfirmationDialog('E')">E</div>
                                     <div class="bar" v-if="progressBarArray['E']?.isVisible">
                                         <div>
                                             <div :style="progressBarArray['E']?.progressBarStyle" />
@@ -210,7 +221,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.D1?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['D1']">D1</div>
+                                        <div class="center" :class="classNameArray['D1']"
+                                            @click="openAccountingConfirmationDialog('D1')">D1</div>
                                         <div class="bar" v-if="progressBarArray['D1']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['D1']?.progressBarStyle" />
@@ -226,7 +238,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.D2?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['D2']">D2</div>
+                                        <div class="center" :class="classNameArray['D2']"
+                                            @click="openAccountingConfirmationDialog('D2')">D2</div>
                                         <div class="bar" v-if="progressBarArray['D2']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['D2']?.progressBarStyle" />
@@ -244,7 +257,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.B1?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['B1']">B1</div>
+                                        <div class="center" :class="classNameArray['B1']"
+                                            @click="openAccountingConfirmationDialog('B1')">B1</div>
                                         <div class="bar" v-if="progressBarArray['B1']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B1']?.progressBarStyle" />
@@ -260,7 +274,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.B2?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['B2']">B2</div>
+                                        <div class="center" :class="classNameArray['B2']"
+                                            @click="openAccountingConfirmationDialog('B2')">B2</div>
                                         <div class="bar" v-if="progressBarArray['B2']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B2']?.progressBarStyle" />
@@ -276,7 +291,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.B3?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['B3']">B3</div>
+                                        <div class="center" :class="classNameArray['B3']"
+                                            @click="openAccountingConfirmationDialog('B3')">B3</div>
                                         <div class="bar" v-if="progressBarArray['B3']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B3']?.progressBarStyle" />
@@ -292,7 +308,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.B4?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['B4']">B4</div>
+                                        <div class="center" :class="classNameArray['B4']"
+                                            @click="openAccountingConfirmationDialog('B4')">B4</div>
                                         <div class="bar" v-if="progressBarArray['B4']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B4']?.progressBarStyle" />
@@ -332,25 +349,26 @@
                 <ul>
                     <li>
                         <p>今日の来店客数:</p>
-                        <p>100人</p>
+                        <p>{{ operations.customerCount }}人</p>
                     </li>
                     <li>
                         <p>今日の売上:</p>
-                        <p>1000000円</p>
+                        <p>{{ operations.sales }}円</p>
                     </li>
                     <li>
                         <p>今日の回転率:</p>
-                        <p>213%</p>
+                        <p>{{ operations.turnoverRate }}%</p>
                     </li>
 
                     <li>
                         <p>営業残り:</p>
-                        <p>03:03</p>
+                        <p>{{ operations.closingTime }}</p>
                     </li>
                 </ul>
             </div>
         </article>
     </section>
+    <AccountingConfirmationDialog :isVisible="isVisible.accountingConfirmation" :deskId="deskId" @close="closeModal" />
 </template>
 
 <script setup>
@@ -362,12 +380,58 @@ const api_fetchAllTables = async () => {
     try {
         const res = await fetchAllTables();
         tables.value = res.data.data; // APIからデータを取得
-        console.log(tables.value);
         setTableState()
+        setHeader()
     } catch (err) {
         console.error("リクエストエラー:", err);
         alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
     }
+}
+
+const stateCounts = reactive({
+    deskState0: 0,
+    deskState1: 0,
+    deskState2: 0,
+    deskState4: 0,
+    orderState1: 0,
+    orderState2: 0,
+    orderState3: 0
+})
+const setHeader = () => {
+    stateCounts.deskState0 = 0
+    stateCounts.deskState1 = 0
+    stateCounts.deskState2 = 0
+    stateCounts.deskState3 = 0
+    stateCounts.orderState1 = 0
+    stateCounts.orderState2 = 0
+    stateCounts.orderState3 = 0
+    tables.value.forEach(item => {
+        switch (item.deskState) {
+            case '0':
+                stateCounts.deskState0++;
+                break;
+            case '1':
+                stateCounts.deskState1++;
+                break;
+            case '2':
+                stateCounts.deskState2++;
+                break;
+            case '3':
+                stateCounts.deskState3++;
+                break;
+        }
+        switch (item.orderState) {
+            case '1':
+                stateCounts.orderState1++;
+                break;
+            case '2':
+                stateCounts.orderState2++;
+                break;
+            case '3':
+                stateCounts.orderState3++;
+                break;
+        }
+    })
 }
 
 const api_resetAllTables = async () => {
@@ -390,6 +454,7 @@ const api_resetAllTables = async () => {
 onMounted(() => {
     api_fetchAllTables();
     send_fetchAllCompletedOrders()
+    send_fetchOperations()
 });
 
 const getDeskStyle = (state) => {
@@ -443,7 +508,7 @@ setInterval(() => {
 const timeIntoProgressBar = (time) => {
     return computed(() => {
         if (!time) {
-            return { timeData: '00:00', progressBar: 0, isVisible: false };
+            return { isVisible: false };
         }
         const specifiedTime = new Date(time); // 注文時刻を Date オブジェクトに変換
         const timeDiff = now.value - specifiedTime; // 現在時刻との時間差を計算
@@ -504,7 +569,6 @@ const send_fetchAllCompletedOrders = async () => {
                 ...item,
                 checked: false, // 每次重新加载时重置 checked 状态
             }));
-            console.log(completedorders.value);
         } else {
             alert(res.data.msg);
             console.log(res.data.msg);
@@ -568,6 +632,97 @@ const send_changeOrderDishState = async (index, deskId, orderId, dishId) => {
         console.error("リクエストエラー:", error);
         alert("フェッチ失敗しました。もう一度お試しください。");
     }
+}
+
+/*************************************
+* 会計確認
+**************************************/
+import AccountingConfirmationDialog from "@/components/AccountingConfirmationDialog.vue";
+const isVisible = reactive({
+    accountingConfirmation: false,
+})
+// モーダルを閉じる関数
+const closeModal = () => {
+    isVisible.accountingConfirmation = false;
+    api_fetchAllTables();
+    send_fetchOperations();
+};
+
+const deskId = ref()
+const openAccountingConfirmationDialog = (id) => {
+    deskId.value = id
+    isVisible.accountingConfirmation = true;
+}
+
+
+/*************************************
+* 営業情報所得する
+**************************************/
+import { fetchOperations } from "@/api/frontApi";
+const operations = reactive({
+    customerCount: "",
+    sales: "",
+    turnoverRate: "",
+    closingTime: ""
+});
+const send_fetchOperations = async () => {
+    try {
+        const res = await fetchOperations();
+        const code = res.data.code;
+        if (code === 1) {
+            Object.assign(operations, res.data.data);
+            setClosingTime()
+        } else {
+            alert(res.data.msg);
+            console.log(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+        alert("営業情報フェッチ失敗しました。もう一度お試しください。");
+    }
+}
+
+/*************************************
+* ラストタイムアウトを設定する
+**************************************/
+const setClosingTime = () => {
+    const updateClosingTime = () => {
+        const now = new Date();
+        const currentDate = now.toISOString().split("T")[0];
+
+        // 获取午餐和晚餐的开始和结束时间
+        const lunchStartTime = new Date(`${currentDate}T${operations.lunchTimeStart}`);
+        const lunchEndTime = new Date(`${currentDate}T${operations.lunchTimeEnd}`);
+        const dinnerStartTime = new Date(`${currentDate}T${operations.dinnerTimeStart}`);
+        const dinnerEndTime = new Date(`${currentDate}T${operations.dinnerTimeEnd}`);
+
+        // 当前时间是否在午餐或晚餐时间段内
+        if (now >= lunchStartTime && now <= lunchEndTime) {
+            const lunchRemaining = lunchEndTime - now;
+            const hours = Math.floor(lunchRemaining / (1000 * 60 * 60));
+            const minutes = Math.floor((lunchRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((lunchRemaining % (1000 * 60)) / 1000);
+            operations.closingTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            return;
+        }
+
+        if (now >= dinnerStartTime && now <= dinnerEndTime) {
+            const dinnerRemaining = dinnerEndTime - now;
+            const hours = Math.floor(dinnerRemaining / (1000 * 60 * 60));
+            const minutes = Math.floor((dinnerRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((dinnerRemaining % (1000 * 60)) / 1000);
+            operations.closingTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            return;
+        }
+
+        // 不在午餐或晚餐时间段内
+        operations.closingTime = "営業時間外";
+    };
+
+    updateClosingTime();
+    // 然后启动定时器
+    const interval = setInterval(updateClosingTime, 1000);
 }
 
 

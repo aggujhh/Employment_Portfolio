@@ -35,7 +35,6 @@ const fetchTable = async () => {
     setIsActive()
   } catch (err) {
     console.error("リクエストエラー:", err);
-    alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
   }
 };
 

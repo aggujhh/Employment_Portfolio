@@ -1,14 +1,16 @@
-@keyframes blink {
-    0% {
-        background-color: #59FF80;
-    }
+.blink-animation(@name, @color) {
+    @keyframes @name {
+        0% {
+            background-color: @color;
+        }
 
-    50% {
-        background-color: #ffffff;
-    }
+        50% {
+            background-color: #ffffff;
+        }
 
-    100% {
-        background-color: #59FF80;
+        100% {
+            background-color: @color;
+        }
     }
 }
 
@@ -140,11 +142,20 @@
                         align-items: center;
                         font-family: 'Leckerli One';
                         font-size: 26px;
+                        pointer-events: none;
+                        user-select: none;
                     }
 
                     .center.state1 {
-                        background: #59FF80;
-                        animation: blink 1s infinite;
+                        .blink-animation(blink1, #59FF80);
+                        animation: blink1 1.5s infinite;
+                    }
+
+                    .center.state2 {
+                        pointer-events: auto;
+                        .blink-animation(blink2, #F7E902);
+                        animation: blink2 1.5s infinite;
+                        cursor: pointer;
                     }
 
                     .bar {

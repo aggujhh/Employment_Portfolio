@@ -8,7 +8,7 @@ export default class SseService {
      * @param url SSE サーバーの URL
      * @param onMessage メッセージを受信したときに実行されるコールバック関数
      */
-    constructor(private url: string, private onMessage: () => void) {}
+    constructor(private url: string, private onMessage: (message: string) => void) { }
 
     /**
      * SSE 接続を開始する
@@ -17,9 +17,9 @@ export default class SseService {
         this.eventSource = new EventSource(this.url); // EventSource オブジェクトを初期化
 
         // メッセージを受信した場合の処理
-        this.eventSource.onmessage = () => {
+        this.eventSource.onmessage = (event: MessageEvent) => {
             this.reconnectAttempts = 0; // メッセージを受信できれば試行回数をリセット
-            this.onMessage(); // コールバック関数を呼び出す
+            this.onMessage(event.data); // コールバック関数を呼び出す
         };
 
         // 接続エラーが発生した場合の処理

@@ -1,0 +1,85 @@
+@import "@/assets/css/dialog.less";
+
+#bill_dialog {
+    .dialog {
+        width: 350px;
+        height: 450px;
+        background: #333;
+        justify-content: flex-start;
+
+        h3 {
+            color: #fbb034;
+            font-size: 26px;
+            font-family: 'YujiSyuku';
+            margin-bottom: 20px;
+        }
+
+        ul {
+            border: 1px solid #fbb034;
+            width: 85%;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+
+            li {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 5px;
+                color: #fbb034;
+            }
+
+            li:nth-of-type(5) {
+                margin-bottom: 15px;
+            }
+
+            li:nth-of-type(6) {
+                font-size: 20px;
+                font-weight: bold;
+            }
+        }
+
+        .pay-method {
+            align-self: flex-start;
+            margin-left: 28px;
+            color: #fbb034;
+            margin-bottom: 40px;
+
+            p {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+
+            label {
+                margin-left: 30px;
+
+                input {
+                    margin-right: 5px;
+                }
+            }
+        }
+
+        .btn {
+            width: 85%;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            grid-column-gap: 20px;
+
+            button {
+                padding: 10px 10px;
+                border: none;
+                border-radius: 5px;
+                user-select: none;
+            }
+
+            button:nth-of-type(1){
+                background: #bebebe;
+            }
+
+            button:nth-of-type(2){
+                background: #c60608;
+                color: #fbb034;
+                font-weight: bold;
+            }
+        }
+    }
+}

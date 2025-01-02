@@ -68,3 +68,15 @@ export function fetchAllCompletedOrders(data: { deskId: string }) {
         params: data
     });
 }
+
+
+/**
+ * 会計完了
+ */
+export function finishOrder(data: {
+    deskId: string,
+    payMethod: string,
+    amount: number
+ }) {
+    return instance.patch('/api/order/finish', data);
+}

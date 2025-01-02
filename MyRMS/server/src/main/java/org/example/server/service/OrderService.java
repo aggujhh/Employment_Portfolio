@@ -1,5 +1,6 @@
 package org.example.server.service;
 import org.example.pojo.entity.Order;
+import org.example.pojo.entity.OrderHistory;
 
 import java.util.List;
 
@@ -9,4 +10,6 @@ public interface OrderService {
     Integer getOrderTotalPrice(String order);
 
     List<Order.Dishes> fetchAllCompletedOrders(String deskId);
+
+    void finishOrder(OrderHistory order);
 }

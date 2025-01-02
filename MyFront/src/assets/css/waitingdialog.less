@@ -1,0 +1,51 @@
+@import "@/assets/css/dialog.less";
+
+@keyframes bounce {
+
+    0%,
+    10%,
+    100% {
+        transform: translateY(0);
+    }
+
+    5% {
+        transform: translateY(-10px);
+        /* 跳动高度 */
+    }
+}
+
+#WaitingDialog {
+    .dialog {
+        width: 350px;
+        height: 450px;
+        background: #333;
+        background-image: url('@/assets/images/order_img/cat_register.png');
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-size: cover;
+        justify-content: flex-start;
+        padding: 30px;
+
+
+        h3 {
+            color: #fbb034;
+        }
+
+        h3 span {
+            display: inline-block;
+            animation: bounce 3s ease-in-out infinite;
+
+            // 使用循环生成 nth-child 样式
+            .loop(@i, @max) when (@i <=@max) {
+                &:nth-child(@{i}) {
+                    animation-delay: (@i - 1) * 0.1s;
+                }
+
+                .loop(@i + 1, @max);
+            }
+
+            // 调用循环，@max 是总子元素个数
+            .loop(1, 26);
+        }
+    }
+}

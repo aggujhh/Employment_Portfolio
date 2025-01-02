@@ -3,7 +3,7 @@ package org.example.server.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.example.pojo.entity.Order;
-import org.example.pojo.entity.OrderHistory;
+import org.example.pojo.entity.OrderCompletion;
 import org.example.pojo.entity.OrderSnapshot;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public interface KitchenMapper {
     @Update("UPDATE `order` SET state='1' WHERE id=#{id}")
     void changeOrderState(String id);
 
-    @Update("UPDATE `order` SET state='0'")
+    @Update("UPDATE `order` SET state='0' WHERE state='1'")
     void resetAllOrderState();
 
     @Update("UPDATE order_dish SET state='0' WHERE state='1'")
@@ -90,7 +90,7 @@ public interface KitchenMapper {
             "ON order_dish.dish_id=dish.id " +
             "WHERE order_dish.state != '0' " +
             "ORDER BY order_dish.completion_time DESC ")
-    List<OrderHistory> fetchAllOrderHistory();
+    List<OrderCompletion> fetchAllOrderHistory();
 
     @Update("UPDATE desk SET desk_state='1',order_state='1' WHERE id=#{deskId}")
     void setTableOrderState(String deskId);

@@ -1,7 +1,7 @@
 package org.example.server.service;
 
 import org.example.pojo.entity.Order;
-import org.example.pojo.entity.OrderHistory;
+import org.example.pojo.entity.OrderCompletion;
 import org.example.pojo.entity.OrderSnapshot;
 
 import java.util.List;
@@ -19,5 +19,5 @@ public interface KitchenService {
 
     String changeOrderState(Order order);
 
-    List<OrderHistory> fetchAllOrderHistory();
+    List<OrderCompletion> fetchAllOrderHistory();
 }

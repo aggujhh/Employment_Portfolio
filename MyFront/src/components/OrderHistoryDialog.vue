@@ -66,7 +66,7 @@ const send_fetchAllOrderHistory = async () => {
     try {
         const res = await fetchAllOrderHistory();
         const code = res.data.code;
-        console.log(res.data.data);
+        console.log("Fetched Data:", res.data.data);
         if (code === 1) {
             orderHistory.value = res.data.data
             computedRequiredTime()
@@ -89,14 +89,19 @@ const computedRequiredTime = () => {
         // ISO 8601 時間文字列を Date オブジェクトに変換
         const orderTime = new Date(item.orderTime);
         const completionTime = new Date(item.completionTime);
-        const timeDiff = completionTime - orderTime
-        const totalSeconds = Math.floor(timeDiff / 1000); // 総秒数を計算
-        const hours = Math.floor(totalSeconds / 3600); // 時間
-        const minutes = Math.floor((totalSeconds % 3600) / 60); // 分
-        const seconds = totalSeconds % 60; // 秒
-        const requiredTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
-        item['requiredTime'] = requiredTime
-        item.completionTime = item.completionTime.replace("T", "\n");
+        if (item.completionTime) {
+            const timeDiff = completionTime - orderTime
+            const totalSeconds = Math.floor(timeDiff / 1000); // 総秒数を計算
+            const hours = Math.floor(totalSeconds / 3600); // 時間
+            const minutes = Math.floor((totalSeconds % 3600) / 60); // 分
+            const seconds = totalSeconds % 60; // 秒
+            const requiredTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+            item['requiredTime'] = requiredTime
+            item.completionTime = item.completionTime.replace("T", "\n");
+        } else {
+            item.completionTime = 'null'
+            item['requiredTime'] = 'null'
+        }
     })
 };
 

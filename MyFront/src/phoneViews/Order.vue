@@ -25,13 +25,13 @@
                                 <span>×</span>
                                 <p>{{ item.count }}</p>
                             </div>
-                            <p>未提供</p>
+                            <p :style="{ color: item.servedInfo.servedColor }">{{ item.servedInfo.servedText }}</p>
                         </li>
                     </ul>
                     <p>合計金額<span>{{ totalPrice }}</span>円</p>
                     <div class="btns">
                         <button @click.stop="closeAccounting">戻る</button>
-                        <button @click.stop="">会計する</button>
+                        <button @click.stop="openBillDialog">会計する</button>
                     </div>
                 </div>
             </div>
@@ -63,20 +63,78 @@
             </div>
         </footer>
     </section>
+    <BillDialog :isVisible="isVisible.bill" :totalPrice="totalPrice" @close="closeModal" @next="nextModal" />
+    <WaitingDialog :isVisible="isVisible.waiting" @close="closeModal" />
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue"
-import { fetDishCategory, fetchAllTables } from "@/api/orderApi";
+import { ref, reactive, onMounted, watch, onBeforeUnmount } from "vue"
+import { fetDishCategory } from "@/api/orderApi";
 import { useRouter, useRoute, RouterView } from "vue-router";
 import { useDishStore } from "@/stores/dishStore";
 
 const store = useDishStore();
 const res = ref([]);
-const tables = ref([]);
-const tableIdArray = ref([]);
 const route = useRoute();
 const router = useRouter();
+
+/*************************************
+* 画面モーダル設定
+**************************************/
+import BillDialog from "@/components/BillDialog.vue";
+import WaitingDialog from "@/components/WaitingDialog.vue";
+const isVisible = reactive({
+    bill: false,
+    waiting: false
+})
+// モーダルを閉じる関数
+const closeModal = () => {
+    isVisible.bill = false;
+    isVisible.waiting = false;
+};
+
+const nextModal = (payMethod) => {
+    isVisible.bill = false;
+    isVisible.waiting = true;
+    finishOrderReq.amount = totalPrice.value
+    finishOrderReq.payMethod = payMethod
+    sendFinishOrder()
+};
+
+/*************************************
+* 会計画面を開く
+**************************************/
+const openBillDialog = () => {
+    if (checkIsAllPaid()) return
+    isVisible.bill = true;
+    isVisible.waiting = false;
+}
+
+const checkIsAllPaid = () => {
+    if (completedOrders.value.length <= 0) {
+        alert("注文していないので、会計できません。")
+        return true
+    }
+    let count = 0
+    completedOrders.value.forEach(item => {
+        if (item.state !== '2') {
+            count++;
+
+        }
+        return false;
+    })
+
+    if (count === 0) {
+        return false;
+    } else {
+        const proceed = (confirm("料理がすべて提供されていないのですが、本当に会計するのですか？"))
+        if (!proceed) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 
 
 // ディッシュカテゴリーを取得するメソッド
@@ -91,21 +149,9 @@ const fetchDishCategories = async () => {
     }
 };
 
-const fetchTables = async () => {
-    try {
-        const response = await fetchAllTables();
-        tables.value = response.data.data; // APIからデータを取得
-        setTableIdArray()
-        checkHasTable()
-    } catch (err) {
-        console.error("リクエストエラー:", err);
-        alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
-    }
-};
 
 // コンポーネントがマウントされたときにカテゴリデータを取得
 onMounted(() => {
-    fetchTables();
     fetchDishCategories();
     api_getOrderTotalPrice();
     api_fetchAllCompletedOrders();
@@ -175,31 +221,6 @@ const minus = (dishId) => {
     }
 }
 
-
-const setTableIdArray = () => {
-    tableIdArray.value = tables.value.map(
-        (item) => item.id
-    );
-}
-const checkHasTable = () => {
-    // URLのパラメーターからdesk_idを取得し、大文字に変換する
-    const deskId = route.params.desk_id.toUpperCase();
-
-    // テーブルリストから対象のテーブルを検索する
-    const table = tables.value.find((item) => item.id === deskId);
-
-    // テーブルが見つからない場合、404ページにリダイレクトする
-    if (!table) {
-        router.push("/404");
-    } else {
-        // テーブルのゲスト人数が4人の場合、注文ページにリダイレクトする
-        if (table.guestCount === 0) {
-            router.push(`/order/${route.params.desk_id}/0`);
-        }
-    }
-};
-
-
 //注文データをサーバに送信
 import { addOrder } from "@/api/orderApi";
 const req = reactive({
@@ -260,6 +281,9 @@ const api_fetchAllCompletedOrders = async () => {
     try {
         const res = await fetchAllCompletedOrders({ deskId: req.deskId });
         completedOrders.value = res.data.data
+        completedOrders.value.forEach(item => {
+            item['servedInfo'] = setServedInfoByDishState(item.state)
+        })
         console.log("注文完了オーダー", completedOrders.value);
     } catch (err) {
         console.error("リクエストエラー:", err);
@@ -272,11 +296,86 @@ const api_fetchAllCompletedOrders = async () => {
 **************************************/
 const setServedInfoByDishState = (state) => {
     const servedInfo = {
-        servedText="",
-        servedColor=""
+        servedText: "",
+        servedColor: ""
+    }
+    if (state == '2') {
+        servedInfo.servedText = '提供済'
+        servedInfo.servedColor = 'green'
+    } else {
+        servedInfo.servedText = '未提供'
+        servedInfo.servedColor = 'red'
+    }
+    return servedInfo
+}
+
+/*************************************
+* 会計完了
+**************************************/
+import { finishOrder } from "@/api/orderApi";
+const finishOrderReq = reactive({
+    deskId: route.params.desk_id,
+    payMethod: '',
+    amount: 0
+})
+const sendFinishOrder = async () => {
+    try {
+        const res = await finishOrder(finishOrderReq);
+        const code = res.data.code; // ステータスコードを取得
+        console.log(code);
+        if (code === 1) {
+            // api_getOrderTotalPrice();
+            // api_fetchAllCompletedOrders();
+        } else {
+            alert(res.data.msg); // エラーメッセージを表示
+            console.log(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+        alert("リセット失敗しました。もう一度お試しください。");
     }
 }
 
+
+const props = defineProps(['orderState'])
+console.log(" orderState.value", props.orderState);
+watch(
+    () => props.orderState,
+    (newVal) => {
+        console.log("orderState changed to:", newVal);
+        if (newVal === '2') {
+            isVisible.bill = false;
+            isVisible.waiting = true;
+        }
+    },
+    { immediate: true } // 立即执行，确保初始值也触发
+);
+
+/*************************************
+* SSE（Server-Sent Events）を使用してリアルタイム更新を実現
+**************************************/
+import SseService from "@/utils/sseService";
+/**
+* SSE サービスのインスタンスを作成
+* @param url サーバーの URL
+* @param callback 新しいメッセージが届いた時の処理
+*/
+const sseService = new SseService("http://localhost:8080/api/front/order", (event) => {
+    console.log("收到的消息:", event);
+    if (event === "提供済み") {
+        // 注文リストをリフレッシュ
+        api_fetchAllCompletedOrders();
+    } else if (event === "リセット") {
+        isVisible.waiting = false;
+    }
+});
+// SSE 接続を開始
+sseService.connect();
+//コンポーネントが破棄される前に呼び出されるフック
+onBeforeUnmount(() => {
+    sseService.close(); // SSE 接続を閉じる
+});
 
 </script>
 

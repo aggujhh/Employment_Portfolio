@@ -13,3 +13,26 @@ export function fetchAllCompletedOrders() {
 export function changeOrderDishState(data: { deskId: string, orderId: string, dishId: number }) {
     return instance.patch('/api/front', data);
 }
+
+/**
+ * 会計中のオーダーをすべてフェッチ
+ */
+export function fetchAllAccountingOrders(data: { deskId: string }) {
+    return instance.get('/api/front/accounting', {
+        params: data
+    });
+}
+
+/**
+ * 会計確認完了
+ */
+export function accountingConfirmationCompleted(data: any) {
+    return instance.put('/api/front', data);
+}
+
+/**
+ * 営業情報所得する
+ */
+export function fetchOperations() {
+    return instance.get('/api/front/operations');
+}

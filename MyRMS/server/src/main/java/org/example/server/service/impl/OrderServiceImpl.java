@@ -2,6 +2,7 @@ package org.example.server.service.impl;
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.example.pojo.entity.OrderHistory;
 import org.example.server.mapper.OrderMapper;
 import org.example.server.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,6 @@ public class OrderServiceImpl implements OrderService {
         });
         String deskId = order.getDeskId();
         boolean hasOrderTime = orderMapper.checkDeskHasOrderTime(deskId);
-        System.out.println("hasOrderTime>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+hasOrderTime);
         if (hasOrderTime) {
             orderMapper.setNewDeskState(deskId);
         } else {
@@ -114,4 +114,13 @@ public class OrderServiceImpl implements OrderService {
         return dishes;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
+    public void finishOrder(OrderHistory orderHistory) {
+        String deskId = orderHistory.getDeskId();
+        List<String> orderIds = orderMapper.fetchOrderByDeskId(deskId);
+        orderIds.forEach(orderMapper::setOrderDishStateToThreeByOrderId);
+        orderMapper.setOrderStateToThree(deskId);
+        orderMapper.setDeskOrderStateToTwo(orderHistory);
+    }
 }

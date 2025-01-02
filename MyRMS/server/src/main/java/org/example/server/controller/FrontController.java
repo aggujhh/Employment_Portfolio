@@ -4,12 +4,15 @@ package org.example.server.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.Result;
 import org.example.common.SseService;
-import org.example.pojo.entity.Order;
+import org.example.pojo.entity.AccountingOrders;
+import org.example.pojo.entity.Operations;
+import org.example.pojo.entity.OrderCompletion;
 import org.example.pojo.entity.OrderHistory;
 import org.example.server.service.FrontService;
-import org.example.server.service.KitchenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -19,27 +22,63 @@ import java.util.List;
 public class FrontController {
 
     private final FrontService frontService;
+    private final SseService sseService;
 
 
     @Autowired
-    public FrontController(FrontService frontService) {
+    public FrontController(FrontService frontService, SseService sseService) {
         // フィールドにインターセプターを設定
         this.frontService = frontService;
+        this.sseService = sseService;
+    }
+
+    //SSEインターフェース
+    @GetMapping(value = "/order", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> streamToOrder() {
+        return sseService.getOrderSseFlux();
     }
 
     @GetMapping
     public Result fetchAllCompletedOrders() {
         log.info("調理済オーダーをすべてフェッチ。");
-        List<OrderHistory> results = frontService.fetchAllCompletedOrders();
+        List<OrderCompletion> results = frontService.fetchAllCompletedOrders();
         log.info("フェッチ成功:{}", results);
         return Result.success(results);
     }
 
+    @GetMapping("/accounting")
+    public Result fetchAllAccountingOrders(@RequestParam("deskId") String deskId) {
+        AccountingOrders accountingOrders = new AccountingOrders();
+        accountingOrders.setDeskId(deskId);
+        log.info("会計中のオーダーをすべてフェッチ。引数{}", accountingOrders);
+        AccountingOrders result = frontService.fetchAllAccountingOrders(accountingOrders);
+        log.info("フェッチ成功:{}", result);
+        return Result.success(result);
+    }
+
     @PatchMapping
-    public Result changeOrderDishState(@RequestBody OrderHistory orderHistory) {
-        log.info("提供済み料理の状態を変更する。引数({})>>>>>>>>>>>>", orderHistory);
-        frontService.changeOrderDishState(orderHistory);
+    public Result changeOrderDishState(@RequestBody OrderCompletion orderCompletion) {
+        log.info("提供済み料理の状態を変更する。引数({})>>>>>>>>>>>>", orderCompletion);
+        frontService.changeOrderDishState(orderCompletion);
+        log.info(">>>>>>>>>>>>変更成功！");
+        sseService.sendToOrderClients("提供済み");
+        return Result.success();
+    }
+
+    @PutMapping
+    public Result accountingConfirmationCompleted(@RequestBody OrderHistory orderHistory) {
+        log.info("会計確認完了。引数({})>>>>>>>>>>>>", orderHistory);
+        frontService.accountingConfirmationCompleted(orderHistory);
+        sseService.sendToOrderClients("リセット");
         log.info(">>>>>>>>>>>>変更成功！");
         return Result.success();
+    }
+
+    @GetMapping("/operations")
+    public Result fetchOperations() {
+        log.info("営業情報所得する。>>>>>>>>>>>>");
+        Operations result = frontService.fetchOperations();
+        log.info("フェッチ成功:{}", result);
+        return Result.success(result);
     }
 }

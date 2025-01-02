@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.example.pojo.entity.Desk;
-import org.example.pojo.entity.DishCategory;
 
 import java.util.List;
 
@@ -23,4 +22,10 @@ public interface DeskMapper {
 
     @Update("UPDATE desk SET guest_count=0,desk_state='0',order_state='0',order_time=null")
     void resetAllTables();
+
+    @Select("SELECT seat_count FROM desk")
+    List<Integer> countAllSeat();
+
+    @Select("SELECT guest_count FROM desk WHERE id=#{deskId}")
+    int getGuestCount(String deskId);
 }
