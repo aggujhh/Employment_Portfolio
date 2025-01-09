@@ -34,4 +34,7 @@ public interface DeskMapper {
 
     @Update("UPDATE desk SET desk.order_state=#{orderState} WHERE id=#{deskId}")
     void setDeskOrderState(String deskId, String orderState);
+
+    @Select("SELECT id FROM desk")
+    List<String> fetchAllTableIds();
 }

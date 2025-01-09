@@ -43,7 +43,7 @@ const router = createRouter({
         { path: '/permission', component: Permission, },
         { path: '/qrCode', component: QrCode, },
         {
-            path: '/order/:desk_id',
+            path: '/order/:desk_id/:nanoId',
             component: OrderBase,
             meta: { requiresAuth: false },
             children: [
@@ -56,7 +56,7 @@ const router = createRouter({
                     path: '', // 空路径表示匹配父路径 /order/:desk_id
                     component: Order,
                     meta: { requiresAuth: false },
-                    redirect: (to) => `/order/${to.params.desk_id}/1`,
+                    redirect: (to) => `/order/${to.params.desk_id}/${to.params.nanoId}/1`,
                     children: [
                         {
                             path: ':id', // 动态子路由

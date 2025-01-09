@@ -105,7 +105,7 @@ const checkHasTable = () => {
     } else {
         // テーブルのゲスト人数が4人の場合、注文ページにリダイレクトする
         if (table.guestCount === 0) {
-            router.push(`/order/${route.params.desk_id}/0`);
+            router.push(`/order/${route.params.desk_id}/${route.params.nanoId}/0`);
         }
     }
 };
@@ -118,7 +118,6 @@ const setOrderState = () => {
         console.log(item.id,route.params.desk_id.toUpperCase());    
         if (item.id === route.params.desk_id.toUpperCase()) {
             orderState.value=item.orderState
-            console.log("orderState>>>",orderState.value);
             if (orderState.value === '3') {
                 isCalling.value = true
             } else {

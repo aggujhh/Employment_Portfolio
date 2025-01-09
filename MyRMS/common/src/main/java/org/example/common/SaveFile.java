@@ -28,7 +28,7 @@ public class SaveFile {
      * @param savePath 保存先のパス
      * @throws RuntimeException ディレクトリの作成に失敗した場合
      */
-    private void PathCheckExample(String savePath) {
+    public void PathCheckExample(String savePath) {
         File saveDir = new File(savePath).getParentFile(); // 親ディレクトリを取得
         if (!saveDir.exists() && !saveDir.mkdirs()) { // ディレクトリが存在しない場合は作成
             log.error("ディレクトリの作成に失敗しました: {}", saveDir.getAbsolutePath());
@@ -97,4 +97,9 @@ public class SaveFile {
             return true;
         }
     }
+
+    public String getBasePath() {
+        return base_path + File.separator + "MyFront" + File.separator + "public";
+    }
+
 }
