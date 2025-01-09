@@ -62,7 +62,7 @@ public class OrderController {
     @GetMapping("/{dishCategoryId}")
     public List<Dish> getDishesByCategoryId(@PathVariable("dishCategoryId") Long dishCategoryId) {
         // 假设有一个服务层处理业务逻辑
-        return dishService.getDishByCategoryId(dishCategoryId);
+        return orderService.getDishByCategoryId(dishCategoryId);
     }
 
     @GetMapping("/desk/all")
@@ -124,6 +124,26 @@ public class OrderController {
         orderService.finishOrder(orderHistory);
         log.info("保存成功しました。");
         sseService.sendToFrontDesk("会計あり");
+        return Result.success();
+    }
+
+    @PatchMapping("/call")
+    public Result setDeskOrderStateForThree(@RequestBody Desk desk) {
+        String deskId = desk.getId();
+        log.info("呼び出しの状況に変換:{}", deskId);
+        deskService.setDeskOrderStateForThree(deskId);
+        log.info("変換成功しました。");
+        sseService.sendToFrontDesk("呼び出しの状況に変換を保存成功");
+        return Result.success();
+    }
+
+    @PatchMapping("/cancelCall")
+    public Result setDeskOrderStateComeBack(@RequestBody Desk desk) {
+        String deskId = desk.getId();
+        log.info("呼び出しの状況を戻る:{}", deskId);
+        deskService.setDeskOrderStateComeBack(deskId);
+        log.info("戻る成功しました。");
+        sseService.sendToFrontDesk("呼び出しの状況を戻る成功");
         return Result.success();
     }
 }

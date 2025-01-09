@@ -1,0 +1,41 @@
+#data_analysis {
+    height: 87vh;
+    width: 100%;
+    background: #F9F6EF;
+    padding: 20px;
+    position: relative;
+
+    .nav {
+        width: 450px;
+        display: flex;
+        justify-content: space-around;
+        border: 2px solid #3B3632;
+        border-radius: 5px;
+        margin-bottom: 20px;
+
+        li {
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-left: 1px solid #3B3632;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        li:first-of-type {
+            border-left: none
+        }
+
+        li.active {
+            background: #3B3632;
+            color: #fff;
+        }
+
+        li:hover {
+            background: #3B3632;
+            color: #fff;
+        }
+    }
+}

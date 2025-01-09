@@ -22,6 +22,10 @@
         <p>シフト管理</p>
         <div class="img"></div>
       </li>
+      <li @click="()=>{ router.push('/qrCode') }">
+        <p>QRコード管理</p>
+        <div class="img"></div>
+      </li>
       <li @click="()=>{ router.push('/data_analysis') }">
         <p>データ分析</p>
         <div class="img"></div>

@@ -120,8 +120,6 @@ const seed_accountingConfirmationCompleted = async () => {
         const code = res.data.code;
         if (code === 1) {
             emit('close');
-            // accountingData.value = res.data.data
-            // console.log(accountingData.value);
         } else {
             alert(res.data.msg);
             console.log(res.data.msg);

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.example.pojo.entity.Dish;
 import org.example.pojo.entity.Order;
 import org.example.pojo.entity.OrderHistory;
 
@@ -66,4 +67,7 @@ public interface OrderMapper {
     @Update("UPDATE desk SET desk.order_state='2',order_time=null,pay_method=#{payMethod} " +
             "WHERE id=#{deskId}")
     void setDeskOrderStateToTwo(OrderHistory order);
+
+    @Select("SELECT * FROM dish WHERE dish_category_id=#{dishCategoryId} AND state !='2'")
+    List<Dish> getDishByCategoryId(Long dishCategoryId);
 }

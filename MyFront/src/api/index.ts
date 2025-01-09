@@ -6,7 +6,7 @@ import session from "@/utils/session";
 
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8080', // 基本URL
+    baseURL: 'http://localhost:5173', // 基本URL
     timeout: 10000, // タイムアウト時間（ミリ秒）
     headers: { 'Content-Type': 'application/json' }, // デフォルトのヘッダー
     withCredentials: true,

@@ -18,6 +18,8 @@ import Order from '@/phoneViews/Order.vue';
 import OrderDishes from '@/phoneViews/Dishes.vue';
 import OrderBase from '@/phoneViews/OrderBase.vue';
 import CustomerCount from '@/phoneViews/CustomerCount.vue';
+import DataAnalysisInfo from '@/components/DataAnalysisInfo.vue';
+import QrCode from '@/views/QrCode.vue';
 
 // ルーターインスタンスを作成
 const router = createRouter({
@@ -33,9 +35,13 @@ const router = createRouter({
         },
         { path: '/reservation', component: Reservation, },
         { path: '/shift', component: Shift, },
-        { path: '/data_analysis', component: DataAnalysis, },
+        {
+            path: '/data_analysis', component: DataAnalysis, redirect: '/data_analysis/3day',
+            children: [{ path: ':dateType', component: DataAnalysisInfo }]
+        },
         { path: '/staff', component: Staff, },
         { path: '/permission', component: Permission, },
+        { path: '/qrCode', component: QrCode, },
         {
             path: '/order/:desk_id',
             component: OrderBase,

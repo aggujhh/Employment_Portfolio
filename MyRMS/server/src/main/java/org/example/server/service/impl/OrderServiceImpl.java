@@ -2,6 +2,7 @@ package org.example.server.service.impl;
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.example.pojo.entity.Dish;
 import org.example.pojo.entity.OrderHistory;
 import org.example.server.mapper.OrderMapper;
 import org.example.server.service.OrderService;
@@ -122,5 +123,10 @@ public class OrderServiceImpl implements OrderService {
         orderIds.forEach(orderMapper::setOrderDishStateToThreeByOrderId);
         orderMapper.setOrderStateToThree(deskId);
         orderMapper.setDeskOrderStateToTwo(orderHistory);
+    }
+
+    @Override
+    public List<Dish> getDishByCategoryId(Long dishCategoryId) {
+        return orderMapper.getDishByCategoryId(dishCategoryId);
     }
 }

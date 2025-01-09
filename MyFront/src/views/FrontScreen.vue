@@ -38,7 +38,7 @@
                     <div>
                         <div class="desk" :style="tableStateArray['A1']">
                             <div class="center" :class="classNameArray['A1']"
-                                @click="openAccountingConfirmationDialog('A1')">
+                                @click="openDialog('A1')">
                                 A1</div>
                             <div class="bar" v-if="progressBarArray['A1']?.isVisible">
                                 <div>
@@ -56,7 +56,7 @@
                     <div>
                         <div class="desk" :style="tableStateArray['A2']">
                             <div class="center" :class="classNameArray['A2']"
-                                @click="openAccountingConfirmationDialog('A2')">A2</div>
+                                @click="openDialog('A2')">A2</div>
                             <div class="bar" v-if="progressBarArray['A2']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A2']?.progressBarStyle" />
@@ -73,7 +73,7 @@
                     <div>
                         <div class="desk" :style="tableStateArray['A3']">
                             <div class="center" :class="classNameArray['A3']"
-                                @click="openAccountingConfirmationDialog('A3')">A3</div>
+                                @click="openDialog('A3')">A3</div>
                             <div class="bar" v-if="progressBarArray['A3']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A3']?.progressBarStyle" />
@@ -90,7 +90,7 @@
                     <div>
                         <div class="desk" :style="tableStateArray['A4']">
                             <div class="center" :class="classNameArray['A4']"
-                                @click="openAccountingConfirmationDialog('A4')">A4</div>
+                                @click="openDialog('A4')">A4</div>
                             <div class="bar" v-if="progressBarArray['A4']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A4']?.progressBarStyle" />
@@ -107,7 +107,7 @@
                     <div>
                         <div class="desk" :style="tableStateArray['A5']">
                             <div class="center" :class="classNameArray['A5']"
-                                @click="openAccountingConfirmationDialog('A5')">A5</div>
+                                @click="openDialog('A5')">A5</div>
                             <div class="bar" v-if="progressBarArray['A5']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A5']?.progressBarStyle" />
@@ -131,7 +131,7 @@
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
                                 <div class="center" :class="classNameArray['C1']"
-                                    @click="openAccountingConfirmationDialog('C1')">C1</div>
+                                    @click="openDialog('C1')">C1</div>
                                 <div class="bar" v-if="progressBarArray['C1']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C1']?.progressBarStyle" />
@@ -148,7 +148,7 @@
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
                                 <div class="center" :class="classNameArray['C2']"
-                                    @click="openAccountingConfirmationDialog('C2')">C2</div>
+                                    @click="openDialog('C2')">C2</div>
                                 <div class="bar" v-if="progressBarArray['C2']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C2']?.progressBarStyle" />
@@ -165,7 +165,7 @@
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
                                 <div class="center" :class="classNameArray['C3']"
-                                    @click="openAccountingConfirmationDialog('C3')">C3</div>
+                                    @click="openDialog('C3')">C3</div>
                                 <div class="bar" v-if="progressBarArray['C3']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C3']?.progressBarStyle" />
@@ -182,7 +182,7 @@
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
                                 <div class="center" :class="classNameArray['C4']"
-                                    @click="openAccountingConfirmationDialog('C4')">C4</div>
+                                    @click="openDialog('C4')">C4</div>
                                 <div class="bar" v-if="progressBarArray['C4']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C4']?.progressBarStyle" />
@@ -202,7 +202,7 @@
                                             ? { background: '#FBB034' }
                                             : { background: '#505050' }" />
                                     <div class="center" :class="classNameArray['E']"
-                                        @click="openAccountingConfirmationDialog('E')">E</div>
+                                        @click="openDialog('E')">E</div>
                                     <div class="bar" v-if="progressBarArray['E']?.isVisible">
                                         <div>
                                             <div :style="progressBarArray['E']?.progressBarStyle" />
@@ -221,8 +221,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.D1?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['D1']"
-                                            @click="openAccountingConfirmationDialog('D1')">D1</div>
+                                        <div class="center" :class="classNameArray['D1']" @click="openDialog('D1')">D1
+                                        </div>
                                         <div class="bar" v-if="progressBarArray['D1']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['D1']?.progressBarStyle" />
@@ -239,7 +239,7 @@
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
                                         <div class="center" :class="classNameArray['D2']"
-                                            @click="openAccountingConfirmationDialog('D2')">D2</div>
+                                            @click="openDialog('D2')">D2</div>
                                         <div class="bar" v-if="progressBarArray['D2']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['D2']?.progressBarStyle" />
@@ -258,7 +258,7 @@
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
                                         <div class="center" :class="classNameArray['B1']"
-                                            @click="openAccountingConfirmationDialog('B1')">B1</div>
+                                            @click="openDialog('B1')">B1</div>
                                         <div class="bar" v-if="progressBarArray['B1']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B1']?.progressBarStyle" />
@@ -275,7 +275,7 @@
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
                                         <div class="center" :class="classNameArray['B2']"
-                                            @click="openAccountingConfirmationDialog('B2')">B2</div>
+                                            @click="openDialog('B2')">B2</div>
                                         <div class="bar" v-if="progressBarArray['B2']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B2']?.progressBarStyle" />
@@ -292,7 +292,7 @@
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
                                         <div class="center" :class="classNameArray['B3']"
-                                            @click="openAccountingConfirmationDialog('B3')">B3</div>
+                                            @click="openDialog('B3')">B3</div>
                                         <div class="bar" v-if="progressBarArray['B3']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B3']?.progressBarStyle" />
@@ -309,7 +309,7 @@
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
                                         <div class="center" :class="classNameArray['B4']"
-                                            @click="openAccountingConfirmationDialog('B4')">B4</div>
+                                            @click="openDialog('B4')">B4</div>
                                         <div class="bar" v-if="progressBarArray['B4']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B4']?.progressBarStyle" />
@@ -369,13 +369,17 @@
         </article>
     </section>
     <AccountingConfirmationDialog :isVisible="isVisible.accountingConfirmation" :deskId="deskId" @close="closeModal" />
+    <CallDialog :isVisible="isVisible.call" :deskId="deskId" @close="closeModal"/>
 </template>
 
 <script setup>
 import { ref, onMounted, reactive, onBeforeUnmount, computed } from "vue"
 import { fetchAllTables, resetAllTables } from "@/api/deskApi";
 
+
 const tables = ref([]);
+
+
 const api_fetchAllTables = async () => {
     try {
         const res = await fetchAllTables();
@@ -481,6 +485,9 @@ const seatStateArray = reactive({})
 const tableStateArray = reactive({})
 const classNameArray = reactive({})
 const progressBarArray = reactive({})
+const orderStateArray = reactive({})
+
+
 const setTableState = () => {
     tables.value.forEach((item) => {
         tableStateArray[item.id] = getDeskStyle(item.deskState);
@@ -490,10 +497,9 @@ const setTableState = () => {
             seatCount: item.seatCount,
             guestCount: item.guestCount
         }
+        orderStateArray[item.id] = item.orderState
     });
 }
-
-
 /*************************************
 * 時間を進捗バーに変換する
 **************************************/
@@ -635,23 +641,42 @@ const send_changeOrderDishState = async (index, deskId, orderId, dishId) => {
 }
 
 /*************************************
-* 会計確認
+* 会計確認と呼び出し確認
 **************************************/
 import AccountingConfirmationDialog from "@/components/AccountingConfirmationDialog.vue";
+import CallDialog from "@/components/CallDialog.vue";
+
 const isVisible = reactive({
     accountingConfirmation: false,
+    call: false
 })
 // モーダルを閉じる関数
 const closeModal = () => {
     isVisible.accountingConfirmation = false;
+    isVisible.call = false;
     api_fetchAllTables();
     send_fetchOperations();
 };
 
 const deskId = ref()
+
+const openDialog = (id) => {
+    console.log("orderStateArray[id]", orderStateArray[id]);
+    if (orderStateArray[id] === '2') {
+        openAccountingConfirmationDialog(id);
+    } else if (orderStateArray[id] === '3') {
+        openCallDialog(id)
+    }
+}
+
 const openAccountingConfirmationDialog = (id) => {
     deskId.value = id
     isVisible.accountingConfirmation = true;
+}
+
+const openCallDialog = (id) => {
+    deskId.value = id
+    isVisible.call = true;
 }
 
 
@@ -724,6 +749,7 @@ const setClosingTime = () => {
     // 然后启动定时器
     const interval = setInterval(updateClosingTime, 1000);
 }
+
 
 
 </script>

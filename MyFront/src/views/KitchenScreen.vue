@@ -375,13 +375,11 @@ const redo = async () => {
                 // ポインタを進める
                 api_fetAllOrders(); // 最新の注文データを再取得
             } else {
-                alert(res.data.msg); // エラーメッセージを表示
                 console.log(res.data.msg);
             }
         } catch (error) {
             // エラー処理
             console.error("リクエストエラー:", error);
-            alert("リセット失敗しました。もう一度お試しください。");
         }
     }
 };

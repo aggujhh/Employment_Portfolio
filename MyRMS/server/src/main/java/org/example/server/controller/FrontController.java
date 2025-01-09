@@ -4,10 +4,8 @@ package org.example.server.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.Result;
 import org.example.common.SseService;
-import org.example.pojo.entity.AccountingOrders;
-import org.example.pojo.entity.Operations;
-import org.example.pojo.entity.OrderCompletion;
-import org.example.pojo.entity.OrderHistory;
+import org.example.pojo.entity.*;
+import org.example.server.service.DeskService;
 import org.example.server.service.FrontService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,13 +21,14 @@ public class FrontController {
 
     private final FrontService frontService;
     private final SseService sseService;
-
+    private final DeskService deskService;
 
     @Autowired
-    public FrontController(FrontService frontService, SseService sseService) {
+    public FrontController(FrontService frontService, SseService sseService, DeskService deskService) {
         // フィールドにインターセプターを設定
         this.frontService = frontService;
         this.sseService = sseService;
+        this.deskService = deskService;
     }
 
     //SSEインターフェース
@@ -80,5 +79,15 @@ public class FrontController {
         Operations result = frontService.fetchOperations();
         log.info("フェッチ成功:{}", result);
         return Result.success(result);
+    }
+
+    @PatchMapping("/checkedCall")
+    public Result setDeskOrderStateComeBack(@RequestBody Desk desk) {
+        String deskId = desk.getId();
+        log.info("呼び出しの状況を戻る:{}", deskId);
+        deskService.setDeskOrderStateComeBack(deskId);
+        log.info("戻る成功しました。");
+        sseService.sendToOrderClients("呼び出しの状況を戻る成功");
+        return Result.success();
     }
 }

@@ -11,4 +11,8 @@ public interface DeskService {
     void setCustomerCount(Desk desk);
 
     void resetAllTables();
+
+    void setDeskOrderStateForThree(String deskId);
+
+    void setDeskOrderStateComeBack(String deskId);
 }

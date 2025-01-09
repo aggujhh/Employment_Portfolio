@@ -17,15 +17,50 @@
             </div>
             <div class="desk_id">テーブル番号：{{ route.params.desk_id }}</div>
         </header>
-        <RouterView :orderState="orderState"></RouterView>
+        <div class="callBell" title="店員を呼び出し" @click="openModal" :class="{ calling: isCalling }">
+            <img src="@/assets/images/order_img/CallBell.svg">
+            <p>call</p>
+        </div>
+        <RouterView :orderState="orderState" @fetchTables="fetchTables"></RouterView>
+        <CallCheckDialog :isVisible="isVisible.callCheck" :flag="callingFlag" @close="closeModal" @calling="calling" />
     </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"
+import { ref, reactive, onMounted } from "vue"
 import { useRouter, useRoute, RouterView } from "vue-router";
 const route = useRoute();
 const router = useRouter();
+
+/*************************************
+* モデルを導入する
+**************************************/
+import CallCheckDialog from "@/phoneViews/CallCheckDialog.vue";
+const isVisible = reactive({
+    callCheck: false,
+})
+
+const callingFlag = ref("")
+
+// モーダルを閉じる関数
+const closeModal = () => {
+    isVisible.callCheck = false;
+};
+
+const openModal = () => {
+    if (orderState.value === '3') {
+        callingFlag.value = '1'
+    } else {
+        callingFlag.value = '0'
+    }
+    isVisible.callCheck = true;
+}
+
+const isCalling = ref(false)
+const calling = () => {
+    fetchTables();
+}
+
 
 onMounted(() => {
     fetchTables();
@@ -42,8 +77,8 @@ const fetchTables = async () => {
         const response = await fetchAllTables();
         tables.value = response.data.data; // APIからデータを取得
         setTableIdArray()
-        checkHasTable()   
-        setOrderState();   
+        checkHasTable()
+        setOrderState();
     } catch (err) {
         console.error("リクエストエラー:", err);
         alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
@@ -76,15 +111,23 @@ const checkHasTable = () => {
 };
 
 const orderState = ref('')
-const setOrderState = () => {
+
+
+const setOrderState = () => { 
     tables.value.forEach(item => {
-        if (item.id === route.params.desk_id) {
-            orderState.value = item.orderState
+        console.log(item.id,route.params.desk_id.toUpperCase());    
+        if (item.id === route.params.desk_id.toUpperCase()) {
+            orderState.value=item.orderState
+            console.log("orderState>>>",orderState.value);
+            if (orderState.value === '3') {
+                isCalling.value = true
+            } else {
+                isCalling.value = false
+            }
             return;
         }
     })
 }
-
 </script>
 
 <style lang="less" scoped>

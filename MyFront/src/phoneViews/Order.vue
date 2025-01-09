@@ -65,6 +65,7 @@
     </section>
     <BillDialog :isVisible="isVisible.bill" :totalPrice="totalPrice" @close="closeModal" @next="nextModal" />
     <WaitingDialog :isVisible="isVisible.waiting" @close="closeModal" />
+    <ThankYouBusiness :isVisible="isVisible.thank" @close="closeModal" />
 </template>
 
 <script setup>
@@ -77,20 +78,24 @@ const store = useDishStore();
 const res = ref([]);
 const route = useRoute();
 const router = useRouter();
+const emit = defineEmits(['fetchTables']);
 
 /*************************************
 * 画面モーダル設定
 **************************************/
 import BillDialog from "@/components/BillDialog.vue";
 import WaitingDialog from "@/components/WaitingDialog.vue";
+import ThankYouBusiness from "@/components/ThankYouBusiness.vue";
 const isVisible = reactive({
     bill: false,
-    waiting: false
+    waiting: false,
+    thank: false
 })
 // モーダルを閉じる関数
 const closeModal = () => {
     isVisible.bill = false;
     isVisible.waiting = false;
+    isVisible.thank = false;
 };
 
 const nextModal = (payMethod) => {
@@ -267,7 +272,6 @@ const api_getOrderTotalPrice = async () => {
         const res = await getOrderTotalPrice({ deskId: req.deskId });
         totalPrice.value = res.data.data
         count.price = totalPrice.value
-        console.log("総値段", res.data.data);
     } catch (err) {
         console.error("リクエストエラー:", err);
         alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
@@ -324,8 +328,6 @@ const sendFinishOrder = async () => {
         const code = res.data.code; // ステータスコードを取得
         console.log(code);
         if (code === 1) {
-            // api_getOrderTotalPrice();
-            // api_fetchAllCompletedOrders();
         } else {
             alert(res.data.msg); // エラーメッセージを表示
             console.log(res.data.msg);
@@ -339,11 +341,9 @@ const sendFinishOrder = async () => {
 
 
 const props = defineProps(['orderState'])
-console.log(" orderState.value", props.orderState);
 watch(
     () => props.orderState,
     (newVal) => {
-        console.log("orderState changed to:", newVal);
         if (newVal === '2') {
             isVisible.bill = false;
             isVisible.waiting = true;
@@ -361,13 +361,20 @@ import SseService from "@/utils/sseService";
 * @param url サーバーの URL
 * @param callback 新しいメッセージが届いた時の処理
 */
-const sseService = new SseService("http://localhost:8080/api/front/order", (event) => {
+const sseService = new SseService("https://www.cyg1995.xyz/api/front/order", (event) => {
     console.log("收到的消息:", event);
     if (event === "提供済み") {
         // 注文リストをリフレッシュ
         api_fetchAllCompletedOrders();
     } else if (event === "リセット") {
         isVisible.waiting = false;
+        isVisible.thank = true;
+        setTimeout(() => {
+            isVisible.thank = false;
+            router.push(`/order/${route.params.desk_id}/0`);
+        }, 5000)
+    } else if (event === "呼び出しの状況を戻る成功") {
+        emit('fetchTables');
     }
 });
 // SSE 接続を開始

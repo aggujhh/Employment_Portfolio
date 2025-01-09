@@ -28,4 +28,10 @@ public interface DeskMapper {
 
     @Select("SELECT guest_count FROM desk WHERE id=#{deskId}")
     int getGuestCount(String deskId);
+
+    @Select("SELECT order_state FROM desk WHERE id=#{deskId}")
+    String getDeskOrderState(String deskId);
+
+    @Update("UPDATE desk SET desk.order_state=#{orderState} WHERE id=#{deskId}")
+    void setDeskOrderState(String deskId, String orderState);
 }

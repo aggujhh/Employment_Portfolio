@@ -40,10 +40,10 @@ import { ref } from "vue"
 *モーダルを閉じる
 **************************************/
 const props = defineProps(['isVisible'])
-const emit = defineEmits(['close']);
-const close = () => {
-    emit('close');
-}
+// const emit = defineEmits(['close']);
+// const close = () => {
+//     emit('close');
+// }
 </script>
 
 <style lang="less" scoped>

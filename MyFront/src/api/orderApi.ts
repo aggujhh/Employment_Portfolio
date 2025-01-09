@@ -1,4 +1,11 @@
-import instance from './index';
+import axios from 'axios';
+
+const instance = axios.create({
+    baseURL: 'https://www.cyg1995.xyz', // 基本URL
+    timeout: 10000, // タイムアウト時間（ミリ秒）
+    headers: { 'Content-Type': 'application/json' }, // デフォルトのヘッダー
+    withCredentials: true,
+});
 
 /**
  * 料理のカテゴリーをフェッチ
@@ -77,6 +84,20 @@ export function finishOrder(data: {
     deskId: string,
     payMethod: string,
     amount: number
- }) {
+}) {
     return instance.patch('/api/order/finish', data);
+}
+
+/**
+ * 呼び出し
+ */
+export function callForStaff(data: { id: string }) {
+    return instance.patch('/api/order/call', data);
+}
+
+/**
+ * 呼び出し取り消す
+ */
+export function cancelCall(data: { id: string }) {
+    return instance.patch('/api/order/cancelCall', data);
 }

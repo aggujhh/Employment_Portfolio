@@ -18,11 +18,12 @@ export default defineConfig({
     },
   },
   server: {
+    host: '0.0.0.0',
+    port: 5173,
     proxy: {
       '/api': {
-        target: "http://localhost:8080/", //跨域地址
+        target: "http://192.168.1.10:8080", //跨域地址
         changeOrigin: true, //支持跨域
-        rewrite: (path) => path.replace(/^\/api/, "")//重写路径,替换/api
       }
     }
   },

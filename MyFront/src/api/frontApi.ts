@@ -36,3 +36,10 @@ export function accountingConfirmationCompleted(data: any) {
 export function fetchOperations() {
     return instance.get('/api/front/operations');
 }
+
+/**
+ * 呼び出し確認完了
+ */
+export function checkedCall(data: { id: string }) {
+    return instance.patch('/api/front/checkedCall',data);
+}

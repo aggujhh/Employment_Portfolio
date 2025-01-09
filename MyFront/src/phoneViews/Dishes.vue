@@ -1,21 +1,21 @@
 <template>
     <section id="dish">
         <ul>
-            <li v-for="(dish, i) in res" :key="i">
-                <!-- <div :class="statusTextClass(dish.status)">売り切れ</div> -->
-                <!-- <div class="dishCard" :class="statusClass1(dish.status)"> -->
-                <div class="dishImg" :style="`background-image: url(${image_pathes[i]})`"></div>
-                <div class="dishInfo">
-                    <p class="title" :title="dish.name">{{ dish.name }}</p>
-                    <p class="description" :title="dish.description">{{ dish.description }}</P>
-                    <p class="price"><span>&yen;</span>{{ dish.price }}</p>
-                    <div class="count">
-                        <div class="minus" @click="minus(dish.id)">
-                            <p>－</p>
-                        </div>
-                        <span>{{ store?.dishes[countParam.deskId][dish.id]?.count || 0 }}</span>
-                        <div class="add" @click="plus(dish.id)">
-                            <p>＋</p>
+            <li v-for="(dish, i) in res" :key="i" :class="{ 'sold-out': isSoldOut(dish.state) }">
+                <div class="dishCard">
+                    <div class="dishImg" :style="`background-image: url(${image_pathes[i]})`"></div>
+                    <div class="dishInfo">
+                        <p class="title" :title="dish.name">{{ dish.name }}</p>
+                        <p class="description" :title="dish.description">{{ dish.description }}</P>
+                        <p class="price"><span>&yen;</span>{{ dish.price }}</p>
+                        <div class="count">
+                            <div class="minus" @click="minus(dish.id)">
+                                <p>－</p>
+                            </div>
+                            <span>{{ store?.dishes[countParam.deskId][dish.id]?.count || 0 }}</span>
+                            <div class="add" @click="plus(dish.id)">
+                                <p>＋</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -97,6 +97,12 @@ const minus = (dishId) => {
         emit('sumOrderAndPrice')
     }
 }
+
+/*************************************
+* 料理状態により、classを変更
+**************************************/
+const isSoldOut = (state) => state === '1';
+
 </script>
 
 <style lang="less" scoped>

@@ -39,7 +39,9 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             // JSON形式に変換
             String notLogin = JSON.toJSONString(error);
             // レスポンスに書き込み
-            response.getWriter().write(notLogin);
+            if (!response.isCommitted()) {
+                response.getWriter().write(notLogin);
+            }
             return false;
         }
 

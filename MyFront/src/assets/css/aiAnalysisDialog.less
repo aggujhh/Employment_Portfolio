@@ -1,0 +1,63 @@
+@import "@/assets/css/dialog.less";
+
+#aiAnalysis {
+
+    .dialog {
+        width: 800px;
+        height: 500px;
+        padding: 30px 60px;
+        justify-content: flex-start;
+        background: rgba(255, 255, 255);
+        backdrop-filter: blur(5px);
+
+        h3 {
+            margin-bottom: 30px;
+        }
+
+        .img {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 70%;
+            width: 50%;
+            background-image: url('@/assets/images/dataAnalysisImg/Ai.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        .close_btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            border: none;
+            background: #fff;
+            font-size: 30px;
+            line-height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .close_btn:hover {
+            background: #333;
+            color: #fff;
+        }
+
+
+
+
+        .text {
+            width: 100%;
+            height: 80%;
+            overflow: auto;
+
+            li {
+                list-style: disc !important;
+            }
+
+        }
+    }
+}
