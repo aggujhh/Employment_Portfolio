@@ -4,8 +4,8 @@
             <nav>
                 <ul>
                     <li v-for="(item, index) in res" :key="index"
-                        @click="toDishPage(`/order/${route.params.desk_id}/${item.id}`)"
-                        :class="{ active: isActive(`/order/${route.params.desk_id}/${item.id}`) }">
+                        @click="toDishPage(`/order/${route.params.desk_id}/${route.params.nanoId}/${item.id}`)"
+                        :class="{ active: isActive(`/order/${route.params.desk_id}/${route.params.nanoId}/${item.id}`) }">
                         <div class="nav_name">
                             <p :title="item.name">{{ item.name }}</p>
                         </div>

@@ -2,7 +2,15 @@
     <HeaderView></HeaderView>
     <NavView></NavView>
     <section id="front_screen">
-        <button @click="api_resetAllTables">reset</button>
+        <button @click="openSettingDialog">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                <g fill="none" stroke="#616161" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                    <path class="path1" d="M12.132 15.404a3.364 3.364 0 1 0 0-6.728a3.364 3.364 0 0 0 0 6.728" />
+                    <path
+                        d="M20.983 15.094a9.4 9.4 0 0 1-1.802 3.1l-2.124-.482a7.25 7.25 0 0 1-2.801 1.56l-.574 2.079a9.5 9.5 0 0 1-1.63.149a9 9 0 0 1-2.032-.23l-.609-2.146a7.5 7.5 0 0 1-2.457-1.493l-2.1.54a9.4 9.4 0 0 1-1.837-3.33l1.55-1.722a7.2 7.2 0 0 1 .069-2.652L3.107 8.872a9.4 9.4 0 0 1 2.067-3.353l2.17.54A7.7 7.7 0 0 1 9.319 4.91l.574-2.124a9 9 0 0 1 2.17-.287c.585 0 1.17.054 1.745.16l.551 2.113c.83.269 1.608.68 2.296 1.217l2.182-.563a9.4 9.4 0 0 1 2.043 3.1l-1.48 1.607a7.4 7.4 0 0 1 .068 3.364z" />
+                </g>
+            </svg>
+        </button>
         <main>
             <div class="header">
                 <ul>
@@ -37,8 +45,7 @@
                     </div>
                     <div>
                         <div class="desk" :style="tableStateArray['A1']">
-                            <div class="center" :class="classNameArray['A1']"
-                                @click="openDialog('A1')">
+                            <div class="center" :class="classNameArray['A1']" @click="openDialog('A1')">
                                 A1</div>
                             <div class="bar" v-if="progressBarArray['A1']?.isVisible">
                                 <div>
@@ -55,8 +62,7 @@
                     </div>
                     <div>
                         <div class="desk" :style="tableStateArray['A2']">
-                            <div class="center" :class="classNameArray['A2']"
-                                @click="openDialog('A2')">A2</div>
+                            <div class="center" :class="classNameArray['A2']" @click="openDialog('A2')">A2</div>
                             <div class="bar" v-if="progressBarArray['A2']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A2']?.progressBarStyle" />
@@ -72,8 +78,7 @@
                     </div>
                     <div>
                         <div class="desk" :style="tableStateArray['A3']">
-                            <div class="center" :class="classNameArray['A3']"
-                                @click="openDialog('A3')">A3</div>
+                            <div class="center" :class="classNameArray['A3']" @click="openDialog('A3')">A3</div>
                             <div class="bar" v-if="progressBarArray['A3']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A3']?.progressBarStyle" />
@@ -89,8 +94,7 @@
                     </div>
                     <div>
                         <div class="desk" :style="tableStateArray['A4']">
-                            <div class="center" :class="classNameArray['A4']"
-                                @click="openDialog('A4')">A4</div>
+                            <div class="center" :class="classNameArray['A4']" @click="openDialog('A4')">A4</div>
                             <div class="bar" v-if="progressBarArray['A4']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A4']?.progressBarStyle" />
@@ -106,8 +110,7 @@
                     </div>
                     <div>
                         <div class="desk" :style="tableStateArray['A5']">
-                            <div class="center" :class="classNameArray['A5']"
-                                @click="openDialog('A5')">A5</div>
+                            <div class="center" :class="classNameArray['A5']" @click="openDialog('A5')">A5</div>
                             <div class="bar" v-if="progressBarArray['A5']?.isVisible">
                                 <div>
                                     <div :style="progressBarArray['A5']?.progressBarStyle" />
@@ -130,8 +133,7 @@
                                     :key="index" class="seat" :style="index < seatStateArray?.C1?.guestCount
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
-                                <div class="center" :class="classNameArray['C1']"
-                                    @click="openDialog('C1')">C1</div>
+                                <div class="center" :class="classNameArray['C1']" @click="openDialog('C1')">C1</div>
                                 <div class="bar" v-if="progressBarArray['C1']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C1']?.progressBarStyle" />
@@ -147,8 +149,7 @@
                                     :key="index" class="seat" :style="index < seatStateArray?.C2?.guestCount
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
-                                <div class="center" :class="classNameArray['C2']"
-                                    @click="openDialog('C2')">C2</div>
+                                <div class="center" :class="classNameArray['C2']" @click="openDialog('C2')">C2</div>
                                 <div class="bar" v-if="progressBarArray['C2']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C2']?.progressBarStyle" />
@@ -164,8 +165,7 @@
                                     :key="index" class="seat" :style="index < seatStateArray?.C3?.guestCount
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
-                                <div class="center" :class="classNameArray['C3']"
-                                    @click="openDialog('C3')">C3</div>
+                                <div class="center" :class="classNameArray['C3']" @click="openDialog('C3')">C3</div>
                                 <div class="bar" v-if="progressBarArray['C3']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C3']?.progressBarStyle" />
@@ -181,8 +181,7 @@
                                     :key="index" class="seat" :style="index < seatStateArray?.C4?.guestCount
                                         ? { background: '#FBB034' }
                                         : { background: '#505050' }" />
-                                <div class="center" :class="classNameArray['C4']"
-                                    @click="openDialog('C4')">C4</div>
+                                <div class="center" :class="classNameArray['C4']" @click="openDialog('C4')">C4</div>
                                 <div class="bar" v-if="progressBarArray['C4']?.isVisible">
                                     <div>
                                         <div :style="progressBarArray['C4']?.progressBarStyle" />
@@ -201,8 +200,7 @@
                                         :key="index" class="seat" :style="index < seatStateArray?.E?.guestCount
                                             ? { background: '#FBB034' }
                                             : { background: '#505050' }" />
-                                    <div class="center" :class="classNameArray['E']"
-                                        @click="openDialog('E')">E</div>
+                                    <div class="center" :class="classNameArray['E']" @click="openDialog('E')">E</div>
                                     <div class="bar" v-if="progressBarArray['E']?.isVisible">
                                         <div>
                                             <div :style="progressBarArray['E']?.progressBarStyle" />
@@ -238,8 +236,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.D2?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['D2']"
-                                            @click="openDialog('D2')">D2</div>
+                                        <div class="center" :class="classNameArray['D2']" @click="openDialog('D2')">D2
+                                        </div>
                                         <div class="bar" v-if="progressBarArray['D2']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['D2']?.progressBarStyle" />
@@ -257,8 +255,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.B1?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['B1']"
-                                            @click="openDialog('B1')">B1</div>
+                                        <div class="center" :class="classNameArray['B1']" @click="openDialog('B1')">B1
+                                        </div>
                                         <div class="bar" v-if="progressBarArray['B1']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B1']?.progressBarStyle" />
@@ -274,8 +272,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.B2?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['B2']"
-                                            @click="openDialog('B2')">B2</div>
+                                        <div class="center" :class="classNameArray['B2']" @click="openDialog('B2')">B2
+                                        </div>
                                         <div class="bar" v-if="progressBarArray['B2']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B2']?.progressBarStyle" />
@@ -291,8 +289,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.B3?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['B3']"
-                                            @click="openDialog('B3')">B3</div>
+                                        <div class="center" :class="classNameArray['B3']" @click="openDialog('B3')">B3
+                                        </div>
                                         <div class="bar" v-if="progressBarArray['B3']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B3']?.progressBarStyle" />
@@ -308,8 +306,8 @@
                                             :key="index" class="seat" :style="index < seatStateArray?.B4?.guestCount
                                                 ? { background: '#FBB034' }
                                                 : { background: '#505050' }" />
-                                        <div class="center" :class="classNameArray['B4']"
-                                            @click="openDialog('B4')">B4</div>
+                                        <div class="center" :class="classNameArray['B4']" @click="openDialog('B4')">B4
+                                        </div>
                                         <div class="bar" v-if="progressBarArray['B4']?.isVisible">
                                             <div>
                                                 <div :style="progressBarArray['B4']?.progressBarStyle" />
@@ -369,12 +367,13 @@
         </article>
     </section>
     <AccountingConfirmationDialog :isVisible="isVisible.accountingConfirmation" :deskId="deskId" @close="closeModal" />
-    <CallDialog :isVisible="isVisible.call" :deskId="deskId" @close="closeModal"/>
+    <CallDialog :isVisible="isVisible.call" :deskId="deskId" @close="closeModal" />
+    <FrontSettingDialog :isVisible="isVisible.setting" @close="closeModal" />
 </template>
 
 <script setup>
 import { ref, onMounted, reactive, onBeforeUnmount, computed } from "vue"
-import { fetchAllTables, resetAllTables } from "@/api/deskApi";
+import { fetchAllTables} from "@/api/deskApi";
 
 
 const tables = ref([]);
@@ -438,21 +437,7 @@ const setHeader = () => {
     })
 }
 
-const api_resetAllTables = async () => {
-    try {
-        const res = await resetAllTables();
-        const code = res.data.code; // ステータスコードを取得
-        if (code === 1) {
-            api_fetchAllTables();
-        } else {
-            alert(res.data.msg);
-        }
-    } catch (error) {
-        // エラー処理
-        console.error("リクエストエラー:", error);
-        alert("リセット失敗しました。もう一度お試しください。");
-    }
-}
+
 
 // コンポーネントがマウントされたときにカテゴリデータを取得
 onMounted(() => {
@@ -645,15 +630,18 @@ const send_changeOrderDishState = async (index, deskId, orderId, dishId) => {
 **************************************/
 import AccountingConfirmationDialog from "@/components/AccountingConfirmationDialog.vue";
 import CallDialog from "@/components/CallDialog.vue";
+import FrontSettingDialog from "@/components/FrontSettingDialog.vue";
 
 const isVisible = reactive({
     accountingConfirmation: false,
-    call: false
+    call: false,
+    setting: false
 })
 // モーダルを閉じる関数
 const closeModal = () => {
     isVisible.accountingConfirmation = false;
     isVisible.call = false;
+    isVisible.setting = false;
     api_fetchAllTables();
     send_fetchOperations();
 };
@@ -667,6 +655,10 @@ const openDialog = (id) => {
     } else if (orderStateArray[id] === '3') {
         openCallDialog(id)
     }
+}
+
+const openSettingDialog = () => {
+    isVisible.setting = true;
 }
 
 const openAccountingConfirmationDialog = (id) => {

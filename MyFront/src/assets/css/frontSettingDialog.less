@@ -1,0 +1,50 @@
+@import "@/assets/css/dialog.less";
+
+#frontSetting {
+    .dialog {
+        width: 800px;
+        height: 500px;
+        justify-content: start;
+
+        h3 {
+            margin-bottom: 20px;
+        }
+
+        ul {
+            width: 80%;
+
+            li {
+                display: grid;
+                grid-template-columns: 3fr 1fr;
+                grid-column-gap: 20px;
+                align-items: center;
+
+                .reset_btn{
+                    padding: 10px 10px;
+                    background: #006ce0;
+                    border-radius: 5px;
+                    border: none;
+                    color: #fff;
+                }
+            }
+        }
+
+        .close_btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            border: none;
+            background: #fff;
+            font-size: 30px;
+            line-height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .close_btn:hover {
+            background: #333;
+            color: #fff;
+        }
+    }
+}
