@@ -13,6 +13,12 @@
     <!-- プロジェクトのパッケージ形式を指定します -->
     <!-- jar: Javaアプリケーション用の実行可能またはライブラリ用のJARファイル -->
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+    </dependencies>
     <!-- プロジェクトまたはモジュールの一意な識別子を指定 -->
     <artifactId>common</artifactId>
 </project>

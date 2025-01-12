@@ -15,4 +15,8 @@ public interface DeskService {
     void setDeskOrderStateForThree(String deskId);
 
     void setDeskOrderStateComeBack(String deskId);
+
+    void disableDeskById(Desk desk);
+
+    void restoreDeskById(Desk desk);
 }

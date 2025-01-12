@@ -21,6 +21,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Slf4j
@@ -39,15 +40,12 @@ public class QrCodeServiceImpl implements QrCodeService {
     @Override
     public List<QrCode> fetchAllQrCode() {
         List<QrCode> qrCodeList = new ArrayList<>();
-        List<String> deskIds = deskMapper.fetchAllTableIds();
+        List<String> deskIds = deskMapper.fetchAllAvailableTableIds();
         deskIds.forEach(deskId -> {
             QrCode qrCode = qrCodeMapper.fetchQrCodeByDeskId(deskId);
             if (qrCode == null) {
                 qrCode = QRCodeGenerator(deskId);
                 qrCodeMapper.addQrCode(qrCode);
-            } else if (qrCode.getUrl() == null) {
-                qrCode = QRCodeGenerator(deskId);
-                qrCodeMapper.updateQrCode(qrCode);
             }
             qrCodeList.add(qrCode);
         });
@@ -69,7 +67,12 @@ public class QrCodeServiceImpl implements QrCodeService {
             // 保存二维码到文件
             SaveFile saveFile = new SaveFile();
             String basePath = saveFile.getBasePath();
-            String filePath = basePath + File.separator + "qrCodeImages" + File.separator + deskId + File.separator + "qr_" + fileName + ".png"; // 保存路径
+            String folderPath = basePath + File.separator + "qrCodeImages" + File.separator + deskId;
+            File targetFolder = new File(folderPath);
+            clearFolder(targetFolder);
+
+            // 构建目标文件路径
+            String filePath = folderPath + File.separator + "qr_" + fileName + ".png";
             saveFile.PathCheckExample(filePath);
             Path path = FileSystems.getDefault().getPath(filePath);
             MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
@@ -86,6 +89,18 @@ public class QrCodeServiceImpl implements QrCodeService {
             return null;
         }
 
+    }
+
+    private void clearFolder(File folder) {
+        if (folder.exists() && folder.isDirectory()) {
+            for (File file : Objects.requireNonNull(folder.listFiles())) {
+                if (file.isFile()) {
+                    if (!file.delete()) {
+                        System.err.println("ファイル削除失敗しました。" );
+                    }
+                }
+            }
+        }
     }
 
 }

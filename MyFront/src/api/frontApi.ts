@@ -41,5 +41,8 @@ export function fetchOperations() {
  * 呼び出し確認完了
  */
 export function checkedCall(data: { id: string }) {
-    return instance.patch('/api/front/checkedCall',data);
+    return instance.patch('/api/front/checkedCall', data);
 }
+
+
+

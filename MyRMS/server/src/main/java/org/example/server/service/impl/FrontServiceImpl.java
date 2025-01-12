@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.pojo.entity.*;
 import org.example.server.mapper.DeskMapper;
 import org.example.server.mapper.FrontMapper;
+import org.example.server.mapper.QrCodeMapper;
 import org.example.server.service.FrontService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,14 @@ public class FrontServiceImpl implements FrontService {
     private final FrontMapper frontMapper;
     private final DeskMapper deskMapper;
 
+    private final QrCodeMapper qrCodeMapper;
+
     @Autowired
-    public FrontServiceImpl(FrontMapper frontMapper, DeskMapper deskMapper) {
+    public FrontServiceImpl(FrontMapper frontMapper, DeskMapper deskMapper, QrCodeMapper qrCodeMapper) {
         // フィールドにインターセプターを設定
         this.frontMapper = frontMapper;
         this.deskMapper = deskMapper;
+        this.qrCodeMapper = qrCodeMapper;
     }
 
     @Override
@@ -163,6 +167,8 @@ public class FrontServiceImpl implements FrontService {
 
         // デスクの状態をリセット
         frontMapper.resetDeskByDeskId(orderHistory);
+
+        qrCodeMapper.deleteQrCode(deskId);
     }
 
     @Override

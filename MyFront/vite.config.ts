@@ -22,7 +22,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: "http://192.168.1.10:8080", //跨域地址
+        target: "http://localhost:8080", //跨域地址
         changeOrigin: true, //支持跨域
       }
     }

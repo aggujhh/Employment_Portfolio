@@ -23,6 +23,8 @@ const seed_fetchAllQrCode = async () => {
         const res = await fetchAllQrCode();
         const code = res.data.code; // ステータスコードを取得
         if (code === 1) {
+            console.log(res.data.data);
+            
             qrCodeArray.value = res.data.data
         }
     } catch (error) {

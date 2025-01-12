@@ -13,3 +13,17 @@ export function fetchAllTables() {
 export function resetAllTables() {
     return instance.put('/api/desk');
 }
+
+/**
+ * テーブルを一時的に停止に設定
+ */
+export function disableDeskById(data: { id: string }) {
+    return instance.patch('/api/desk/disable', data);
+}
+
+/**
+ * テーブルを再利用に設定
+ */
+export function restoreDeskById(data: { id: string }) {
+    return instance.patch('/api/desk/restore', data);
+}

@@ -147,7 +147,6 @@ const fetchDishCategories = async () => {
     try {
         const response = await fetDishCategory();
         res.value = response.data.data; // APIからデータを取得
-        console.log("dishCategories:", res.value);
     } catch (err) {
         console.error("リクエストエラー:", err);
         alert("料理カテゴリーのフェッチに失敗しました。もう一度お試しください。");
@@ -243,10 +242,8 @@ const api_addOrder = async () => {
     }
     try {
         const res = await addOrder(req);
-        console.log(res);
         const code = res.data.code; // ステータスコードを取得
         if (code === 1) {
-            console.log("注文成功");
             store.resetDishes(req.deskId)
             count.order = 0
             api_getOrderTotalPrice()
@@ -260,7 +257,6 @@ const api_addOrder = async () => {
     } catch (error) {
         // エラー処理
         console.error("リクエストエラー:", error);
-        alert("注文失敗しました。もう一度お試しください。");
     }
 }
 
@@ -274,7 +270,6 @@ const api_getOrderTotalPrice = async () => {
         count.price = totalPrice.value
     } catch (err) {
         console.error("リクエストエラー:", err);
-        alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
     }
 }
 
@@ -288,10 +283,8 @@ const api_fetchAllCompletedOrders = async () => {
         completedOrders.value.forEach(item => {
             item['servedInfo'] = setServedInfoByDishState(item.state)
         })
-        console.log("注文完了オーダー", completedOrders.value);
     } catch (err) {
         console.error("リクエストエラー:", err);
-        alert("テーブルのフェッチを失敗しました。もう一度お試しください。");
     }
 }
 
@@ -326,16 +319,13 @@ const sendFinishOrder = async () => {
     try {
         const res = await finishOrder(finishOrderReq);
         const code = res.data.code; // ステータスコードを取得
-        console.log(code);
         if (code === 1) {
         } else {
             alert(res.data.msg); // エラーメッセージを表示
-            console.log(res.data.msg);
         }
     } catch (error) {
         // エラー処理
         console.error("リクエストエラー:", error);
-        alert("リセット失敗しました。もう一度お試しください。");
     }
 }
 
@@ -369,10 +359,6 @@ const sseService = new SseService("https://www.cyg1995.xyz/api/front/order", (ev
     } else if (event === "リセット") {
         isVisible.waiting = false;
         isVisible.thank = true;
-        setTimeout(() => {
-            isVisible.thank = false;
-            router.push(`/order/${route.params.desk_id}/0`);
-        }, 5000)
     } else if (event === "呼び出しの状況を戻る成功") {
         emit('fetchTables');
     }

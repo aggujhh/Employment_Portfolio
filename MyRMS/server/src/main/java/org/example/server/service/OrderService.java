@@ -1,7 +1,5 @@
 package org.example.server.service;
-import org.example.pojo.entity.Dish;
-import org.example.pojo.entity.Order;
-import org.example.pojo.entity.OrderHistory;
+import org.example.pojo.entity.*;
 
 import java.util.List;
 
@@ -15,4 +13,6 @@ public interface OrderService {
     void finishOrder(OrderHistory order);
 
     List<Dish> getDishByCategoryId(Long dishCategoryId);
+
+    List<QrCode> fetchAllTables();
 }

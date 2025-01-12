@@ -35,6 +35,12 @@ public interface DeskMapper {
     @Update("UPDATE desk SET desk.order_state=#{orderState} WHERE id=#{deskId}")
     void setDeskOrderState(String deskId, String orderState);
 
-    @Select("SELECT id FROM desk")
-    List<String> fetchAllTableIds();
+    @Update("UPDATE desk SET desk_state='3' WHERE id=#{id}")
+    void disableDeskById(Desk desk);
+
+    @Update("UPDATE desk SET desk_state='0' WHERE id=#{id}")
+    void restoreDeskById(Desk desk);
+
+    @Select("SELECT * FROM desk WHERE desk_state !='3'")
+    List<String> fetchAllAvailableTableIds();
 }

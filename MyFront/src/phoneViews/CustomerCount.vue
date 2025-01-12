@@ -22,21 +22,32 @@
 <script setup>
 import { ref, onMounted, reactive } from "vue"
 import { fetchDateByTableId, setCustomerCount } from "@/api/orderApi";
-import { useRoute,useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
 const seat_count = ref(0)
-
+const guestCount = ref(false)
 const fetchTable = async () => {
   try {
     const response = await fetchDateByTableId({ id: route.params.desk_id });
     seat_count.value = response.data.data.seatCount; // APIからデータを取得
+    console.log(response.data.data);
+    guestCount.value = response.data.data.guestCount;
+    checkHasGuest()
     setIsActive()
   } catch (err) {
     console.error("リクエストエラー:", err);
   }
 };
+
+const checkHasGuest = () => {
+  console.log("guestCount.value",guestCount.value);
+  if (guestCount.value !== 0) {
+    router.push(`/order/${route.params.desk_id}/${route.params.nanoId}/1`);
+  }
+}
+
 
 const req = reactive({
   id: route.params.desk_id,
@@ -65,7 +76,7 @@ const api_setCustomerCount = async () => {
     // 成功した場合
     if (code == 1) {
       alert("人数の保存を成功しました。");
-      router.push(`/order/${route.params.desk_id}/1`);
+      router.push(`/order/${route.params.desk_id}/${route.params.nanoId}/1`);
     } else {
       // エラーメッセージを表示
       alert("人数の保存を失敗しました,", res.data.msg);

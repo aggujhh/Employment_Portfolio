@@ -5,9 +5,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.example.pojo.entity.Dish;
-import org.example.pojo.entity.Order;
-import org.example.pojo.entity.OrderHistory;
+import org.example.pojo.entity.*;
 
 import java.util.List;
 import java.util.Map;
@@ -70,4 +68,10 @@ public interface OrderMapper {
 
     @Select("SELECT * FROM dish WHERE dish_category_id=#{dishCategoryId} AND state !='2'")
     List<Dish> getDishByCategoryId(Long dishCategoryId);
+
+    @Select("SELECT deskId,fileName,desk.order_state,desk.guest_count FROM qr_code " +
+            "INNER JOIN desk " +
+            "ON qr_code.deskId=desk.id " +
+            "WHERE desk.desk_state !='3'")
+    List<QrCode> fetchAllTables();
 }

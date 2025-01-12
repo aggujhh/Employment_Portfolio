@@ -67,4 +67,14 @@ public class DeskServiceImpl implements DeskService {
         deskMapper.setDeskOrderState(deskId, previousState);
         deskStateManager.clearPreviousState(deskId); // 恢复后清除
     }
+
+    @Override
+    public void disableDeskById(Desk desk) {
+        deskMapper.disableDeskById(desk);
+    }
+
+    @Override
+    public void restoreDeskById(Desk desk) {
+        deskMapper.restoreDeskById(desk);
+    }
 }

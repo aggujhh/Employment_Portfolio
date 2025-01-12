@@ -12,4 +12,6 @@ public class QrCode {
     private String deskId;
     private String fileName;
     private String url;
+    private String orderState;
+    private Integer guestCount;
 }

@@ -18,7 +18,7 @@
                 </ul>
                 <div class="totalPrice">
                     <p>お会計(税込)</p>
-                    <p>¥{{ accountingData.amount.toLocaleString() }}</p>
+                    <p>¥{{ accountingData?.amount?.toLocaleString() || '0' }}</p>
                 </div>
             </div>
             <div>
@@ -28,23 +28,28 @@
                     </li>
                     <li>
                         <p>合計金額</p>
-                        <p>¥{{ accountingData.amount.toLocaleString() }}</p>
+                        <p>¥{{ accountingData?.amount?.toLocaleString() || '0' }}</p>
                     </li>
                     <li>
                         <p>内消費税</p>
-                        <p>¥{{ Math.floor(accountingData.amount * 0.1).toLocaleString() }}</p>
+                        <p>¥{{ accountingData?.amount ? Math.floor(accountingData.amount * 0.1).toLocaleString() : '0'
+                            }}</p>
                     </li>
                     <li>
                         <p>合計人数</p>
-                        <p>{{ accountingData.guestCount }}人</p>
+                        <p>{{ accountingData?.guestCount || '0' }}人</p>
                     </li>
                     <li>
                         <p>お一人様の支払い</p>
-                        <p>¥{{ Math.floor(accountingData.amount / accountingData.guestCount).toLocaleString() }}</p>
+                        <p>¥{{ accountingData?.guestCount && accountingData?.amount
+                            ? Math.floor(accountingData.amount / accountingData.guestCount).toLocaleString()
+                            : '0' }}</p>
                     </li>
                     <li>
                         <p>支払方法</p>
-                        <p>{{ setPayMethodByNum(accountingData.payMethod) }}</p>
+                        <p>{{ accountingData?.payMethod !== undefined
+                            ? setPayMethodByNum(accountingData.payMethod)
+                            : '未指定' }}</p>
                     </li>
                 </ul>
                 <button @click="seed_accountingConfirmationCompleted">確認</button>

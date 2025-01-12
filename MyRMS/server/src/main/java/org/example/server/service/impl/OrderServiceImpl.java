@@ -2,12 +2,10 @@ package org.example.server.service.impl;
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.example.pojo.entity.Dish;
-import org.example.pojo.entity.OrderHistory;
+import org.example.pojo.entity.*;
 import org.example.server.mapper.OrderMapper;
 import org.example.server.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.example.pojo.entity.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,5 +126,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Dish> getDishByCategoryId(Long dishCategoryId) {
         return orderMapper.getDishByCategoryId(dishCategoryId);
+    }
+
+    @Override
+    public List<QrCode> fetchAllTables() {
+        return orderMapper.fetchAllTables();
     }
 }

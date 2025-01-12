@@ -49,14 +49,11 @@ const countParam = reactive({
 const fetchDishes = async (req) => {
     try {
         const response = await fetchDishByCategoryId(req);
-        console.log("dish: ", response);
         res.value = response.data; // データを保存
-        console.log("dish: ", res.value);
         setImgPath(res.value); // 画像パスを設定
         setDishStore()
     } catch (err) {
         console.error("リクエストエラー:", err);
-        alert("料理の取得に失敗しました。");
     }
 };
 

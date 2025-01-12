@@ -76,6 +76,8 @@ const fetchTables = async () => {
     try {
         const response = await fetchAllTables();
         tables.value = response.data.data; // APIからデータを取得
+        console.log(tables.value);
+
         setTableIdArray()
         checkHasTable()
         setOrderState();
@@ -89,15 +91,15 @@ const fetchTables = async () => {
 const tableIdArray = ref([]);
 const setTableIdArray = () => {
     tableIdArray.value = tables.value.map(
-        (item) => item.id
+        (item) => item.deskId
     );
 }
 const checkHasTable = () => {
     // URLのパラメーターからdesk_idを取得し、大文字に変換する
-    const deskId = route.params.desk_id.toUpperCase();
+    const nanoId = route.params.nanoId
 
     // テーブルリストから対象のテーブルを検索する
-    const table = tables.value.find((item) => item.id === deskId);
+    const table = tables.value.find((item) => item.fileName === nanoId);
 
     // テーブルが見つからない場合、404ページにリダイレクトする
     if (!table) {
@@ -113,11 +115,12 @@ const checkHasTable = () => {
 const orderState = ref('')
 
 
-const setOrderState = () => { 
+
+const setOrderState = () => {
     tables.value.forEach(item => {
-        console.log(item.id,route.params.desk_id.toUpperCase());    
-        if (item.id === route.params.desk_id.toUpperCase()) {
-            orderState.value=item.orderState
+        console.log(item.id, route.params.desk_id.toUpperCase());
+        if (item.deskId === route.params.desk_id.toUpperCase()) {
+            orderState.value = item.orderState
             if (orderState.value === '3') {
                 isCalling.value = true
             } else {

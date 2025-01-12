@@ -20,7 +20,6 @@ import java.util.List;
 @RequestMapping("/order")
 public class OrderController {
     private final DishCategoryService dishCategoryService;
-    private final DishService dishService;
     private final DeskService deskService;
     private final OrderService orderService;
     private final SseService sseService;
@@ -28,13 +27,11 @@ public class OrderController {
 
     @Autowired
     public OrderController(DishCategoryService dishCategoryService,
-                           DishService dishService,
                            DeskService deskService,
                            OrderService orderService,
                            SseService sseService) {
         // フィールドにインターセプターを設定
         this.dishCategoryService = dishCategoryService;
-        this.dishService = dishService;
         this.deskService = deskService;
         this.orderService = orderService;
         this.sseService = sseService;
@@ -67,7 +64,7 @@ public class OrderController {
 
     @GetMapping("/desk/all")
     public Result fetchAllTables() {
-        List<Desk> results = deskService.fetchAllTables();
+        List<QrCode> results = orderService.fetchAllTables();
         log.info("テーブルをすべてフェッチする:{}", results);
         return Result.success(results);
     }

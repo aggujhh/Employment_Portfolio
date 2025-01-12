@@ -40,11 +40,11 @@
             <div class="deskes_area">
                 <div class="deskes deskes1">
                     <div>
-                        <div class="desk" :style="tableStateArray['A1']">
+                        <div class="desk" :class="tableStateArray['A1']">
                         </div>
                     </div>
                     <div>
-                        <div class="desk" :style="tableStateArray['A1']">
+                        <div class="desk" :class="tableStateArray['A1']">
                             <div class="center" :class="classNameArray['A1']" @click="openDialog('A1')">
                                 A1</div>
                             <div class="bar" v-if="progressBarArray['A1']?.isVisible">
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <div>
-                        <div class="desk" :style="tableStateArray['A2']">
+                        <div class="desk" :class="tableStateArray['A2']">
                             <div class="center" :class="classNameArray['A2']" @click="openDialog('A2')">A2</div>
                             <div class="bar" v-if="progressBarArray['A2']?.isVisible">
                                 <div>
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     <div>
-                        <div class="desk" :style="tableStateArray['A3']">
+                        <div class="desk" :class="tableStateArray['A3']">
                             <div class="center" :class="classNameArray['A3']" @click="openDialog('A3')">A3</div>
                             <div class="bar" v-if="progressBarArray['A3']?.isVisible">
                                 <div>
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     <div>
-                        <div class="desk" :style="tableStateArray['A4']">
+                        <div class="desk" :class="tableStateArray['A4']">
                             <div class="center" :class="classNameArray['A4']" @click="openDialog('A4')">A4</div>
                             <div class="bar" v-if="progressBarArray['A4']?.isVisible">
                                 <div>
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     <div>
-                        <div class="desk" :style="tableStateArray['A5']">
+                        <div class="desk" :class="tableStateArray['A5']">
                             <div class="center" :class="classNameArray['A5']" @click="openDialog('A5')">A5</div>
                             <div class="bar" v-if="progressBarArray['A5']?.isVisible">
                                 <div>
@@ -128,7 +128,7 @@
                 <div class="area">
                     <div class="deskes deskes3">
                         <div>
-                            <div class="desk" :style="tableStateArray['C1']">
+                            <div class="desk" :class="tableStateArray['C1']">
                                 <div v-for="(seat, index) in Array.from({ length: seatStateArray?.C1?.seatCount })"
                                     :key="index" class="seat" :style="index < seatStateArray?.C1?.guestCount
                                         ? { background: '#FBB034' }
@@ -144,7 +144,7 @@
                             </div>
                         </div>
                         <div>
-                            <div class="desk" :style="tableStateArray['C2']">
+                            <div class="desk" :class="tableStateArray['C2']">
                                 <div v-for="(seat, index) in Array.from({ length: seatStateArray?.C2?.seatCount })"
                                     :key="index" class="seat" :style="index < seatStateArray?.C2?.guestCount
                                         ? { background: '#FBB034' }
@@ -160,7 +160,7 @@
                             </div>
                         </div>
                         <div>
-                            <div class="desk" :style="tableStateArray['C3']">
+                            <div class="desk" :class="tableStateArray['C3']">
                                 <div v-for="(seat, index) in Array.from({ length: seatStateArray?.C3?.seatCount })"
                                     :key="index" class="seat" :style="index < seatStateArray?.C3?.guestCount
                                         ? { background: '#FBB034' }
@@ -176,7 +176,7 @@
                             </div>
                         </div>
                         <div>
-                            <div class="desk" :style="tableStateArray['C4']">
+                            <div class="desk" :class="tableStateArray['C4']">
                                 <div v-for="(seat, index) in Array.from({ length: seatStateArray?.C4?.seatCount })"
                                     :key="index" class="seat" :style="index < seatStateArray?.C4?.guestCount
                                         ? { background: '#FBB034' }
@@ -195,7 +195,7 @@
                     <div class="area">
                         <div class="deskes deskes5">
                             <div>
-                                <div class="desk" :style="tableStateArray['E']">
+                                <div class="desk" :class="tableStateArray['E']">
                                     <div v-for="(seat, index) in Array.from({ length: seatStateArray?.E?.seatCount })"
                                         :key="index" class="seat" :style="index < seatStateArray?.E?.guestCount
                                             ? { background: '#FBB034' }
@@ -214,7 +214,7 @@
                         <div class="area">
                             <div class="deskes deskes4">
                                 <div>
-                                    <div class="desk" :style="tableStateArray['D1']">
+                                    <div class="desk" :class="tableStateArray['D1']">
                                         <div v-for="(seat, index) in Array.from({ length: seatStateArray?.D1?.seatCount })"
                                             :key="index" class="seat" :style="index < seatStateArray?.D1?.guestCount
                                                 ? { background: '#FBB034' }
@@ -231,7 +231,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="desk" :style="tableStateArray['D2']">
+                                    <div class="desk" :class="tableStateArray['D2']">
                                         <div v-for="(seat, index) in Array.from({ length: seatStateArray?.D2?.seatCount })"
                                             :key="index" class="seat" :style="index < seatStateArray?.D2?.guestCount
                                                 ? { background: '#FBB034' }
@@ -250,7 +250,7 @@
                             </div>
                             <div class="deskes deskes2">
                                 <div>
-                                    <div class="desk" :style="tableStateArray['B1']">
+                                    <div class="desk" :class="tableStateArray['B1']">
                                         <div v-for="(seat, index) in Array.from({ length: seatStateArray?.B1?.seatCount })"
                                             :key="index" class="seat" :style="index < seatStateArray?.B1?.guestCount
                                                 ? { background: '#FBB034' }
@@ -267,7 +267,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="desk" :style="tableStateArray['B2']">
+                                    <div class="desk" :class="tableStateArray['B2']">
                                         <div v-for="(seat, index) in Array.from({ length: seatStateArray?.B2?.seatCount })"
                                             :key="index" class="seat" :style="index < seatStateArray?.B2?.guestCount
                                                 ? { background: '#FBB034' }
@@ -284,7 +284,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="desk" :style="tableStateArray['B3']">
+                                    <div class="desk" :class="tableStateArray['B3']">
                                         <div v-for="(seat, index) in Array.from({ length: seatStateArray?.B3?.seatCount })"
                                             :key="index" class="seat" :style="index < seatStateArray?.B3?.guestCount
                                                 ? { background: '#FBB034' }
@@ -301,7 +301,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="desk" :style="tableStateArray['B4']">
+                                    <div class="desk" :class="tableStateArray['B4']">
                                         <div v-for="(seat, index) in Array.from({ length: seatStateArray?.B4?.seatCount })"
                                             :key="index" class="seat" :style="index < seatStateArray?.B4?.guestCount
                                                 ? { background: '#FBB034' }
@@ -368,17 +368,15 @@
     </section>
     <AccountingConfirmationDialog :isVisible="isVisible.accountingConfirmation" :deskId="deskId" @close="closeModal" />
     <CallDialog :isVisible="isVisible.call" :deskId="deskId" @close="closeModal" />
-    <FrontSettingDialog :isVisible="isVisible.setting" @close="closeModal" />
+    <FrontSettingDialog :isVisible="isVisible.setting" :tables="tables" @close="closeModal" @refresh="refresh" />
 </template>
 
 <script setup>
 import { ref, onMounted, reactive, onBeforeUnmount, computed } from "vue"
-import { fetchAllTables} from "@/api/deskApi";
+import { fetchAllTables } from "@/api/deskApi";
 
 
 const tables = ref([]);
-
-
 const api_fetchAllTables = async () => {
     try {
         const res = await fetchAllTables();
@@ -447,24 +445,17 @@ onMounted(() => {
 });
 
 const getDeskStyle = (state) => {
-    let background;
-    let border;
     switch (state) {
         case '0':
-            background = '#B7B7B7';
-            break;
+            return 'style0'
         case '1':
-            background = '#5779FF';
-            break;
+            return 'style1'
         case '2':
-            background = '#D62B81';
-            break;
+            return 'style2'
         case '3':
-            background = '#fff';
-            border = '1.5px dashed red'
-            break;
+            return 'style3'
+
     }
-    return { background, border };
 };
 const seatStateArray = reactive({})
 const tableStateArray = reactive({})
@@ -671,7 +662,9 @@ const openCallDialog = (id) => {
     isVisible.call = true;
 }
 
-
+const refresh = () => {
+    api_fetchAllTables();
+}
 /*************************************
 * 営業情報所得する
 **************************************/
