@@ -16,17 +16,20 @@
                 <li @click="navigateTo('/menu')" :class="{ nav_active: isNavActive('/menu') }">
                     メニュー管理
                 </li>
-                <li @click="navigateTo('/reservation')" :class="{ nav_active: isNavActive('/reservation') }">
-                    予約管理
-                </li>
-                <li @click="navigateTo('/shift')" :class="{ nav_active: isNavActive('/shift') }">
-                    シフト管理
+                <li @click="navigateTo('/qrCode')" :class="{ nav_active: isNavActive('/qrCode') }">
+                    QRコード管理
                 </li>
                 <li @click="navigateTo('/data_analysis')" :class="{ nav_active: isNavActive('/data_analysis') }">
                     データ分析
                 </li>
+                <li @click="navigateTo('/reservation')" :class="{ nav_active: isNavActive('/reservation') }">
+                    予約管理
+                </li>
                 <li @click="navigateTo('/staff')" :class="{ nav_active: isNavActive('/staff') }">
                     社員管理
+                </li>
+                <li @click="navigateTo('/shift')" :class="{ nav_active: isNavActive('/shift') }">
+                    シフト管理
                 </li>
                 <li @click="navigateTo('/permission')" :class="{ nav_active: isNavActive('/permission') }">
                     権限管理
@@ -44,19 +47,19 @@ const route = useRoute();
 
 // ナビゲーション
 const navigateTo = (path) => {
-    router.push(path); 
+    router.push(path);
 };
 
 // 現在のルートがアクティブかどうかを判断
 const isNavActive = (path) => {
-    return route.path === path; 
+    return route.path === path;
 };
 
-const isActive = ref(false); 
+const isActive = ref(false);
 
 // アクティブ状態を切り替える関数
 const toggleActive = () => {
-    isActive.value = !isActive.value; 
+    isActive.value = !isActive.value;
 };
 </script>
 

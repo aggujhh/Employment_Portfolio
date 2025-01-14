@@ -2,39 +2,39 @@
   <HeaderView></HeaderView>
   <section id="home">
     <ul>
-      <li @click="()=>{ router.push('/front_screen') }">
+      <li @click="() => { router.push('/front_screen') }">
         <p>フロント画面</p>
         <div class="img"></div>
       </li>
-      <li @click="()=>{ router.push('/kitchen_screen') }">
+      <li @click="() => { router.push('/kitchen_screen') }">
         <p>厨房画面</p>
         <div class="img"></div>
       </li>
-      <li @click="()=>{ router.push('/menu') }">
+      <li @click="() => { router.push('/menu') }">
         <p>メニュー管理</p>
         <div class="img"></div>
       </li>
-      <li @click="()=>{ router.push('/reservation') }">
-        <p>予約管理</p>
-        <div class="img"></div>
-      </li>
-      <li @click="()=>{ router.push('/shift') }">
-        <p>シフト管理</p>
-        <div class="img"></div>
-      </li>
-      <li @click="()=>{ router.push('/qrCode') }">
+      <li @click="() => { router.push('/qrCode') }">
         <p>QRコード管理</p>
         <div class="img"></div>
       </li>
-      <li @click="()=>{ router.push('/data_analysis') }">
+      <li @click="() => { router.push('/data_analysis') }">
         <p>データ分析</p>
         <div class="img"></div>
       </li>
-      <li @click="()=>{ router.push('/staff') }">
+      <li @click="() => { router.push('/reservation') }">
+        <p>予約管理</p>
+        <div class="img"></div>
+      </li>
+      <li @click="() => { router.push('/staff') }">
         <p>社員管理</p>
         <div class="img"></div>
       </li>
-      <li @click="()=>{ router.push('/permission') }">
+      <li @click="() => { router.push('/shift') }">
+        <p>シフト管理</p>
+        <div class="img"></div>
+      </li>
+      <li @click="() => { router.push('/permission') }">
         <p>権限管理</p>
         <div class="img"></div>
       </li>

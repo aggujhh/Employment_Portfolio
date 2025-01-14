@@ -1,0 +1,197 @@
+#reservation {
+    height: 87vh;
+    width: 100%;
+    background: #F9F6EF;
+    padding: 80px 200px 60px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    grid-column-gap: 40px;
+
+    >div {
+        height: 100%;
+    }
+
+    .calendar {
+        position: relative;
+
+        input[type="date"] {
+            height: 30px;
+            width: 200px;
+            border: 1px solid #818181;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #333;
+            outline: none;
+            position: absolute;
+            left: 0;
+            top: -30px;
+        }
+
+        .header {
+            height: 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #5A544B;
+
+            >p {
+                font-size: 28px;
+                font-weight: bold;
+                color: #f3f3f3;
+            }
+
+            >button {
+                height: 100%;
+                width: 30px;
+                color: #f3f3f3;
+                background: #5A544B;
+                border: none;
+            }
+
+            >button:hover {
+                background: #a69b8a;
+            }
+        }
+
+        table {
+            margin-bottom: 20px;
+            table-layout: fixed;
+            width: 100%;
+            background: #fff;
+
+            tr {
+                height: 80px;
+
+                th,
+                td {
+                    border: 2px solid #818181;
+                }
+
+                td {
+                    position: relative;
+
+                    >p {
+                        position: absolute;
+                        top: 3px;
+                        left: 6px;
+                        font-size: 24px;
+                        font-family: 'Kaushan';
+                        font-weight: bold;
+                        color: #736666;
+                    }
+                }
+
+                .today {
+                    position: relative;
+
+                    p {
+                        color: #FF3578 !important;
+                    }
+                }
+
+                .today::before {
+                    content: '今日';
+                    position: absolute;
+                    top: 3px;
+                    left: 35px;
+                    font-size: 22px;
+                    color: #FF3578;
+                    font-family: 'YujiSyuku';
+                }
+
+
+                .not_this_moon {
+                    background: #cdcdcd !important;
+
+                    >p {
+                        color: #818181 !important;
+                    }
+                }
+            }
+
+
+            thead {
+                tr {
+                    height: 35px;
+
+                    >th {
+                        line-height: 35px;
+                    }
+
+                    >th:nth-of-type(1) {
+                        color: #D8647F;
+                    }
+
+                    >th:nth-of-type(7) {
+                        color: #7491C2;
+                    }
+                }
+            }
+        }
+    }
+
+    .info {
+        background: #fff;
+
+        .header {
+            height: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #5A544B;
+
+
+            >p {
+                font-size: 28px;
+                font-weight: bold;
+                color: #f3f3f3;
+            }
+
+        }
+    }
+
+    .qrCode {
+        position: fixed;
+        width: 200px;
+        height: 200px;
+        background: #5A544B;
+        right: 0;
+        top: 50%;
+        transform: translate(200px, -50%);
+        padding: 15px;
+        transition: 0.6s;
+
+        >div {
+            height: 100%;
+            width: 100%;
+            background: #fff;
+        }
+    }
+
+    .qrCode::before {
+        content: '＜';
+        font-weight: bold;
+        position: absolute;
+        width: 20px;
+        height: 40px;
+        left: -20px;
+        top: 50%;
+        background: #5A544B;
+        transform: translateY(-50%);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px 0 0 5px;
+        cursor: pointer;
+    }
+
+    .qrCode.expand{
+        transform: translate(0, -50%);
+    }
+
+    .qrCode.expand::before {
+        content: '＞';
+    }
+}
