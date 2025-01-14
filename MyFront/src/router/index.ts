@@ -20,6 +20,7 @@ import OrderBase from '@/phoneViews/OrderBase.vue';
 import CustomerCount from '@/phoneViews/CustomerCount.vue';
 import DataAnalysisInfo from '@/components/DataAnalysisInfo.vue';
 import QrCode from '@/views/QrCode.vue';
+import ReservationFromHome from '@/reservationFrom/ReservationFromHome.vue';
 
 // ルーターインスタンスを作成
 const router = createRouter({
@@ -67,6 +68,7 @@ const router = createRouter({
                 },
             ],
         },
+        { path: '/reservation_from', component: ReservationFromHome, meta: { requiresAuth: false } },
         { path: '/404', component: NotFound, meta: { requiresAuth: false } },
         { path: '/', redirect: '/login' },
         { path: '/:pathMatch(.*)*', redirect: '/404' },

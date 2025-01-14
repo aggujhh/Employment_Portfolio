@@ -1,0 +1,128 @@
+#reservationFromHome {
+    height: 100vh;
+    width: 100%;
+    background-image: url('@/assets/images/login_bg.jpeg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .content {
+        height: 45%;
+        width: 80%;
+        background: rgba(255, 255, 255, .7);
+        margin-bottom: 60px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+        backdrop-filter: blur(5px);
+
+        h3 {
+            margin-bottom: 20px;
+        }
+
+        p{
+            text-indent: 1rem;
+            margin-bottom: 10px;
+        }
+    }
+
+    button {
+        width: 80%;
+        height: 7%;
+        background: #4981F6;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: 3px;
+    }
+}
+
+#hearder {
+    height: 11vh;
+    width: 100%;
+    background: #f2f2f2;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .5);
+}
+
+
+#step1 {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #fff;
+
+    .step-container {
+        width: 80%;
+        margin-left: 10%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        /* 背景色 */
+        padding: 10px 20px;
+
+        /* 步骤项 */
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 70px;
+            background: none;
+
+            /* 圆形样式 */
+            .circle {
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #a5a5a5;
+                border-radius: 50%;
+                font-size: 16px;
+                font-weight: bold;
+                background: white;
+                color: #a5a5a5;
+            }
+
+            span {
+                margin-top: 5px;
+                font-size: 14px;
+                color: #a5a5a5;
+            }
+        }
+
+        .step.process {
+            .circle {
+                border: 1px solid #000;
+                color: #000;
+            }
+
+            span {
+                color: #000;
+            }
+        }
+    }
+
+    /* 连接线样式 */
+    .line {
+        flex: 1;
+        border-top: 2px solid black;
+        transform: translateY(-10px) scaleX(2.3);
+    }
+
+    .line.dashed {
+        border-top: 2px dotted #a5a5a5;
+        /* 虚线样式 */
+        background: none;
+    }
+}

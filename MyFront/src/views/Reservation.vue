@@ -35,7 +35,8 @@
             </div>
         </div>
         <div class="qrCode" @click="expandQrCode" :class="{ expand: isExpand }">
-            <div></div>
+            <div><img src="@/assets/images/qrCode/reservation_qrCode.png"></div>
+            <P>予約QRコード</P>
         </div>
     </section>
 </template>

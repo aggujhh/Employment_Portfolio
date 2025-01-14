@@ -154,7 +154,7 @@
     .qrCode {
         position: fixed;
         width: 200px;
-        height: 200px;
+        height: 235px;
         background: #5A544B;
         right: 0;
         top: 50%;
@@ -163,9 +163,22 @@
         transition: 0.6s;
 
         >div {
-            height: 100%;
+            aspect-ratio: 1 / 1;
             width: 100%;
             background: #fff;
+            margin-bottom: 10px;
+
+            img {
+                height: 100%;
+                width: 100%;
+            }
+        }
+
+        >p{
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
         }
     }
 
@@ -187,7 +200,7 @@
         cursor: pointer;
     }
 
-    .qrCode.expand{
+    .qrCode.expand {
         transform: translate(0, -50%);
     }
 

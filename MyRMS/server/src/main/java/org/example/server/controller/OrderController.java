@@ -19,8 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
-    private final DishCategoryService dishCategoryService;
-    private final DeskService deskService;
+    private final DishCategoryService dishCategoryService;    private final DeskService deskService;
     private final OrderService orderService;
     private final SseService sseService;
 
