@@ -9,7 +9,7 @@ import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 export default defineConfig({
   plugins: [
     vue(),
-    vueDevTools(),
+    // vueDevTools(),
     vueSetupExtend(),
   ],
   resolve: {
@@ -25,7 +25,7 @@ export default defineConfig({
         target: "http://localhost:8080", //跨域地址
         changeOrigin: true, //支持跨域
       }
-    }
+    },
   },
   assetsInclude: ['**/*.ttf'],
 })

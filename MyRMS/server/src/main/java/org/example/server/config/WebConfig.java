@@ -36,7 +36,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "/order/*/*",
                         "/login",// ログインページ,
                         "/kitchen/front",
-                        "/front/order"
+                        "/front/order",
+                        "/reservation",
+                        "/reservation/*"
                 );
     }
 

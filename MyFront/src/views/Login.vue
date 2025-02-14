@@ -72,29 +72,30 @@ const send = async () => {
 
         // レスポンスデータを取得
         const code = res.data.code; // ステータスコードを取得
-        const res_data = JSON.parse(res.data.data); // レスポンスの JSON データを解析
-        if (res_data) {
-            // Pinia ストアのインスタンスを取得
-            const userStore = useUserStore();
 
-            // ユーザーデータをストアに保存または更新
-            userStore.upsertUser({
-                id: res_data.id,      // ユーザー ID
-                name: res_data.name,  // ユーザー名
-                type: res_data.type,  // ユーザータイプ
-                job: res_data.job     // ジョブタイトル
-            });
-
-            // トークンを localStorage に保存
-            session.setSession(res_data.id, res_data.token, 60 * 60 * 1000); // トークンの有効期限を 15 分間に設定
-        }
         // ログインが成功した場合
         if (code == 1) {
+            const res_data = JSON.parse(res.data.data); // レスポンスの JSON データを解析
+            if (res_data) {
+                // Pinia ストアのインスタンスを取得
+                const userStore = useUserStore();
+
+                // ユーザーデータをストアに保存または更新
+                userStore.upsertUser({
+                    id: res_data.id,      // ユーザー ID
+                    name: res_data.name,  // ユーザー名
+                    type: res_data.type,  // ユーザータイプ
+                    job: res_data.job     // ジョブタイトル
+                });
+
+                // トークンを localStorage に保存
+                session.setSession(res_data.id, res_data.token, 60 * 60 * 1000); // トークンの有効期限を 15 分間に設定
+            }
             // ホームページにリダイレクト
             router.push("/home");
         } else {
             mistakeCount.value++
-            if (mistakeCount.value > 3) {
+            if (mistakeCount.value > 2) {
                 alert("入力を3回間違えた場合、登録が一時停止されます。");
                 blockRegistration(6)
             } else {

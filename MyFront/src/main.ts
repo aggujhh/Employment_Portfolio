@@ -12,6 +12,7 @@ import DeleteDialog from "./components/DeleteDialog.vue";
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 
+
 // アプリケーションを作成
 const app = createApp(App)
 const pinia = createPinia();
@@ -27,6 +28,7 @@ app.use(pinia);
 app.component('HeaderView', Header);
 app.component('NavView', Nav);
 app.component('DeleteDialog', DeleteDialog);
+
 
 // アプリケーションを指定したDOM要素にマウント
 app.mount("#app"); 

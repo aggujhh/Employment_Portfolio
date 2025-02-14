@@ -2,11 +2,14 @@ package org.example.server.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.common.Result;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -24,6 +27,23 @@ public class GlobalExceptionHandler {
         log.error("外部キー制約違反：{}", e.getMessage());
         // 外部キー制約違反が発生した場合のエラーメッセージを返します。
         return Result.error("このカテゴリは既存の料理と関連付けられているため、削除できません。関連付けられている料理を先に削除してください。");
+    }
+
+    /**
+     * バリデーションエラーを処理します。
+     * RequestBodyのバリデーションに失敗した場合に発生する例外を捕捉し、エラーメッセージを返します。
+     *
+     * @param e MethodArgumentNotValidException 発生したバリデーション例外
+     * @return Result バリデーションエラーのメッセージを含むレスポンス
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result handleValidationException(MethodArgumentNotValidException e) {
+        // 将所有验证错误信息合并为一个字符串
+        String errorMsg = e.getBindingResult().getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining("; "));
+        log.error("バリデーションエラー: {}", errorMsg);
+        return Result.error(errorMsg);
     }
 
     /**
