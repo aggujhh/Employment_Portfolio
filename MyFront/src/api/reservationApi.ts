@@ -1,5 +1,4 @@
-// import instance from './index';
-
+import instance from './index';
 import axios from 'axios';
 
 const axiosInstance = axios.create({
@@ -24,4 +23,13 @@ export function addReservation(data: {
     specialNote: String,
 }) {
     return axiosInstance.post('/api/reservation', data);
+}
+
+/**
+ * 指定した月の予約データを取得する関数
+ */
+export function fetchReservationDataByMouth(data: { date: String }) {
+    return instance.get('/api/reservation', {
+        params: data
+    });
 }

@@ -80,12 +80,50 @@
                         font-weight: bold;
                         color: #736666;
                     }
+
+                    .countGuest {
+                        position: absolute;
+                        bottom: 3px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 5px;
+
+                        p {
+                            color: #818181;
+                            font-size: 20px;
+                        }
+                    }
+
+                    .countGuest.hasGuest {
+                        cursor: pointer;
+
+                        p {
+                            color: #D62B81;
+                        }
+
+                        svg path {
+                            fill: #FF3578
+                        }
+                    }
+
+                    .countGuest.hasGuest:hover {
+                        p {
+                            text-shadow: 0 0 10px #FF3578;
+                        }
+
+                        svg {
+                            filter: drop-shadow(0 0 10px #FF3578);
+                        }
+                    }
                 }
 
                 .today {
                     position: relative;
 
-                    p {
+                    >p {
                         color: #FF3578 !important;
                     }
                 }
@@ -103,6 +141,44 @@
 
                 .not_this_moon {
                     background: #cdcdcd !important;
+
+                    >p {
+                        color: #818181 !important;
+                    }
+
+                    .countGuest {
+                        display: none;
+                    }
+                }
+
+                .not_bookable {
+                    background: #cdcdcd !important;
+
+                    .countGuest {
+                        p {
+                            color: #818181;
+                        }
+                    }
+
+                    .countGuest.hasGuest {
+                        p {
+                            color: #3c7236;
+                        }
+
+                        svg path {
+                            fill: #3c7236;
+                        }
+                    }
+
+                    .countGuest.hasGuest:hover {
+                        p {
+                            text-shadow: 0 0 10px #3c7236;
+                        }
+
+                        svg {
+                            filter: drop-shadow(0 0 10px #3c7236);
+                        }
+                    }
 
                     >p {
                         color: #818181 !important;
@@ -174,7 +250,7 @@
             }
         }
 
-        >p{
+        >p {
             text-align: center;
             font-size: 18px;
             font-weight: bold;

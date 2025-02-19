@@ -23,8 +23,15 @@
                 </thead>
                 <tr v-for="(item, index) in dayArray" :key="index">
                     <td v-for="(i, index) in item" :key="index"
-                        :class="{ not_this_moon: !i.this_month, today: i.is_today }">
+                        :class="{ not_this_moon: !i.this_month, today: i.is_today, not_bookable: !i.bookable }">
                         <p>{{ i.date }}</p>
+                        <div class="countGuest" :class="{ hasGuest: i.countGuest !== 0 }">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                                <path fill="#818181"
+                                    d="M24 14.6c0 .6-1.2 1-2.6 1.2c-.9-1.7-2.7-3-4.8-3.9c.2-.3.4-.5.6-.8h.8c3.1-.1 6 1.8 6 3.5M6.8 11H6c-3.1 0-6 1.9-6 3.6c0 .6 1.2 1 2.6 1.2c.9-1.7 2.7-3 4.8-3.9zm5.2 1c2.2 0 4-1.8 4-4s-1.8-4-4-4s-4 1.8-4 4s1.8 4 4 4m0 1c-4.1 0-8 2.6-8 5c0 2 8 2 8 2s8 0 8-2c0-2.4-3.9-5-8-5m5.7-3h.3c1.7 0 3-1.3 3-3s-1.3-3-3-3c-.5 0-.9.1-1.3.3c.8 1 1.3 2.3 1.3 3.7c0 .7-.1 1.4-.3 2M6 10h.3C6.1 9.4 6 8.7 6 8c0-1.4.5-2.7 1.3-3.7C6.9 4.1 6.5 4 6 4C4.3 4 3 5.3 3 7s1.3 3 3 3" />
+                            </svg>
+                            <p>{{ i.countGuest }}</p>
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -42,7 +49,17 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, reactive, toRaw } from "vue"
+
+
+/*************************************
+* ページの初期化時に実行
+**************************************/
+onMounted(async () => {
+    const countGuestArray = await seed_fetchReservationDataByMouth(year.value, month.value); // 解析 Promise
+    dayArray.value = getDaysOfMonthWithSurroundingWeeks(year.value, month.value, countGuestArray);
+});
+
 
 // 現在の年と月を使用
 const today = new Date();
@@ -51,9 +68,10 @@ const this_month = today.getMonth();
 
 const year = ref(this_year)
 const month = ref(this_month + 1)
+const dayArray = ref()
 
 // 指定された年、月のカレンダーに前後の週を含めた日付リストを生成する関数
-const getDaysOfMonthWithSurroundingWeeks = (year, month) => {
+const getDaysOfMonthWithSurroundingWeeks = (year, month, countGuestArray) => {
     const daysOfMonth = [];
     let daysOfWeek = [];
 
@@ -98,11 +116,32 @@ const getDaysOfMonthWithSurroundingWeeks = (year, month) => {
     const today = new Date(); // 获取当前日期
 
     while (currentMonthDate.getMonth() === month - 1) {
+        // console.log(currentMonthDate);
+
+        // 提前提取当前日期信息
+        const currentYear = currentMonthDate.getFullYear();
+        const currentMonth = currentMonthDate.getMonth();
+        const currentDate = currentMonthDate.getDate();
+
         // 检查是否为当前日期
         const isToday =
-            currentMonthDate.getFullYear() === today.getFullYear() &&
-            currentMonthDate.getMonth() === today.getMonth() &&
-            currentMonthDate.getDate() === today.getDate();
+            currentYear === today.getFullYear() &&
+            currentMonth === today.getMonth() &&
+            currentDate === today.getDate();
+
+        // 检查是否可预约
+        const bookable =
+            currentYear > today.getFullYear() ||
+            (currentYear === today.getFullYear() &&
+                (currentMonth > today.getMonth() ||
+                    (currentMonth === today.getMonth() && currentDate >= today.getDate())));
+
+        //予約人数をチェックする
+        console.log(1, currentMonthDate.getDate());
+        console.log(2, countGuestArray);
+        console.log(3, countGuestArray[String(currentMonthDate.getDate())]);
+
+        const countGuest = String(currentMonthDate.getDate()) in countGuestArray ? countGuestArray[String(currentMonthDate.getDate())] : 0
 
         addDayToWeek({
             year: currentMonthDate.getFullYear(),
@@ -111,6 +150,8 @@ const getDaysOfMonthWithSurroundingWeeks = (year, month) => {
             weekDay: currentMonthDate.getDay(),
             this_month: true,
             is_today: isToday, // 添加标识
+            bookable: bookable,
+            countGuest: countGuest
         });
 
         currentMonthDate.setDate(currentMonthDate.getDate() + 1);
@@ -134,10 +175,7 @@ const getDaysOfMonthWithSurroundingWeeks = (year, month) => {
     return daysOfMonth;
 };
 
-const dayArray = ref(getDaysOfMonthWithSurroundingWeeks(year.value, month.value))
-console.log(dayArray.value);
-
-const switchMonth = (direction) => {
+const switchMonth = async (direction) => {
     if (direction === "prev") {
         month.value = month.value > 1 ? month.value - 1 : 12;
         year.value = month.value === 12 ? year.value - 1 : year.value;
@@ -145,22 +183,22 @@ const switchMonth = (direction) => {
         month.value = month.value < 12 ? month.value + 1 : 1;
         year.value = month.value === 1 ? year.value + 1 : year.value;
     }
-    dayArray.value = getDaysOfMonthWithSurroundingWeeks(year.value, month.value)
-    calendarDate.value =`${year.value}-${String(month.value).padStart(2, '0')}-01`
+    calendarDate.value = `${year.value}-${String(month.value).padStart(2, '0')}-01`
+    const countGuestArray = await seed_fetchReservationDataByMouth(year.value, month.value); // 解析 Promise
+    dayArray.value = getDaysOfMonthWithSurroundingWeeks(year.value, month.value, countGuestArray);
 }
 
 
 const calendarDate = ref(today.toISOString().split("T")[0])
 
-const changeCalendar = () => {
-    console.log(calendarDate.value);
+const changeCalendar = async () => {
     const assignDate = new Date(calendarDate.value);
     const assignMonth = assignDate.getMonth() + 1;
     const assignYear = assignDate.getFullYear();
-    console.log(month, year);
     month.value = assignMonth
     year.value = assignYear
-    dayArray.value = getDaysOfMonthWithSurroundingWeeks(year.value, month.value)
+    const countGuestArray = await seed_fetchReservationDataByMouth(year.value, month.value); // 解析 Promise
+    dayArray.value = getDaysOfMonthWithSurroundingWeeks(year.value, month.value, countGuestArray);
 }
 
 const isExpand = ref(false)
@@ -168,6 +206,51 @@ const isExpand = ref(false)
 const expandQrCode = () => {
     isExpand.value = !isExpand.value
 }
+
+
+
+
+//予約情報をサーバに送信する
+import { fetchReservationDataByMouth } from "@/api/reservationApi";
+
+const seed_fetchReservationDataByMouth = async (year, month) => {
+    try {
+        console.log(year, month);
+        const res = await fetchReservationDataByMouth({ date: calendarDate.value });
+        if (res.data.code !== 0) {
+            console.log(res.data.data);
+            const countGuestArray = countGuestGroupsByDay(res.data.data)
+
+
+            // dayArray.value = getDaysOfMonthWithSurroundingWeeks(year, month)
+            return countGuestArray
+        } else {
+            console.log("送信失敗しました:" + res.data.msg)
+            return false
+        }
+    } catch (err) {
+        console.log("リクエストエラー:", err)
+        return false;
+    }
+}
+
+//指定された日数内のゲストグループ数を計算する
+const countGuestGroupsByDay = (res) => {
+    const countGuestArray = {}
+    res.forEach(item => {
+        const dateObj = new Date(item.date);
+        const day = dateObj.getDate();
+        if (countGuestArray[day]) {
+            countGuestArray[day] += 1
+        } else {
+            countGuestArray[day] = 1
+        }
+    });
+    console.log(countGuestArray);
+
+    return countGuestArray;
+}
+
 </script>
 
 <style lang="less" scoped>

@@ -1,0 +1,226 @@
+#reservation {
+  height: 87vh;
+  width: 100%;
+  background: #F9F6EF;
+  padding: 80px 200px 60px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-column-gap: 40px;
+}
+#reservation > div {
+  height: 100%;
+}
+#reservation .calendar {
+  position: relative;
+}
+#reservation .calendar input[type="date"] {
+  height: 30px;
+  width: 200px;
+  border: 1px solid #818181;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+  outline: none;
+  position: absolute;
+  left: 0;
+  top: -30px;
+}
+#reservation .calendar .header {
+  height: 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #5A544B;
+}
+#reservation .calendar .header > p {
+  font-size: 28px;
+  font-weight: bold;
+  color: #f3f3f3;
+}
+#reservation .calendar .header > button {
+  height: 100%;
+  width: 30px;
+  color: #f3f3f3;
+  background: #5A544B;
+  border: none;
+}
+#reservation .calendar .header > button:hover {
+  background: #a69b8a;
+}
+#reservation .calendar table {
+  margin-bottom: 20px;
+  table-layout: fixed;
+  width: 100%;
+  background: #fff;
+}
+#reservation .calendar table tr {
+  height: 80px;
+}
+#reservation .calendar table tr th,
+#reservation .calendar table tr td {
+  border: 2px solid #818181;
+}
+#reservation .calendar table tr td {
+  position: relative;
+}
+#reservation .calendar table tr td > p {
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  font-size: 24px;
+  font-family: 'Kaushan';
+  font-weight: bold;
+  color: #736666;
+}
+#reservation .calendar table tr td .countGuest {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+#reservation .calendar table tr td .countGuest p {
+  color: #818181;
+  font-size: 20px;
+}
+#reservation .calendar table tr td .countGuest.hasGuest {
+  cursor: pointer;
+}
+#reservation .calendar table tr td .countGuest.hasGuest p {
+  color: #D62B81;
+}
+#reservation .calendar table tr td .countGuest.hasGuest svg path {
+  fill: #FF3578;
+}
+#reservation .calendar table tr td .countGuest.hasGuest:hover p {
+  text-shadow: 0 0 10px #FF3578;
+}
+#reservation .calendar table tr td .countGuest.hasGuest:hover svg {
+  filter: drop-shadow(0 0 10px #FF3578);
+}
+#reservation .calendar table tr .today {
+  position: relative;
+}
+#reservation .calendar table tr .today > p {
+  color: #FF3578 !important;
+}
+#reservation .calendar table tr .today::before {
+  content: '今日';
+  position: absolute;
+  top: 3px;
+  left: 35px;
+  font-size: 22px;
+  color: #FF3578;
+  font-family: 'YujiSyuku';
+}
+#reservation .calendar table tr .not_this_moon {
+  background: #cdcdcd !important;
+}
+#reservation .calendar table tr .not_this_moon > p {
+  color: #818181 !important;
+}
+#reservation .calendar table tr .not_this_moon .countGuest {
+  display: none;
+}
+#reservation .calendar table tr .not_bookable {
+  background: #cdcdcd !important;
+}
+#reservation .calendar table tr .not_bookable .countGuest p {
+  color: #818181;
+}
+#reservation .calendar table tr .not_bookable .countGuest.hasGuest p {
+  color: #3c7236;
+}
+#reservation .calendar table tr .not_bookable .countGuest.hasGuest svg path {
+  fill: #3c7236;
+}
+#reservation .calendar table tr .not_bookable .countGuest.hasGuest:hover p {
+  text-shadow: 0 0 10px #3c7236;
+}
+#reservation .calendar table tr .not_bookable .countGuest.hasGuest:hover svg {
+  filter: drop-shadow(0 0 10px #3c7236);
+}
+#reservation .calendar table tr .not_bookable > p {
+  color: #818181 !important;
+}
+#reservation .calendar table thead tr {
+  height: 35px;
+}
+#reservation .calendar table thead tr > th {
+  line-height: 35px;
+}
+#reservation .calendar table thead tr > th:nth-of-type(1) {
+  color: #D8647F;
+}
+#reservation .calendar table thead tr > th:nth-of-type(7) {
+  color: #7491C2;
+}
+#reservation .info {
+  background: #fff;
+}
+#reservation .info .header {
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #5A544B;
+}
+#reservation .info .header > p {
+  font-size: 28px;
+  font-weight: bold;
+  color: #f3f3f3;
+}
+#reservation .qrCode {
+  position: fixed;
+  width: 200px;
+  height: 235px;
+  background: #5A544B;
+  right: 0;
+  top: 50%;
+  transform: translate(200px, -50%);
+  padding: 15px;
+  transition: 0.6s;
+}
+#reservation .qrCode > div {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  background: #fff;
+  margin-bottom: 10px;
+}
+#reservation .qrCode > div img {
+  height: 100%;
+  width: 100%;
+}
+#reservation .qrCode > p {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+}
+#reservation .qrCode::before {
+  content: '＜';
+  font-weight: bold;
+  position: absolute;
+  width: 20px;
+  height: 40px;
+  left: -20px;
+  top: 50%;
+  background: #5A544B;
+  transform: translateY(-50%);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px 0 0 5px;
+  cursor: pointer;
+}
+#reservation .qrCode.expand {
+  transform: translate(0, -50%);
+}
+#reservation .qrCode.expand::before {
+  content: '＞';
+}
