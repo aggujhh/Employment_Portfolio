@@ -25,7 +25,8 @@
                     <td v-for="(i, index) in item" :key="index"
                         :class="{ not_this_moon: !i.this_month, today: i.is_today, not_bookable: !i.bookable }">
                         <p>{{ i.date }}</p>
-                        <div class="countGuest" :class="{ hasGuest: i.countGuest !== 0 }">
+                        <div class="countGuest" :class="{ hasGuest: i.countGuest !== 0 }"
+                            @click="getReservationDataByDay(i.date)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                                 <path fill="#818181"
                                     d="M24 14.6c0 .6-1.2 1-2.6 1.2c-.9-1.7-2.7-3-4.8-3.9c.2-.3.4-.5.6-.8h.8c3.1-.1 6 1.8 6 3.5M6.8 11H6c-3.1 0-6 1.9-6 3.6c0 .6 1.2 1 2.6 1.2c.9-1.7 2.7-3 4.8-3.9zm5.2 1c2.2 0 4-1.8 4-4s-1.8-4-4-4s-4 1.8-4 4s1.8 4 4 4m0 1c-4.1 0-8 2.6-8 5c0 2 8 2 8 2s8 0 8-2c0-2.4-3.9-5-8-5m5.7-3h.3c1.7 0 3-1.3 3-3s-1.3-3-3-3c-.5 0-.9.1-1.3.3c.8 1 1.3 2.3 1.3 3.7c0 .7-.1 1.4-.3 2M6 10h.3C6.1 9.4 6 8.7 6 8c0-1.4.5-2.7 1.3-3.7C6.9 4.1 6.5 4 6 4C4.3 4 3 5.3 3 7s1.3 3 3 3" />
@@ -39,6 +40,34 @@
         <div class="info">
             <div class="header">
                 <p>予約詳細</p>
+            </div>
+            <div class="content">
+                <h4>{{ dateText }}</h4>
+                <ul>
+                    <li v-for="(item, index) in oneDayReservationData" :key="index">
+                        <select class="guestState">
+                            <option>未来店</option>
+                            <option>来店済</option>
+                            <option>キャンセル</option>
+                        </select>
+                        <div class="tag">組{{ index + 1 }}</div>
+                        <p>担当者名：{{ item.name }}({{ item.katakana }})</p>
+                        <p>予約時間帯：{{ item.timeRange }}</p>
+                        <p>予約内容：{{ item.content }}</p>
+                        <p>人数：{{ item.people }}</p>
+                        <p>連絡先：{{ item.tel }}</p>
+                        <p>メールアドレス：{{ item.mail }}</p>
+                        <p>特記事項：{{ item.specialNote }}</p>
+                        <div class="deskSelect">
+                            <p>テーブル指定：</p>
+                            <select>
+                                <option>A1</option>
+                                <option>A2</option>
+                                <option>A3</option>
+                            </select>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="qrCode" @click="expandQrCode" :class="{ expand: isExpand }">
@@ -65,7 +94,6 @@ onMounted(async () => {
 const today = new Date();
 const this_year = today.getFullYear();
 const this_month = today.getMonth();
-
 const year = ref(this_year)
 const month = ref(this_month + 1)
 const dayArray = ref()
@@ -137,10 +165,6 @@ const getDaysOfMonthWithSurroundingWeeks = (year, month, countGuestArray) => {
                     (currentMonth === today.getMonth() && currentDate >= today.getDate())));
 
         //予約人数をチェックする
-        console.log(1, currentMonthDate.getDate());
-        console.log(2, countGuestArray);
-        console.log(3, countGuestArray[String(currentMonthDate.getDate())]);
-
         const countGuest = String(currentMonthDate.getDate()) in countGuestArray ? countGuestArray[String(currentMonthDate.getDate())] : 0
 
         addDayToWeek({
@@ -208,20 +232,17 @@ const expandQrCode = () => {
 }
 
 
-
-
 //予約情報をサーバに送信する
 import { fetchReservationDataByMouth } from "@/api/reservationApi";
-
+const reservationData = ref("")
 const seed_fetchReservationDataByMouth = async (year, month) => {
     try {
         console.log(year, month);
         const res = await fetchReservationDataByMouth({ date: calendarDate.value });
         if (res.data.code !== 0) {
             console.log(res.data.data);
+            reservationData.value = res.data.data
             const countGuestArray = countGuestGroupsByDay(res.data.data)
-
-
             // dayArray.value = getDaysOfMonthWithSurroundingWeeks(year, month)
             return countGuestArray
         } else {
@@ -249,6 +270,23 @@ const countGuestGroupsByDay = (res) => {
     console.log(countGuestArray);
 
     return countGuestArray;
+}
+
+//指定された日数の予約情報を取得する
+const oneDayReservationData = ref([])
+const dateText = ref("")
+
+const getReservationDataByDay = (day) => {
+    oneDayReservationData.value = []
+    reservationData.value.forEach(item => {
+        const dateObj = new Date(item.date);
+        const dayNum = dateObj.getDate();
+        if (day === dayNum) {
+            dateText.value = item.date
+            oneDayReservationData.value.push(item)
+        }
+    })
+    console.log(oneDayReservationData.value);
 }
 
 </script>

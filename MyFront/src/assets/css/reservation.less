@@ -225,6 +225,75 @@
             }
 
         }
+
+        .content {
+            width: 100%;
+            height: 90%;
+            padding: 0 50px;
+
+            h4 {
+                text-align: center;
+                line-height: 50px;
+                font-weight: normal;
+                font-size: 22px;
+            }
+
+            ul {
+                width: 100%;
+                height: 420px;
+                overflow: auto;
+
+                li {
+                    width: 100%;
+                    border: 2px solid #818181;
+                    margin-bottom: 60px;
+                    padding: 20px 40px;
+                    position: relative;
+
+                    .guestState {
+                        position: absolute;
+                        right: 40px;
+                        top: 20px;
+                        height: 30px;
+                    }
+
+                    .tag {
+                        height: 30px;
+                        width: 70px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background: #5A544B;
+                        color: #fff;
+                        margin-bottom: 20px;
+                    }
+
+                    >p {
+                        margin-bottom: 20px;
+                    }
+
+                    .deskSelect {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 30px;
+
+                        select{
+                            width: 80px;
+                            height: 30px;
+                            text-align: center;
+
+                            option{
+                                text-align: center;
+                            }
+                        }
+                    }
+                }
+
+                li:last-of-type {
+                    margin-bottom: 0;
+                }
+            }
+        }
     }
 
     .qrCode {
