@@ -380,6 +380,8 @@ const tables = ref([]);
 const api_fetchAllTables = async () => {
     try {
         const res = await fetchAllTables();
+        console.log("res",res);
+        
         tables.value = res.data.data; // APIからデータを取得
         setTableState()
         setHeader()

@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
     baseURL: 'https://www.cyg1995.xyz', // 基本URL
     timeout: 10000, // タイムアウト時間（ミリ秒）
     headers: { 'Content-Type': 'application/json' }, // デフォルトのヘッダー
-    withCredentials: true,
+    // withCredentials: true,
 });
 
 /**
