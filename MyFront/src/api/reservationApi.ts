@@ -33,3 +33,11 @@ export function fetchReservationDataByMouth(data: { date: String }) {
         params: data
     });
 }
+
+
+/**
+ * 予約データに予約済みのテーブルIDを追加する。
+ */
+export function addReservedTableId(data: { reservationId: Number, deskId: string }) {
+    return instance.patch('/api/reservation', data);
+}

@@ -27,3 +27,5 @@ export function disableDeskById(data: { id: string }) {
 export function restoreDeskById(data: { id: string }) {
     return instance.patch('/api/desk/restore', data);
 }
+
+

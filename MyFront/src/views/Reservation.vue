@@ -58,13 +58,30 @@
                         <p>連絡先：{{ item.tel }}</p>
                         <p>メールアドレス：{{ item.mail }}</p>
                         <p>特記事項：{{ item.specialNote }}</p>
-                        <div class="deskSelect">
+                        <p>来店状態：未来店</p>
+                        <div v-if="canReserveTable(item.date, item.timeRange)" class="deskSelect">
                             <p>テーブル指定：</p>
-                            <select>
-                                <option>A1</option>
-                                <option>A2</option>
-                                <option>A3</option>
+                            <select v-model="selectedTable">
+                                <option value="">--テーブル番号--</option>
+                                <option v-for="(item, index) in availableTableArray" :key="index" :value="item">{{ item
+                                    }}
+                                </option>
                             </select>
+                            <button @click="seed_addReservedTableId(item.id)">指定</button>
+                        </div>
+                        <div v-if="canReserveTable(item.date, item.timeRange)" class="SelectedDeskes">
+                            <p>指定されたテーブル: </p>
+                            <!-- <div v-for="(item, index) in availableTableArray" :key="index">
+                                <p>{{ item }}</p>
+                                <button @click="seed_restoreDeskById(item)">×</button>
+                            </div> -->
+                        </div>
+                        <div v-else="canReserveTable(item.date, item.timeRange)" class="SelectedDeskes">
+                            <p>指定されたテーブル: A1, A2, A3 </p>
+                            <!-- <div v-for="(item, index) in disableTablesArray" :key="index">
+                                <p>{{ item }}</p>
+                                <button @click="seed_restoreDeskById(item)">×</button>
+                            </div> -->
                         </div>
                     </li>
                 </ul>
@@ -85,6 +102,7 @@ import { ref, onMounted, reactive, toRaw } from "vue"
 * ページの初期化時に実行
 **************************************/
 onMounted(async () => {
+    seed_fetchAllTables()
     const countGuestArray = await seed_fetchReservationDataByMouth(year.value, month.value); // 解析 Promise
     dayArray.value = getDaysOfMonthWithSurroundingWeeks(year.value, month.value, countGuestArray);
 });
@@ -237,13 +255,12 @@ import { fetchReservationDataByMouth } from "@/api/reservationApi";
 const reservationData = ref("")
 const seed_fetchReservationDataByMouth = async (year, month) => {
     try {
-        console.log(year, month);
         const res = await fetchReservationDataByMouth({ date: calendarDate.value });
         if (res.data.code !== 0) {
-            console.log(res.data.data);
             reservationData.value = res.data.data
             const countGuestArray = countGuestGroupsByDay(res.data.data)
-            // dayArray.value = getDaysOfMonthWithSurroundingWeeks(year, month)
+            console.log(reservationData.value);
+            
             return countGuestArray
         } else {
             console.log("送信失敗しました:" + res.data.msg)
@@ -267,8 +284,6 @@ const countGuestGroupsByDay = (res) => {
             countGuestArray[day] = 1
         }
     });
-    console.log(countGuestArray);
-
     return countGuestArray;
 }
 
@@ -286,7 +301,92 @@ const getReservationDataByDay = (day) => {
             oneDayReservationData.value.push(item)
         }
     })
-    console.log(oneDayReservationData.value);
+}
+
+/**************************************************************************
+* 時間を判断する関数で、判断結果に応じてテーブルの指定可否を決定する。
+***************************************************************************/
+// const canReserveTable = ref(false)
+const canReserveTable = (dateStr, timeRangeStr) => {
+    // 現在の時刻を取得
+    const now = new Date();
+
+    // 日付オブジェクトを作成
+    const baseDate = new Date(dateStr);
+
+    // 時間範囲を分割して、開始・終了時間を取得
+    const startTime = timeRangeStr.split("~")[0];
+
+    // 開始時間と終了時間の Date オブジェクトを作成
+    const startDateTime = new Date(baseDate);
+
+
+    // 時間と分を設定
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+
+    startDateTime.setHours(startHour, startMinute, 0, 0);
+
+    // 現在の時間と比較
+    return now < startDateTime;
+}
+
+/*************************************
+* テーブルをすべてフェッチ
+**************************************/
+import { fetchAllTables } from "@/api/deskApi";
+const seed_fetchAllTables = async () => {
+    try {
+        const res = await fetchAllTables();
+        const code = res.data.code; // ステータスコードを取得
+        if (code === 1) {
+            getAvailableArray(res.data.data)
+            // reservedDeskArray.value.push(deskId.value)
+        } else {
+            console.error(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+    }
+}
+
+/*************************************
+* テーブルデータを、予約可能なテーブルと予約済みのテーブルの2つの配列に分割する。
+**************************************/
+const availableTableArray = ref([])
+// const reservedTableAraay = ref([])
+const getAvailableArray = (tableData) => {
+    availableTableArray.value = []
+    tableData.forEach((item) => {
+        if (item.deskState !== '3') {
+            availableTableArray.value.push(item.id)
+        }
+    })
+}
+
+/*************************************
+* 予約データに予約済みのテーブルIDを追加する。
+**************************************/
+import { addReservedTableId } from "@/api/reservationApi";
+const selectedTable = ref("")
+const reservedDeskArray = ref([])
+const seed_addReservedTableId = async (reservationId) => {
+    console.log("reservationId", reservationId);
+
+    try {
+        const res = await addReservedTableId({ reservationId: reservationId, deskId: selectedTable.value });
+        const code = res.data.code; // ステータスコードを取得
+        if (code === 1) {
+            console.log(res.data.data);
+            
+            // reservedDeskArray.value.push(deskId.value)
+        } else {
+            console.error(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+    }
 }
 
 </script>

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -41,4 +43,28 @@ public class ReservationServiceImpl implements ReservationService {
         // 予約データを取得して返す
         return reservationMapper.fetchReservationDataByMouth(firstDay, lastDay);
     }
+
+    @Override
+    public List<String> addReservedTableId(Integer reservationId, String deskId) {
+        // 予約済みテーブルIDを取得
+        String result = reservationMapper.fetchReservedTableIdByReservationId(reservationId);
+
+        List<String> reservationIdList = new ArrayList<>();
+
+        if (result != null && !result.isEmpty()) {
+            // 既存の予約IDをリストに変換
+            reservationIdList = new ArrayList<>(Arrays.asList(result.split(",")));
+        }
+        // 新しい deskId を追加（重複チェックあり）
+        if (!reservationIdList.contains(deskId)) {
+            reservationIdList.add(deskId);
+        }
+        // データベースに更新する処理（必要に応じて追加）
+        String updatedResult = String.join(",", reservationIdList);
+        
+        reservationMapper.updateReservedTableIds(updatedResult, reservationId);
+        // 追加後のリストを返す
+        return reservationIdList;
+    }
+
 }

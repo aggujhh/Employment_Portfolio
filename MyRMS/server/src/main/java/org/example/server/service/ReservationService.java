@@ -8,4 +8,6 @@ public interface ReservationService {
     void addReservation(Reservation reservation);
 
     List<Reservation> fetchReservationDataByMouth(String date);
+
+    List<String> addReservedTableId(Integer reservationId, String deskId);
 }

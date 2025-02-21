@@ -269,21 +269,59 @@
                     }
 
                     >p {
-                        margin-bottom: 20px;
+                        margin-bottom: 15px;
                     }
 
                     .deskSelect {
                         display: flex;
                         align-items: center;
-                        margin-bottom: 30px;
+                        margin-bottom: 15px;
+                        gap: 3%;
 
-                        select{
-                            width: 80px;
+                        select {
+                            width: 125px;
                             height: 30px;
                             text-align: center;
 
-                            option{
+                            option {
                                 text-align: center;
+                            }
+                        }
+
+                        >button {
+                            padding: 5px 15px;
+                            background: #006ce0;
+                            border-radius: 5px;
+                            border: none;
+                            color: #fff;
+                        }
+                    }
+
+                    .SelectedDeskes {
+                        margin-bottom: 30px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        gap: 10px;
+
+                        >div {
+                            padding: 5px 25px;
+                            border: 1px solid #818181;
+                            margin-right: 5px;
+                            position: relative;
+
+                            button {
+                                position: absolute;
+                                right: 2px;
+                                top: 2px;
+                                border: none;
+                                color: #818181;
+                                background: #fff;
+                                font-size: 14px;
+                                line-height: 18px;
+                                width: 18px;
+                                border-radius: 50%;
+                                overflow: hidden;
                             }
                         }
                     }
