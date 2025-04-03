@@ -61,10 +61,30 @@ public class ReservationServiceImpl implements ReservationService {
         }
         // データベースに更新する処理（必要に応じて追加）
         String updatedResult = String.join(",", reservationIdList);
-        
+
         reservationMapper.updateReservedTableIds(updatedResult, reservationId);
         // 追加後のリストを返す
         return reservationIdList;
+    }
+
+    @Override
+    public void deleteSelectedTableById(Integer reservationId, String deskId) {
+        // 予約済みテーブルIDを取得
+        String result = reservationMapper.fetchReservedTableIdByReservationId(reservationId);
+        List<String> reservationIdList = new ArrayList<>();
+
+        if (result != null && !result.isEmpty()) {
+            // 既存の予約IDをリストに変換
+            reservationIdList = new ArrayList<>(Arrays.asList(result.split(",")));
+        }
+
+        reservationIdList.remove(deskId);
+
+
+        // データベースに更新する処理（必要に応じて追加）
+        String updatedResult = String.join(",", reservationIdList);
+
+        reservationMapper.updateReservedTableIds(updatedResult, reservationId);
     }
 
 }

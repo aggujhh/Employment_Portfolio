@@ -41,3 +41,13 @@ export function fetchReservationDataByMouth(data: { date: String }) {
 export function addReservedTableId(data: { reservationId: Number, deskId: string }) {
     return instance.patch('/api/reservation', data);
 }
+
+
+/**
+ * IDにより、予約済みテーブルんの予約状態を削除
+ */
+export function deleteSelectedTableById(data: { reservationId: Number, deskId: string }) {
+    return instance.delete('/api/reservation', {
+        data: data
+    });
+}

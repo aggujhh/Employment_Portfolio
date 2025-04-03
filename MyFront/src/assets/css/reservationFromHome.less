@@ -335,7 +335,7 @@
                                 background: #4981F6;
 
                                 p {
-                                    color: #fff;
+                                    color: #fff ;
                                 }
                             }
                         }
@@ -345,7 +345,7 @@
                                 background: orangered;
 
                                 p {
-                                    color: #fff;
+                                    color: #fff !important;
                                 }
                             }
                         }
@@ -355,7 +355,7 @@
                                 background: orangered;
 
                                 p {
-                                    color: #fff;
+                                    color: #fff !important;
                                 }
                             }
                         }
@@ -398,30 +398,6 @@
                 border: 1.5px solid #4981F6;
             }
         }
-
-        .btn {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-column-gap: 80px;
-
-            button {
-                padding: 10px 10px;
-                border: none;
-                border-radius: 5px;
-                user-select: none;
-            }
-
-            button:nth-of-type(1) {
-                background: #bebebe;
-            }
-
-            button:nth-of-type(2) {
-                background: #4981F6;
-                color: #fff;
-                font-weight: bold;
-            }
-        }
     }
 }
 
@@ -437,11 +413,10 @@
         padding: 40px;
         height: 89vh;
         width: 100%;
+        overflow: auto;
 
         ul {
-            height: 65vh;
             width: 100%;
-            overflow: auto;
             margin-bottom: 20px;
 
             li {
@@ -480,6 +455,10 @@
                     border: 1.5px solid #4981F6;
                 }
             }
+
+            li:nth-of-type(7) {
+                margin-bottom: 40px;
+            }
         }
     }
 }
@@ -496,11 +475,10 @@
         padding: 40px;
         height: 89vh;
         width: 100%;
+        overflow: auto;
 
         ul {
-            height: 65vh;
             width: 100%;
-            overflow: auto;
 
             li {
                 width: 100%;
@@ -520,6 +498,10 @@
                     text-align: right;
                 }
             }
+
+            li:nth-of-type(9){
+                margin-bottom: 40px;
+            }
         }
     }
 }
@@ -529,15 +511,12 @@ section {
         .btn {
             width: 100%;
             display: grid;
-            padding: 0 40px;
             grid-template-columns: 1fr 1fr;
-            grid-column-gap: 80px;
-            position: absolute;
-            left: 0;
-            bottom: 40px;
+            grid-column-gap: 60px;
+            margin-bottom: 150px;
 
             button {
-                padding: 10px 10px;
+                padding: 12px 18px;
                 border: none;
                 border-radius: 5px;
                 user-select: none;

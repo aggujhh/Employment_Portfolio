@@ -1,0 +1,407 @@
+#reservationFromHome {
+  height: 100vh;
+  width: 100%;
+  background-image: url('@/assets/images/login_bg.jpeg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#reservationFromHome .content {
+  height: 45%;
+  width: 80%;
+  background: rgba(255, 255, 255, 0.7);
+  margin-bottom: 60px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  backdrop-filter: blur(5px);
+}
+#reservationFromHome .content h3 {
+  margin-bottom: 20px;
+}
+#reservationFromHome .content p {
+  text-indent: 1rem;
+  margin-bottom: 10px;
+}
+#reservationFromHome button {
+  width: 80%;
+  height: 7%;
+  background: #4981F6;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+#hearder {
+  height: 11vh;
+  width: 100%;
+  background: #f2f2f2;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.5);
+}
+#hearder .step-container {
+  width: 80%;
+  height: 100%;
+  margin-left: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* 背景色 */
+  padding: 10px 20px;
+  position: relative;
+  /* 步骤项 */
+}
+#hearder .step-container .step {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 70px;
+  background: none;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  /* 圆形样式 */
+}
+#hearder .step-container .step .circle {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #a5a5a5;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  background: white;
+  color: #a5a5a5;
+}
+#hearder .step-container .step span {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #a5a5a5;
+}
+#hearder .step-container .step1 {
+  left: 0;
+}
+#hearder .step-container .step2 {
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+#hearder .step-container .step3 {
+  right: 0;
+}
+#hearder .step-container .line {
+  flex: 1;
+  transform: translateY(-10px) scaleX(1);
+  border-top: 2px dotted #a5a5a5;
+}
+#hearder .step-container.step1 .step1 .circle {
+  border: 2px solid #4981F6;
+  color: #4981F6;
+}
+#hearder .step-container.step1 .step1 span {
+  color: #4981F6;
+  font-weight: bold;
+}
+#hearder .step-container.step2 .step1 .circle {
+  color: #fff;
+  background-color: #4981F6;
+  border: none;
+}
+#hearder .step-container.step2 .step1 span {
+  color: #4981F6;
+  font-weight: bold;
+}
+#hearder .step-container.step2 .step2 .circle {
+  border: 2px solid #4981F6;
+  color: #4981F6;
+}
+#hearder .step-container.step2 .step2 span {
+  color: #4981F6;
+  font-weight: bold;
+}
+#hearder .step-container.step2 .line1 {
+  border-top: 2px solid #4981F6;
+}
+#hearder .step-container.step3 .step1 .circle {
+  color: #fff;
+  background-color: #4981F6;
+  border: none;
+}
+#hearder .step-container.step3 .step1 span {
+  color: #4981F6;
+  font-weight: bold;
+}
+#hearder .step-container.step3 .step2 .circle {
+  color: #fff;
+  background-color: #4981F6;
+  border: none;
+}
+#hearder .step-container.step3 .step2 span {
+  color: #4981F6;
+  font-weight: bold;
+}
+#hearder .step-container.step3 .step3 .circle {
+  border: 2px solid #4981F6;
+  color: #4981F6;
+}
+#hearder .step-container.step3 .step3 span {
+  color: #4981F6;
+  font-weight: bold;
+}
+#hearder .step-container.step3 .line1 {
+  border-top: 2px solid #4981F6;
+}
+#hearder .step-container.step3 .line2 {
+  border-top: 2px solid #4981F6;
+}
+#step1 {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: #fff;
+}
+#step1 main {
+  height: 89vh;
+  width: 100%;
+  padding: 20px 40px;
+  overflow: auto;
+}
+#step1 main h3 {
+  margin-bottom: 10px;
+}
+#step1 main h3 > small {
+  color: red;
+  font-weight: normal;
+  font-size: 14px;
+}
+#step1 main .calendar {
+  position: relative;
+  margin-bottom: 20px;
+}
+#step1 main .calendar .header {
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #4981F6;
+}
+#step1 main .calendar .header > p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #f3f3f3;
+}
+#step1 main .calendar .header > button {
+  height: 100%;
+  width: 30px;
+  color: #f3f3f3;
+  background: #4981F6;
+  border: none;
+}
+#step1 main .calendar .main {
+  padding: 0 10px;
+  border: 2px solid #4981F6;
+}
+#step1 main .calendar .main table {
+  margin-bottom: 10px;
+  table-layout: fixed;
+  width: 100%;
+  background: #fff;
+}
+#step1 main .calendar .main table tr {
+  height: 45px;
+}
+#step1 main .calendar .main table tr th {
+  border-bottom: 2px solid #4981F6;
+}
+#step1 main .calendar .main table tr td {
+  position: relative;
+  user-select: none;
+}
+#step1 main .calendar .main table tr td > div {
+  height: 38px;
+  width: 38px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #D9D9D9;
+  display: flex;
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+}
+#step1 main .calendar .main table tr td > div > p {
+  font-size: 18px;
+  font-family: 'Kaushan';
+  font-weight: bold;
+  color: #736666;
+}
+#step1 main .calendar .main table tr .today {
+  position: relative;
+}
+#step1 main .calendar .main table tr .today p {
+  color: #FF3578 !important;
+}
+#step1 main .calendar .main table tr .not_this_moon {
+  pointer-events: none;
+}
+#step1 main .calendar .main table tr .not_this_moon > p {
+  color: #818181 !important;
+}
+#step1 main .calendar .main table tr .bookable > div {
+  background: #4981F6;
+}
+#step1 main .calendar .main table tr .bookable > div p {
+  color: #fff;
+}
+#step1 main .calendar .main table tr .bookable:hover > div {
+  background: orangered;
+}
+#step1 main .calendar .main table tr .bookable:hover > div p {
+  color: #fff !important;
+}
+#step1 main .calendar .main table tr .bookable.selected > div {
+  background: orangered;
+}
+#step1 main .calendar .main table tr .bookable.selected > div p {
+  color: #fff !important;
+}
+#step1 main .calendar .main thead tr > th {
+  line-height: 35px;
+}
+#step1 main .calendar .main thead tr > th:nth-of-type(1) {
+  color: #D8647F;
+}
+#step1 main .calendar .main thead tr > th:nth-of-type(7) {
+  color: #7491C2;
+}
+#step1 main .timeRange {
+  margin-bottom: 40px;
+}
+#step1 main .timeRange select {
+  width: 100%;
+  height: 40px;
+  outline: none;
+  border: 1.5px solid #333;
+}
+#step1 main .timeRange select.focus {
+  border: 1.5px solid #4981F6;
+}
+#step2 {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: #fff;
+}
+#step2 main {
+  padding: 40px;
+  height: 89vh;
+  width: 100%;
+  overflow: auto;
+}
+#step2 main ul {
+  width: 100%;
+  margin-bottom: 20px;
+}
+#step2 main ul li {
+  width: 100%;
+  margin-bottom: 8px;
+}
+#step2 main ul li p small {
+  color: red;
+}
+#step2 main ul li > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+#step2 main ul li > div > p {
+  padding-left: 15px;
+}
+#step2 main ul li [type='text'] {
+  width: 100%;
+  height: 35px;
+}
+#step2 main ul li > textarea {
+  padding: 10px 15px;
+  width: 100%;
+  height: 120px;
+}
+#step2 main ul li [type='text']:focus,
+#step2 main ul li textarea:focus {
+  border: 1.5px solid #4981F6;
+}
+#step2 main ul li:nth-of-type(7) {
+  margin-bottom: 40px;
+}
+#step3 {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: #fff;
+}
+#step3 main {
+  padding: 40px;
+  height: 89vh;
+  width: 100%;
+  overflow: auto;
+}
+#step3 main ul {
+  width: 100%;
+}
+#step3 main ul li {
+  width: 100%;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px dotted #666;
+}
+#step3 main ul li p:nth-of-type(1) {
+  font-weight: bold;
+  color: #333;
+  font-size: 18px;
+}
+#step3 main ul li p:nth-of-type(2) {
+  font-weight: bold;
+  color: #666;
+  text-align: right;
+}
+#step3 main ul li:nth-of-type(9) {
+  margin-bottom: 40px;
+}
+section > main .btn {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 60px;
+  margin-bottom: 150px;
+}
+section > main .btn button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 5px;
+  user-select: none;
+}
+section > main .btn button:nth-of-type(1) {
+  background: #bebebe;
+}
+section > main .btn button:nth-of-type(2) {
+  background: #4981F6;
+  color: #fff;
+  font-weight: bold;
+}

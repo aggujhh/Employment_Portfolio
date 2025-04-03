@@ -38,7 +38,7 @@ public class ReservationController {
         return Result.success();
     }
 
-    @PatchMapping()
+    @PatchMapping
     public Result addReservedTableId(@RequestBody Map<String, Object> request) {
         Integer reservationId = (Integer) request.get("reservationId");
         String deskId = (String) request.get("deskId");
@@ -48,5 +48,17 @@ public class ReservationController {
         log.info("追加成功した予約済みのテーブルIDの配列を返す。配列データ：({})", results);
         log.info("------------------------------------------------------");
         return Result.success(results);
+    }
+
+    @DeleteMapping
+    public Result deleteSelectedTableById(@RequestBody Map<String, Object> request) {
+        Integer reservationId = (Integer) request.get("reservationId");
+        String deskId = (String) request.get("deskId");
+        log.info("------------------------------------------------------");
+        log.info("IDにより、予約済みテーブルんの予約状態を削除。引数：({},{})", reservationId, deskId);
+        reservationService.deleteSelectedTableById(reservationId, deskId);
+        log.info("削除成功した");
+        log.info("------------------------------------------------------");
+        return Result.success();
     }
 }

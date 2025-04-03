@@ -4,12 +4,12 @@
     <main>
       <ul>
         <li>
-          <p>担当者名: </p> 
+          <p>担当者名: </p>
           <p>{{ req.name }}</p>
         </li>
         <li>
           <p>担当者名(カタカナ): </p>
-          <p>{{ req.katakana }}</p> 
+          <p>{{ req.katakana }}</p>
         </li>
         <li>
           <p>予約日: </p>
@@ -39,11 +39,11 @@
           <p>特記事項: </p>
           <p>{{ req.specialNote }}</p>
         </li>
+        <div class="btn">
+          <button @click="prev">戻る</button>
+          <button @click="send">送信</button>
+        </div>
       </ul>
-      <div class="btn">
-        <button @click="prev">戻る</button>
-        <button @click="send">送信</button>
-      </div>
     </main>
   </section>
 </template>

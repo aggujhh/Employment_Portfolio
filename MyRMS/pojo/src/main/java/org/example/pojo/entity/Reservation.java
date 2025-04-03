@@ -44,7 +44,7 @@ public class Reservation {
 
     private String specialNote;
 
-    private List<String> reservedTables;
+    private String reservedTables;
 
     private String guestState;
 }

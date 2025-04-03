@@ -37,12 +37,12 @@
             <div class="timeRange">
                 <select v-model="req.timeRange" @focus="focusSelect" @blur="blurSelect" :class="{ focus: isFocus }">
                     <option value="">--時間を選択してください--</option>
-                    <option value="11:00~12:00">11:00~12:00</option>
-                    <option value="12:00~13:00">12:00~13:00</option>
-                    <option value="13:00~14:00">13:00~14:00</option>
-                    <option value="17:00~18:00">17:00~18:00</option>
-                    <option value="18:00~19:00">18:00~19:00</option>
-                    <option value="19:00~20:00">19:00~20:00</option>
+                    <option v-if="isFutureSlot(11)" value="11:00~12:00">11:00~12:00</option>
+                    <option v-if="isFutureSlot(12)" value="12:00~13:00">12:00~13:00</option>
+                    <option v-if="isFutureSlot(13)" value="13:00~14:00">13:00~14:00</option>
+                    <option v-if="isFutureSlot(17)" value="17:00~18:00">17:00~18:00</option>
+                    <option v-if="isFutureSlot(18)" value="18:00~19:00">18:00~19:00</option>
+                    <option v-if="isFutureSlot(19)" value="19:00~20:00">19:00~20:00</option>
                 </select>
             </div>
             <div class="btn">
@@ -169,7 +169,7 @@ const getDaysOfMonthWithSurroundingWeeks = (year, month) => {
             currentYear > today.getFullYear() ||
             (currentYear === today.getFullYear() &&
                 (currentMonth > today.getMonth() ||
-                    (currentMonth === today.getMonth() && currentDate > today.getDate())));
+                    (currentMonth === today.getMonth() && currentDate >= today.getDate())));
 
         const isSelected = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(currentDate).padStart(2, '0')}` === calendarStore.getSelectedDate()
 
@@ -263,6 +263,26 @@ const deselectAll = () => {
     req.selectedDate = ""
     req.timeRange = ""
 }
+
+//予約を今日の場合は、過ぎた予約時間帯を非表示する
+const isFutureSlot = (hourTime) => {
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, "0"); // 月份从0开始
+    const dd = String(now.getDate()).padStart(2, "0");
+    const formatted = `${yyyy}-${mm}-${dd}`;
+    console.log(req.selectedDate, formatted);
+    const isToday = formatted === req.selectedDate
+    // 如果是今天，且该时段还没到，才显示
+    if (isToday) {
+        return now.getHours() < hourTime;
+    }
+
+    // 如果不是今天，一律显示
+    return true;
+};
+
+
 
 </script>
 

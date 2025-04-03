@@ -63,25 +63,22 @@
                             <p>テーブル指定：</p>
                             <select v-model="selectedTable">
                                 <option value="">--テーブル番号--</option>
-                                <option v-for="(item, index) in availableTableArray" :key="index" :value="item">{{ item
+                                <option v-for="(item, index) in item.availableTableArray" :key="index" :value="item">{{
+                                    item
                                     }}
                                 </option>
                             </select>
-                            <button @click="seed_addReservedTableId(item.id)">指定</button>
+                            <button @click="seed_addReservedTableId(item.id, item.date)">指定</button>
                         </div>
                         <div v-if="canReserveTable(item.date, item.timeRange)" class="SelectedDeskes">
                             <p>指定されたテーブル: </p>
-                            <!-- <div v-for="(item, index) in availableTableArray" :key="index">
-                                <p>{{ item }}</p>
-                                <button @click="seed_restoreDeskById(item)">×</button>
-                            </div> -->
+                            <div v-for="(deskId, index) in item.reservedTablesArray" :key="index">
+                                <p>{{ deskId }}</p>
+                                <button @click="seed_deleteSelectedTableById(item.id, deskId, item.date)">×</button>
+                            </div>
                         </div>
                         <div v-else="canReserveTable(item.date, item.timeRange)" class="SelectedDeskes">
-                            <p>指定されたテーブル: A1, A2, A3 </p>
-                            <!-- <div v-for="(item, index) in disableTablesArray" :key="index">
-                                <p>{{ item }}</p>
-                                <button @click="seed_restoreDeskById(item)">×</button>
-                            </div> -->
+                            <p>指定されたテーブル: {{ item.reservedTables }} </p>
                         </div>
                     </li>
                 </ul>
@@ -250,17 +247,16 @@ const expandQrCode = () => {
 }
 
 
-//予約情報をサーバに送信する
+//予約情報をサーバから所得する
 import { fetchReservationDataByMouth } from "@/api/reservationApi";
 const reservationData = ref("")
-const seed_fetchReservationDataByMouth = async (year, month) => {
+const seed_fetchReservationDataByMouth = async () => {
     try {
         const res = await fetchReservationDataByMouth({ date: calendarDate.value });
         if (res.data.code !== 0) {
             reservationData.value = res.data.data
             const countGuestArray = countGuestGroupsByDay(res.data.data)
-            console.log(reservationData.value);
-            
+            processReservationData()
             return countGuestArray
         } else {
             console.log("送信失敗しました:" + res.data.msg)
@@ -270,6 +266,20 @@ const seed_fetchReservationDataByMouth = async (year, month) => {
         console.log("リクエストエラー:", err)
         return false;
     }
+}
+
+//予約情報データを加工する
+const processReservationData = () => {
+    reservationData.value.forEach(item => {
+        const reservedTables = item.reservedTables
+        if (reservedTables) {
+            const reservedTablesArray = reservedTables.split(",")
+            item.reservedTablesArray = reservedTablesArray;
+            // 从拷贝中移除已被占用的桌子
+            const filtered = availableTableArray.value.filter(id => !reservedTablesArray.includes(id));
+            item.availableTableArray = filtered;
+        }
+    })
 }
 
 //指定された日数内のゲストグループ数を計算する
@@ -340,7 +350,6 @@ const seed_fetchAllTables = async () => {
         const code = res.data.code; // ステータスコードを取得
         if (code === 1) {
             getAvailableArray(res.data.data)
-            // reservedDeskArray.value.push(deskId.value)
         } else {
             console.error(res.data.msg);
         }
@@ -369,17 +378,37 @@ const getAvailableArray = (tableData) => {
 **************************************/
 import { addReservedTableId } from "@/api/reservationApi";
 const selectedTable = ref("")
-const reservedDeskArray = ref([])
-const seed_addReservedTableId = async (reservationId) => {
-    console.log("reservationId", reservationId);
-
+// const reservedDeskArray = ref([])
+const seed_addReservedTableId = async (reservationId, date) => {
     try {
         const res = await addReservedTableId({ reservationId: reservationId, deskId: selectedTable.value });
         const code = res.data.code; // ステータスコードを取得
         if (code === 1) {
-            console.log(res.data.data);
-            
-            // reservedDeskArray.value.push(deskId.value)
+            const day = Number(date.split("-")[2])
+            await seed_fetchReservationDataByMouth(); // 等待数据更新
+            getReservationDataByDay(day) // 再重新刷新当天数据
+        } else {
+            console.error(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+    }
+}
+
+
+/*************************************
+*予約済みテーブルを削除
+**************************************/
+import { deleteSelectedTableById } from "@/api/reservationApi";
+const seed_deleteSelectedTableById = async (reservationId, deskId, date) => {
+    try {
+        const res = await deleteSelectedTableById({ reservationId, deskId });
+        const code = res.data.code; // ステータスコードを取得
+        if (code === 1) {
+            const day = Number(date.split("-")[2])
+            await seed_fetchReservationDataByMouth(); // 等待数据更新
+            getReservationDataByDay(day) // 再重新刷新当天数据
         } else {
             console.error(res.data.msg);
         }
