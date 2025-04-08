@@ -51,3 +51,10 @@ export function deleteSelectedTableById(data: { reservationId: Number, deskId: s
         data: data
     });
 }
+
+/**
+ * 予約データの来店状態の変更する
+ */
+export function changeVisitStatus(data: { reservationId: Number, guestState: string }) {
+    return instance.patch('/api/reservation/guestState', data);
+}

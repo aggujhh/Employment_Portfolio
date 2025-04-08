@@ -26,4 +26,9 @@ public interface ReservationMapper {
             "SET reserved_tables=#{updatedResult} " +
             "WHERE id=#{reservationId}")
     void updateReservedTableIds(String updatedResult, Integer reservationId);
+
+    @Update("UPDATE reservation " +
+            "SET guest_state=#{guestState} " +
+            "WHERE id=#{reservationId}")
+    void changeVisitStatus(Integer reservationId, String guestState);
 }

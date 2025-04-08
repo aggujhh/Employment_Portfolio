@@ -12,4 +12,6 @@ public interface ReservationService {
     List<String> addReservedTableId(Integer reservationId, String deskId);
 
     void deleteSelectedTableById(Integer reservationId, String deskId);
+
+    void changeVisitStatus(Integer reservationId, String guestState);
 }

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -59,6 +60,9 @@ public class ReservationServiceImpl implements ReservationService {
         if (!reservationIdList.contains(deskId)) {
             reservationIdList.add(deskId);
         }
+        // 昇順ソート
+        Collections.sort(reservationIdList);
+
         // データベースに更新する処理（必要に応じて追加）
         String updatedResult = String.join(",", reservationIdList);
 
@@ -80,11 +84,18 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservationIdList.remove(deskId);
 
+        // 昇順ソート
+        Collections.sort(reservationIdList);
 
         // データベースに更新する処理（必要に応じて追加）
         String updatedResult = String.join(",", reservationIdList);
 
         reservationMapper.updateReservedTableIds(updatedResult, reservationId);
+    }
+
+    @Override
+    public void changeVisitStatus(Integer reservationId, String guestState) {
+        reservationMapper.changeVisitStatus(reservationId, guestState);
     }
 
 }

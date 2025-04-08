@@ -5,7 +5,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.example.pojo.entity.Desk;
+import org.example.pojo.entity.Reservation;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Mapper
@@ -41,6 +44,22 @@ public interface DeskMapper {
     @Update("UPDATE desk SET desk_state='0' WHERE id=#{id}")
     void restoreDeskById(Desk desk);
 
+    @Update("UPDATE desk SET desk_state='2' WHERE id=#{id}")
+    void reservedDeskById(String id);
+
+    @Update("UPDATE desk SET desk_state='0' WHERE desk_state='2'")
+    void reReservedDeskById();
+
     @Select("SELECT * FROM desk WHERE desk_state !='3'")
     List<String> fetchAllAvailableTableIds();
+
+    @Select("SELECT reserved_tables FROM reservation " +
+            "WHERE date = #{date} " +
+            "AND timeRange IN ('11:00~12:00','12:00~13:00','13:00~14:00')")
+    List<String> checkReservedTablesForMorning(LocalDate date);
+
+    @Select("SELECT reserved_tables FROM reservation " +
+            "WHERE date = #{date} " +
+            "AND timeRange IN ('17:00~18:00','18:00~19:00','19:00~20:00')")
+    List<String> checkReservedTablesForEvening(LocalDate date);
 }

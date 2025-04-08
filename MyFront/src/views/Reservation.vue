@@ -42,13 +42,14 @@
                 <p>予約詳細</p>
             </div>
             <div class="content">
-                <h4>{{ dateText }}</h4>
+                <h4 v-if="oneDayReservationData.length !== 0">{{ dateText }}</h4>
                 <ul>
                     <li v-for="(item, index) in oneDayReservationData" :key="index">
-                        <select class="guestState">
-                            <option>未来店</option>
-                            <option>来店済</option>
-                            <option>キャンセル</option>
+                        <select class="guestState" v-model="item.guestState"
+                            @change="seed_changeVisitStatus(item.id, item.guestState)">
+                            <option value="0">未来店</option>
+                            <option value="1">来店済</option>
+                            <option value="2">キャンセル</option>
                         </select>
                         <div class="tag">組{{ index + 1 }}</div>
                         <p>担当者名：{{ item.name }}({{ item.katakana }})</p>
@@ -58,14 +59,13 @@
                         <p>連絡先：{{ item.tel }}</p>
                         <p>メールアドレス：{{ item.mail }}</p>
                         <p>特記事項：{{ item.specialNote }}</p>
-                        <p>来店状態：未来店</p>
+                        <p>来店状態：{{ getGuestStateText(item.guestState) }}</p>
                         <div v-if="canReserveTable(item.date, item.timeRange)" class="deskSelect">
                             <p>テーブル指定：</p>
                             <select v-model="selectedTable">
                                 <option value="">--テーブル番号--</option>
-                                <option v-for="(item, index) in item.availableTableArray" :key="index" :value="item">{{
-                                    item
-                                    }}
+                                <option v-for="(item, index) in item.availableTableArray" :key="index" :value="item">
+                                    {{ item }}
                                 </option>
                             </select>
                             <button @click="seed_addReservedTableId(item.id, item.date)">指定</button>
@@ -255,6 +255,8 @@ const seed_fetchReservationDataByMouth = async () => {
         const res = await fetchReservationDataByMouth({ date: calendarDate.value });
         if (res.data.code !== 0) {
             reservationData.value = res.data.data
+            console.log(reservationData.value);
+
             const countGuestArray = countGuestGroupsByDay(res.data.data)
             processReservationData()
             return countGuestArray
@@ -268,19 +270,23 @@ const seed_fetchReservationDataByMouth = async () => {
     }
 }
 
-//予約情報データを加工する
+// 予約情報データを加工する
 const processReservationData = () => {
-    reservationData.value.forEach(item => {
-        const reservedTables = item.reservedTables
-        if (reservedTables) {
-            const reservedTablesArray = reservedTables.split(",")
-            item.reservedTablesArray = reservedTablesArray;
-            // 从拷贝中移除已被占用的桌子
-            const filtered = availableTableArray.value.filter(id => !reservedTablesArray.includes(id));
-            item.availableTableArray = filtered;
-        }
-    })
-}
+  reservationData.value.forEach(item => {
+    const reservedTables = item.reservedTables;
+
+    // 文字列を配列に分割する
+    const reservedTablesArray = reservedTables ? reservedTables.split(",") : [];
+
+    // 元データに配列を保存する
+    item.reservedTablesArray = reservedTablesArray;
+
+    // すでに予約されたテーブルを除外して、利用可能なテーブルを取得する
+    item.availableTableArray = availableTableArray.value.filter(
+      id => !reservedTablesArray.includes(id)
+    );
+  });
+};
 
 //指定された日数内のゲストグループ数を計算する
 const countGuestGroupsByDay = (res) => {
@@ -316,7 +322,6 @@ const getReservationDataByDay = (day) => {
 /**************************************************************************
 * 時間を判断する関数で、判断結果に応じてテーブルの指定可否を決定する。
 ***************************************************************************/
-// const canReserveTable = ref(false)
 const canReserveTable = (dateStr, timeRangeStr) => {
     // 現在の時刻を取得
     const now = new Date();
@@ -369,6 +374,7 @@ const getAvailableArray = (tableData) => {
     tableData.forEach((item) => {
         if (item.deskState !== '3') {
             availableTableArray.value.push(item.id)
+            console.log(availableTableArray.value);
         }
     })
 }
@@ -387,6 +393,7 @@ const seed_addReservedTableId = async (reservationId, date) => {
             const day = Number(date.split("-")[2])
             await seed_fetchReservationDataByMouth(); // 等待数据更新
             getReservationDataByDay(day) // 再重新刷新当天数据
+            selectedTable.value = ""
         } else {
             console.error(res.data.msg);
         }
@@ -409,6 +416,41 @@ const seed_deleteSelectedTableById = async (reservationId, deskId, date) => {
             const day = Number(date.split("-")[2])
             await seed_fetchReservationDataByMouth(); // 等待数据更新
             getReservationDataByDay(day) // 再重新刷新当天数据
+        } else {
+            console.error(res.data.msg);
+        }
+    } catch (error) {
+        // エラー処理
+        console.error("リクエストエラー:", error);
+    }
+}
+
+/*************************************
+* 来店状態コードをメッセージに変換する
+**************************************/
+const getGuestStateText = (code) => {
+    switch (code) {
+        case "0":
+            return "未来店"
+        case "1":
+            return "来店済"
+        case "2":
+            return "キャンセル"
+    }
+}
+
+/*************************************
+*　予約データの来店状態の変更する。
+**************************************/
+import { changeVisitStatus } from "@/api/reservationApi";
+const seed_changeVisitStatus = async (reservationId, guestState) => {
+    try {
+        const res = await changeVisitStatus({ reservationId, guestState });
+        const code = res.data.code; // ステータスコードを取得
+        if (code === 1) {
+            // const day = Number(date.split("-")[2])
+            // await seed_fetchReservationDataBychangeVisitStatusMouth(); // 等待数据更新
+            // getReservationDataByDay(day) // 再重新刷新当天数据
         } else {
             console.error(res.data.msg);
         }

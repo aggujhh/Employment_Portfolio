@@ -61,4 +61,16 @@ public class ReservationController {
         log.info("------------------------------------------------------");
         return Result.success();
     }
+
+    @PatchMapping("/guestState")
+    public Result changeVisitStatus(@RequestBody Map<String, Object> request) {
+        Integer reservationId = (Integer) request.get("reservationId");
+        String guestState = (String) request.get("guestState");
+        log.info("------------------------------------------------------");
+        log.info("予約データの来店状態の変更する。引数：({},{})", reservationId, guestState);
+        reservationService.changeVisitStatus(reservationId, guestState);
+        log.info("変更成功");
+        log.info("------------------------------------------------------");
+        return Result.success();
+    }
 }
